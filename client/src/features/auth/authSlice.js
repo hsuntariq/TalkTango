@@ -8,6 +8,8 @@ const initialState = {
     isError: false,
     isSuccess: false,
     message: '',
+    themeError: false,
+    themeSuccess:false,
     allUsers: []
 };
 
@@ -82,6 +84,19 @@ export const verifyOTP = createAsyncThunk('auth/verify', async (data, thunkAPI) 
         return thunkAPI.rejectWithValue(message)
     }
 })
+export const setTheme = createAsyncThunk('auth/set-theme', async (data, thunkAPI) => {
+    try {
+        return await authService.setTheme(data);
+    } catch (error) {
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.error) ||
+            error.message ||
+            error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -91,6 +106,8 @@ export const authSlice = createSlice({
             state.isLoading = false;
             state.isError = false;
             state.isSuccess = false;
+            state.themeSuccess = false;
+            state.themeError = false;
             state.message = '';
             state.allUsers = []
         }
@@ -166,6 +183,22 @@ export const authSlice = createSlice({
                 state.message = action.payload
                 state.message = 'Success'
 
+            })
+            .addCase(setTheme.pending,(state)=>{
+                state.isLoading = true
+            })
+            .addCase(setTheme.rejected, (state, action) => {
+                state.themeError = true;
+                state.message = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(setTheme.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.themeSuccess = true;
+                // console.log(action)
+                state.user = action.payload;
+                localStorage.removeItem('user');
+                localStorage.setItem('user',JSON.stringify(action.payload))
             })
     }
 });

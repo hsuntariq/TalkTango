@@ -27,6 +27,16 @@ const userSchema = mongoose.Schema({
         requried:false,
         default:null,
         
+    },
+    bgTheme:{
+        type: String,
+        default:"#202C33",
+        required:false
+    },
+    textColor:{
+        type:String,
+        default: '#ffffff',
+        required:false,
     }
 }, { timestamps: true });
 

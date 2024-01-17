@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { registerUser, reset } from "../features/auth/authSlice";
+import Loader from "../components/loader/Loader";
+import { BeatLoader } from "react-spinners";
 
 const RegForm = () => {
     const [imageUploaded, setImageUploaded] = useState(false);
@@ -193,16 +195,14 @@ const RegForm = () => {
     useEffect(() => {
         if (isError) {
             toast.error(message)
-        }
-
-        if (isSuccess) {
-            navigate(`/verify/${user?.newUser?._id}`)
+        } if (isSuccess) {
+            navigate(`/verify/${user?._id}`)
         }
 
 
         dispatch(reset())
 
-    }, [isError, isSuccess, navigate, message, user, dispatch])
+    }, [isError, isSuccess, navigate, message, dispatch, user])
 
     return (
         <>
@@ -232,8 +232,8 @@ const RegForm = () => {
                 <PhoneInput country={'pk'} value={phone} className='mb-1 rounded  focus:border-orange-500 shadow-md w-full border border-orange-100 outline-none' onChange={(value) => setPhone(value)}
                     placeholder={'+92 315 1248441'}
                 />
-                <button disabled={imageUploaded} onClick={handleClick} className={`w-full rounded bg-orange-500 text-white p-1 hover:bg-orange-700 transition-all ${imageUploaded && 'cursor-not-allowed diabled'}`}>
-                    {imageUploaded ? 'Registreing...' : 'Register'}
+                <button disabled={imageUploaded} onClick={handleClick} className={`w-full rounded bg-orange-500 text-white p-1  transition-all ${imageUploaded ? 'cursor-not-allowed diabled bg-orange-700' : 'bg-orange-500'}`}>
+                    {imageUploaded ? <BeatLoader size={10} color="white" /> : 'Register'}
                 </button>
             </form>
         </>

@@ -12,15 +12,18 @@ const OTP = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [otp, setOtp] = useState('')
-    const { isLoading, isSuccess, isError, message } = useSelector(state => state.auth);
+    const { user, isLoading, isSuccess, isError, message } = useSelector(state => state.auth);
     useEffect(() => {
+        if (!user) {
+            navigate('/')
+        }
         if (isError) {
             toast.error('Invali OTP')
         } else if (isSuccess) {
             navigate('/home')
         }
         dispatch(reset());
-    }, [isError, dispatch, isSuccess, navigate])
+    }, [isError, dispatch, isSuccess, navigate, user])
     const verify = () => {
         if (!otp) {
             toast.error('Please enter OTP');

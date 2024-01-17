@@ -43,6 +43,16 @@ const verifyOTP = async (data) => {
 };
 
 
+const setTheme = async (themeData) => {
+    try {
+        const response = await axios.put(`${base_url}/set-theme`,{id:themeData.id,bgTheme:themeData.theme})
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
 
 
 export const authService = {
@@ -50,5 +60,6 @@ export const authService = {
     getAllUsers,
     loginUser,
     logoutUser,
-    verifyOTP
+    verifyOTP,
+    setTheme
 }

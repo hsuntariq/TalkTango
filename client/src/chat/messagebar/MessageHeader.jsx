@@ -1,19 +1,31 @@
 import { HiOutlineDotsVertical, HiSearch } from "react-icons/hi"
 import { useSelector } from "react-redux";
 import logo from '../../assets/logo.png'
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 const MessageHeader = () => {
-    const { user } = useSelector(state => state.auth);
+    const { user, allUsers } = useSelector(state => state.auth);
+    const { id } = useParams();
+    const [userInfo, setUserInfo] = useState([]);
+    useEffect(() => {
+        const userData = allUsers?.find((user) => {
+            return user?._id === id
+        })
+        setUserInfo(userData)
 
+    }, [id, allUsers])
     return (
         <>
-            <div className="flex w-full bg-[#1A2329] justify-between items-center p-1 px-4  text-white">
+            <div style={{
+                background: `${user?.bgTheme || '#121A1E'}`
+            }} className="flex w-full bg-[#1A2329] justify-between items-center p-1 px-4  text-white">
                 <div className="flex items-center gap-2">
 
                     <div className="user-image rounded-full w-[45px] h-[45px]">
-                        <img src={user?.newUser?.image ? user?.newUser?.image : logo} alt="" />
+                        <img src={user?.image ? user?.image : logo} alt="" />
                     </div>
                     <div className="text-1">
-                        {user?.newUser?.username}
+                        {userInfo?.username}
                     </div>
                 </div>
                 <div className="flex gap-2">

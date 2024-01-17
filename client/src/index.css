@@ -62,3 +62,7 @@ width: 100% !important;
     font-size: 2rem;
     text-align: center;
   }
+
+  .toggle-settings{
+    transform:translateX(0%)
+  }

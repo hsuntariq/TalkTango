@@ -1,14 +1,19 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import RegForm from "./RegForm"
 import logo from '../assets/logo.png'
 import Footer from "./Footer"
 import Loader from "../components/loader/Loader"
 import { useSelector } from "react-redux"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const Register = () => {
-
-    const { isLoading } = useSelector(state => state.auth);
+    const { user, isLoading } = useSelector(state => state.auth);
+    const navigate = useNavigate()
+    useEffect(() => {
+        // if (user) {
+        //     // navigate('/home')
+        // }
+    }, [navigate, user])
     if (isLoading) {
         return <Loader />
     }

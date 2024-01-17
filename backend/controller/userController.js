@@ -38,8 +38,14 @@ const registerUser = AsyncHandler(async(req, res) => {
             otp
         })
         res.send({
-            newUser,
-            token: generateToken({ id: newUser._id })
+            _id: newUser._id,
+             email,
+            phone,
+            password: hashedPassword,
+            image,
+            otp,
+            token: generateToken({ id: newUser._id }),
+            bgTheme:newUser.bgTheme,
         })
 
         // send otp to the mail
@@ -58,8 +64,8 @@ const registerUser = AsyncHandler(async(req, res) => {
             to: email,
             subject: 'OTP verification',
             html: `
-                <img width='200px' height='200px' src='./logo.png' style='display:block;margin:auto;border-radius:50%;'/>
-            <h3>
+                <img width='200px' height='200px' src='https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/logo.png?raw=true' style='display:block;margin:auto;border-radius:50%;'/>
+            <h1 style='text-align:center'>
             Welcome to TalkTango <b><i style='text-transform:capitalize'>${username}</i></b>.Good to have you on board! <br>
             Following is the OTP to start the <span style="color:orange">tango!</span> 
             </h3>
@@ -144,6 +150,22 @@ const getAllUsers = AsyncHandler(async (req, res) => {
 
 
 
+const setTheme = AsyncHandler(async(req, res) => {
+    const {id,bgTheme}  = req.body;
+    const findUser = await User.findById(id);
+    if(!findUser){
+        res.status(404);
+        throw new Error('User not found')
+    } else {
+        const updateTheme = await User.findByIdAndUpdate(id, { bgTheme }, {
+           new:true
+        })
+        res.send(updateTheme)
+    }
+    
+})
+
+
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn:'1d'
@@ -157,5 +179,6 @@ module.exports = {
     registerUser,
     getAllUsers,
     loginUser,
-    verifyOTP
+    verifyOTP,
+    setTheme
 }

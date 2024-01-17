@@ -17,7 +17,7 @@ const App = () => {
             <Route path='/' element={<Register />} />
             <Route path='/login' element={<Login />} />
             <Route path='/home' element={<Home />} />
-            <Route path='/message-panel' element={<MessagePanel />} />
+            <Route path='/message-panel/:id' element={<MessagePanel />} />
             <Route path='/verify/:id' element={<OTP />} />
             <Route path='*' element={<Error />} />
           </Route>
