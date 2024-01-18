@@ -27,7 +27,8 @@ const SidebarHeader = ({ toggleSettings }) => {
     return (
         <>
             <div style={{
-                background: `${user?.bgTheme}`
+                background: `rgba(${user?.bgTheme})`,
+
             }} className="flex justify-between items-center px-3 p-1 bg-[#202C33]">
                 <div className="user-image  rounded-full w-[45px] h-[45px]">
                     <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png'} alt="" />
@@ -42,7 +43,10 @@ const SidebarHeader = ({ toggleSettings }) => {
 
 
                         )}
-                        <div ref={show} className="flex-flex-col bg-[#17242c] absolute right-1 scale-0 top-5 transition">
+                        <div style={{
+                            background: `rgba(${user?.bgTheme})`,
+                            border: '1px solid black'
+                        }} ref={show} className="flex-flex-col rounded-md bg-[#17242c] absolute right-1 scale-0 top-5 transition">
                             <ul className="list-unstyled  flex flex-col gap-1 text-white font-semibold py-2 ">
                                 <li onClick={toggleSettings} className="cursor-pointer w-full px-4 py-1 transition-all hover:bg-gray-400 mt-1">Setting</li>
                                 <li onClick={() => {

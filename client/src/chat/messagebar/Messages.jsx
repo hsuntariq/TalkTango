@@ -16,9 +16,13 @@ const Messages = () => {
 
         dispatch(reset())
     }, [user, navigate, dispatch])
+    console.log(`linear-gradient(rgba(${user?.chatBG}, 0.6), rgba(${user?.chatBG}, 0.3)), url('${user?.chatImage}')`)
     return (
         <>
-            <div className="messages flex flex-col justify-between sticky top-0 bg-contain min-h-screen">
+            <div style={{
+                backgroundImage: `linear-gradient(rgba(${user?.chatBG},0.6),rgba(${user?.chatBG},0.3)), url('${user?.chatImage ? user?.chatImage : 'https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/background.jpg?raw=true'}')`,
+                // background: `${user?.chatBG}`
+            }} className="messages flex flex-col justify-between sticky top-0 bg-contain min-h-screen">
 
             </div>
 

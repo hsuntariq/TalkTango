@@ -11,7 +11,7 @@ const Register = () => {
     const navigate = useNavigate()
     useEffect(() => {
         // if (user) {
-        //     // navigate('/home')
+        //     navigate('/home')
         // }
     }, [navigate, user])
     if (isLoading) {

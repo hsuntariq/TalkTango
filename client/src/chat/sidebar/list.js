@@ -18,5 +18,13 @@ export const settings = [
                 
             }
         },
+        {
+            id:3,
+            icon: 'IoIosColorPalette',
+            text: 'Chat Image',
+            content: {
+                
+            }
+        },
         
 ]

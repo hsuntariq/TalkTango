@@ -6,8 +6,7 @@ const chatSchema= mongoose.Schema({
         required:true,
         ref:'User'
     },
-    chatBG:{
-        type:String,
-        default:''
-    }
+   
 })
+
+module.exports = mongoose.model('Chat',chatSchema)

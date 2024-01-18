@@ -52,6 +52,15 @@ const setTheme = async (themeData) => {
     }
 
 }
+const setChatTheme = async (themeData) => {
+    try {
+        const response = await axios.put(`${base_url}/set-chat-theme`,{id:themeData.id,chatBG:themeData.chatBG,chatImage:themeData.chatImage})
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+
+}
 
 
 
@@ -61,5 +70,6 @@ export const authService = {
     loginUser,
     logoutUser,
     verifyOTP,
-    setTheme
+    setTheme,
+    setChatTheme
 }

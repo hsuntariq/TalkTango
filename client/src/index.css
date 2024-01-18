@@ -35,7 +35,7 @@ width: 100% !important;
 
 
 .messages{
-  background-image:url('./assets/background.jpg');
+  /* background-image:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.3)), url('./assets/background.jpg'); */
 }
 
 .welcome{

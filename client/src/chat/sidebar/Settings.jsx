@@ -3,23 +3,29 @@ import { IoArrowBack, IoClose } from "react-icons/io5";
 import { settings } from "./list";
 import logo from '../../assets/logo.png'
 import { useDispatch, useSelector } from "react-redux";
-import { FaBell, FaUnlock, FaPaintRoller, FaCross, } from "react-icons/fa";
-import { SketchPicker } from 'react-color';
-import { reset, setTheme } from "../../features/auth/authSlice";
+import { FaBell, FaUnlock, FaPaintRoller, } from "react-icons/fa";
+import { reset, setChatTheme, setTheme } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../components/loader/Loader";
 import { BarLoader, ClipLoader } from "react-spinners";
+import { IoIosColorPalette } from "react-icons/io";
+import SetThemePanel from "./SetThemePanel";
+import SetChatTheme from "./SetChatTheme";
 
 const Settings = ({ show, toggleSettings }) => {
-    const [setting, setSettings] = useState(settings)
     const [color, setColor] = useState(''); // Initial color
+    const [color2, setColor2] = useState(''); // Initial color
     const [openThemes, setOpenThemes] = useState(false);
+    const [chatOpen, setChatOpen] = useState(false);
     const [bgTheme, setBgTheme] = useState('')
     const handleColorChange = (newColor) => {
-        setColor(newColor.hex);
+        setColor(newColor.rgb);
     };
-    const { user, isLoading, isError, message, themeSuccess } = useSelector(state => state.auth);
+    const handleColorChange2 = (newColor) => {
+        setColor2(newColor.rgb);
+    };
+    const { user, isLoading, themeLoading, isError, message, themeSuccess } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -33,18 +39,28 @@ const Settings = ({ show, toggleSettings }) => {
     const setThemeColor = (e) => {
         e.preventDefault()
         const themeData = {
-            id: user?._id, theme: color
+            id: user?._id, theme: `${color.r},${color.g},${color.b}`
+        }
+
+        // console.log(`${color.r},${color.g},${color.b}`)
+
+        dispatch(setTheme(themeData))
+    }
+    const chatTheme = (e) => {
+        e.preventDefault()
+        const themeData = {
+            id: user?._id, chatImage: null, chatBG: `${color2.r},${color2.g},${color2.b}`
         }
         // console.log(themeData)
 
 
-        dispatch(setTheme(themeData))
+        dispatch(setChatTheme(themeData))
     }
 
     return (
         <>
             <div ref={show} style={{
-                background: `${user?.bgTheme || '#121A1E'}`,
+                background: `rgba(${user?.bgTheme})`,
 
             }} className={`min-h-screen translate-x-[-100%] transition w-full fixed top-0 z-20`}>
                 <div className="h-[100px]" style={{
@@ -92,29 +108,17 @@ const Settings = ({ show, toggleSettings }) => {
                             <h3>Theme</h3>
                         </div>
                     </li>
-                    <div style={{
-                        background: `${user?.bgTheme}`
-                    }} className={`w-[350px] transition-[1s] min-h-screen bg-[#1A2329] z-50 fixed top-0 ${openThemes || 'translate-y-[100%]'}`}>
-                        <IoClose size={40} cursor='pointer' onClick={() => setOpenThemes(false)} />
-                        <div className="picker w-full flex flex-col items-center justify-center">
-                            <SketchPicker color={color} onChange={handleColorChange} className='w-full' />
-                            <button disabled={isLoading} onClick={setThemeColor} className={`w-1/2 my-3 flex justify-center items-center bg-blue-600 py-1 rounded-full hover:bg-blue-800 ${isLoading && 'bg-blue-900 text-white disabled cursor-not-allowed'}`}>
-                                {isLoading ?
-                                    <div className='flex flex-col justify-center items-center gap-2 '>
-                                        <p>Updating...</p>
-                                        <BarLoader
-                                            color="white"
-                                            loading={isLoading}
-                                            size={30}
-                                            aria-label="Loading Spinner"
-                                            data-testid="loader"
-
-                                        /></div> : 'Upate theme'}
-                            </button>
+                    <li onClick={() => setChatOpen(true)} className="flex gap-3 py-1 hover:bg-[#222f4b] cursor-pointer transition px-4">
+                        <div className="icon text-3xl">
+                            <IoIosColorPalette />
                         </div>
+                        <div className="text">
+                            <h3>Change Chat Image</h3>
+                        </div>
+                    </li>
+                    <SetChatTheme chatOpen={chatOpen} setChatOpen={setChatOpen} />
 
-
-                    </div>
+                    <SetThemePanel openThemes={openThemes} setOpenThemes={setOpenThemes} color={color} handleColorChange={handleColorChange} setThemeColor={setThemeColor} color2={color2} handleColorChange2={handleColorChange2} chatTheme={chatTheme} />
 
                 </ul>
             </div>

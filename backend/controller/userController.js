@@ -45,7 +45,9 @@ const registerUser = AsyncHandler(async(req, res) => {
             image,
             otp,
             token: generateToken({ id: newUser._id }),
-            bgTheme:newUser.bgTheme,
+            bgTheme: newUser.bgTheme,
+            chatBG:newUser.chatBG,
+            chatImage:newUser.chatImage
         })
 
         // send otp to the mail
@@ -164,6 +166,20 @@ const setTheme = AsyncHandler(async(req, res) => {
     }
     
 })
+const setChatTheme = AsyncHandler(async(req, res) => {
+    const {id,chatImage,chatBG}  = req.body;
+    const findUser = await User.findById(id);
+    if(!findUser){
+        res.status(404);
+        throw new Error('User not found')
+    } else {
+        const updateTheme = await User.findByIdAndUpdate(id, { chatImage,chatBG }, {
+           new:true
+        })
+        res.send(updateTheme)
+    }
+    
+})
 
 
 const generateToken = (id) => {
@@ -180,5 +196,6 @@ module.exports = {
     getAllUsers,
     loginUser,
     verifyOTP,
-    setTheme
+    setTheme,
+    setChatTheme
 }

@@ -30,12 +30,22 @@ const userSchema = mongoose.Schema({
     },
     bgTheme:{
         type: String,
-        default:"#202C33",
+        default:"32,44,51",
         required:false
     },
     textColor:{
         type:String,
         default: '#ffffff',
+        required:false,
+    },
+     chatBG:{
+        type:String,
+        default:'32,44,51',
+        required:false,
+    },
+    chatImage:{
+        type:String,
+        default: 'https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/background.jpg?raw=true',
         required:false,
     }
 }, { timestamps: true });

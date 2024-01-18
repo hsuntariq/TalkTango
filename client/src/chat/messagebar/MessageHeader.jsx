@@ -17,7 +17,8 @@ const MessageHeader = () => {
     return (
         <>
             <div style={{
-                background: `${user?.bgTheme || '#121A1E'}`
+                background: `rgba(${user?.bgTheme})`,
+
             }} className="flex w-full bg-[#1A2329] justify-between items-center p-1 px-4  text-white">
                 <div className="flex items-center gap-2">
 

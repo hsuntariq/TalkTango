@@ -57,12 +57,14 @@ const Sidebar = () => {
     return (
         <>
             <div style={{
-                background: `${user.bgTheme}`
-            }} className="w-full md:w-[500px] min-h-screen sticky top-0 overflow-y-scroll">
+                background: `rgba(${user?.bgTheme})`,
+
+            }} className="sm:w-full md:w-[500px] min-h-screen sticky top-0 overflow-y-scroll">
                 <Settings show={show} toggleSettings={toggleSettings} />
                 <SidebarHeader toggleSettings={toggleSettings} />
                 <form style={{
-                    background: `${user?.bgTheme}`
+                    background: `rgba(${user?.bgTheme})`,
+
                 }} className="flex items-center gap-2 justify-between px-3 my-1 w-full top-[10%] py-2 z-50 bg-[#111B21]">
                     <input type="text" className="w-full rounded-md p-1 px-2" placeholder="Search or start a new chat" value={search} onChange={handleChange} />
                     <IoFilterOutline color="white" size={20} />
