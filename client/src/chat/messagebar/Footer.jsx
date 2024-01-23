@@ -5,7 +5,8 @@ import { useParams } from "react-router-dom";
 import { createMessage } from "../../features/chat/chatSlice";
 import { IoIosSend } from "react-icons/io";
 import { Circles } from "react-loader-spinner";
-
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:5174/');
 const Footer = () => {
     const [message, setMessage] = useState('')
     const { receiver_id } = useParams()

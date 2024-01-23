@@ -11,7 +11,7 @@ const SetThemePanel = ({ openThemes, setOpenThemes, color, handleColorChange, se
     };
     return (
         <div style={{
-            background: `#1A2329`
+            background: `rgba(${user?.bgTheme})`
         }} className={`w-full transition-[1s] min-h-screen bg-[#1A2329] z-50 fixed top-0 ${openThemes || 'translate-y-[100%]'}`}>
             <IoClose size={40} cursor='pointer' onClick={() => setOpenThemes(false)} />
             <div className="picker w-full flex flex-col items-center ">

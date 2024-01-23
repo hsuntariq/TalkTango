@@ -2,6 +2,8 @@
 const express = require('express');
 const connectDB = require('./config/connect');
 const { errorHandler } = require('./middlewares/errorMiddleware');
+const { Server } = require('socket.io');
+const http = require('http')
 // require cors to  handle cross server request
 const cors = require('cors')
 
@@ -10,6 +12,21 @@ const cors = require('cors')
 const app = express()
 // use cors
 app.use(cors())
+const server = http.createServer(app)
+
+
+// create the socket server
+
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:5173/',
+        methods: ['POST', 'GET'],
+    }
+})
+
+io.on('connection', (socket) => {
+    console.log(`user connected on host id:${socket.id.blue}`)
+})
 
 // required dotenv to use .env
 require('dotenv').config();
@@ -27,4 +44,4 @@ app.use('/api/chats', require('./routes/chatRoutes'))
 app.use(errorHandler)
 
 // start the server
-app.listen(process.env.PORT, () => console.log(`Server started on port:${process.env.PORT.yellow}`))
+server.listen(process.env.PORT, () => console.log(`Server started on port:${process.env.PORT.yellow}`))
