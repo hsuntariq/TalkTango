@@ -59,7 +59,7 @@ const Sidebar = () => {
             <div style={{
                 background: `rgba(${user?.bgTheme})`,
 
-            }} className="sm:w-full md:w-[500px] min-h-screen sticky top-0 overflow-y-scroll">
+            }} className="lg:w-[55%] md:w-[75%] xl:w-[25%] relative  z-[100] min-h-screen bg-orange-500  top-0 overflow-y-scroll  overflow-hidden">
                 <Settings show={show} toggleSettings={toggleSettings} />
                 <SidebarHeader toggleSettings={toggleSettings} />
                 <form style={{

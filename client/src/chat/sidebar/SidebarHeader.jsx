@@ -29,7 +29,7 @@ const SidebarHeader = ({ toggleSettings }) => {
             <div style={{
                 background: `rgba(${user?.bgTheme})`,
 
-            }} className="flex justify-between items-center px-3 p-1 bg-[#202C33]">
+            }} className="flex justify-between items-center px-3 p-1 bg-[#202C33] ">
                 <div className="user-image  rounded-full w-[45px] h-[45px]">
                     <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png'} alt="" />
                 </div>
@@ -39,7 +39,7 @@ const SidebarHeader = ({ toggleSettings }) => {
                     <SiMediamarkt className="transition-all cursor-pointer" />
                     <div className="relative">
                         {open ? (<HiOutlineX onClick={openMenu} className="cursor-pointer  text-red-600" />) : (
-                            <HiOutlineDotsVertical onClick={openMenu} className="cursor-pointer" />
+                            <HiOutlineDotsVertical onClick={openMenu} className="cursor-pointer " />
 
 
                         )}

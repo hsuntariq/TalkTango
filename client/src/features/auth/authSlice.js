@@ -8,9 +8,9 @@ const initialState = {
     isError: false,
     isSuccess: false,
     message: '',
-    themeLoading:false,
+    themeLoading: false,
     themeError: false,
-    themeSuccess:false,
+    themeSuccess: false,
     allUsers: []
 };
 
@@ -20,7 +20,7 @@ export const registerUser = createAsyncThunk('auth/register', async (userData, t
     try {
         return await authService.registerUser(userData)
     } catch (error) {
-      const message =
+        const message =
             (error.response &&
                 error.response.data &&
                 error.response.data.error) ||
@@ -38,7 +38,7 @@ export const loginUser = createAsyncThunk('auth/login', async (userData, thunkAP
     } catch (error) {
         const message =
             (error.response && error.response.data && error.response.data.error) ||
-            error.message ||  
+            error.message ||
             error.message ||
             error.toString();
 
@@ -52,7 +52,7 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
     } catch (error) {
         const message =
             (error.response && error.response.data && error.response.data.error) ||
-            error.message ||  
+            error.message ||
             error.message ||
             error.toString();
 
@@ -100,7 +100,6 @@ export const setTheme = createAsyncThunk('auth/set-theme', async (data, thunkAPI
 })
 export const setChatTheme = createAsyncThunk('auth/set-chat-theme', async (data, thunkAPI) => {
     try {
-        console.log(data)
         return await authService.setChatTheme(data);
     } catch (error) {
         const message =
@@ -162,7 +161,7 @@ export const authSlice = createSlice({
             .addCase(logoutUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload 
+                state.message = action.payload
             })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.isLoading = false;
@@ -199,7 +198,7 @@ export const authSlice = createSlice({
                 state.message = 'Success'
 
             })
-            .addCase(setTheme.pending,(state)=>{
+            .addCase(setTheme.pending, (state) => {
                 state.isLoading = true
             })
             .addCase(setTheme.rejected, (state, action) => {
@@ -213,9 +212,9 @@ export const authSlice = createSlice({
                 // console.log(action)
                 state.user = action.payload;
                 localStorage.removeItem('user');
-                localStorage.setItem('user',JSON.stringify(action.payload))
+                localStorage.setItem('user', JSON.stringify(action.payload))
             })
-            .addCase(setChatTheme.pending,(state)=>{
+            .addCase(setChatTheme.pending, (state) => {
                 state.themeLoading = true
             })
             .addCase(setChatTheme.rejected, (state, action) => {
@@ -229,7 +228,7 @@ export const authSlice = createSlice({
                 // console.log(action)
                 state.user = action.payload;
                 localStorage.removeItem('user');
-                localStorage.setItem('user',JSON.stringify(action.payload))
+                localStorage.setItem('user', JSON.stringify(action.payload))
             })
     }
 });

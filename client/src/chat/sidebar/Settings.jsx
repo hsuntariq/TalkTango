@@ -15,7 +15,7 @@ import SetChatTheme from "./SetChatTheme";
 
 const Settings = ({ show, toggleSettings }) => {
     const [color, setColor] = useState(''); // Initial color
-    const [color2, setColor2] = useState(''); // Initial color
+    const [color2, setColor2] = useState({ r: 255, g: 0, b: 0, a: 1 });
     const [openThemes, setOpenThemes] = useState(false);
     const [chatOpen, setChatOpen] = useState(false);
     const [bgTheme, setBgTheme] = useState('')
@@ -39,7 +39,7 @@ const Settings = ({ show, toggleSettings }) => {
     const setThemeColor = (e) => {
         e.preventDefault()
         const themeData = {
-            id: user?._id, theme: `${color.r},${color.g},${color.b}`
+            id: user?._id, theme: `${color.r},${color.g},${color.b}`,
         }
 
         // console.log(`${color.r},${color.g},${color.b}`)
@@ -49,7 +49,7 @@ const Settings = ({ show, toggleSettings }) => {
     const chatTheme = (e) => {
         e.preventDefault()
         const themeData = {
-            id: user?._id, chatImage: null, chatBG: `${color2.r},${color2.g},${color2.b}`
+            id: user?._id, chatImage: user?.chatImage ? user?.chatImage : null, chatBG: `${color2.r},${color2.g},${color2.b}`
         }
         // console.log(themeData)
 
@@ -62,7 +62,7 @@ const Settings = ({ show, toggleSettings }) => {
             <div ref={show} style={{
                 background: `rgba(${user?.bgTheme})`,
 
-            }} className={`min-h-screen translate-x-[-100%] transition w-full fixed top-0 z-20`}>
+            }} className={`min-h-screen translate-x-[-100%] transition  absolute w-full top-0 `}>
                 <div className="h-[100px]" style={{
                     background: `${user?.bgTheme || '#121A1E'}`
                 }}>
@@ -82,7 +82,7 @@ const Settings = ({ show, toggleSettings }) => {
                         </h1>
                     </div>
                 </div>
-                <ul className="list-none text-white flex flex-col gap-3  ">
+                <ul className="list-none text-white flex flex-col gap-3 w-full">
 
                     <li className="flex gap-3 py-1 hover:bg-[#222f4b] cursor-pointer transition px-4">
                         <div className="icon text-3xl">

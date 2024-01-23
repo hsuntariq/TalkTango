@@ -19,11 +19,12 @@ require('colors');
 // connect to the database
 connectDB()
 app.use(express.json());
-app.use(express.urlencoded({extended:false}))
-app.use('/api/users',require('./routes/userRoutes') )
+app.use(express.urlencoded({ extended: false }))
+app.use('/api/users', require('./routes/userRoutes'))
+app.use('/api/chats', require('./routes/chatRoutes'))
 
 // check for the errors
 app.use(errorHandler)
 
 // start the server
-app.listen(process.env.PORT, ()=>console.log(`Server started on port:${process.env.PORT.yellow}`))
+app.listen(process.env.PORT, () => console.log(`Server started on port:${process.env.PORT.yellow}`))

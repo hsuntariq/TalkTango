@@ -1,15 +1,16 @@
 import { useState } from "react"
 import { IoArrowBack, } from "react-icons/io5"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { BiImageAdd } from "react-icons/bi";
 import { BarLoader } from "react-spinners";
+import { setChatTheme } from "../../features/auth/authSlice";
 
 const SetChatTheme = ({ setChatOpen, chatOpen }) => {
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState('https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/background.jpg?raw=true')
     const [imageUploaded, setImageUploaded] = useState(false);
     const { user } = useSelector(state => state.auth)
-
+    const dispatch = useDispatch();
     const imageUpload = async (e) => {
         const data = new FormData();
         data.append('file', image);
@@ -35,13 +36,17 @@ const SetChatTheme = ({ setChatOpen, chatOpen }) => {
 
     const handleChatThemeChange = async () => {
         const chatImg = await imageUpload(image)
-        console.log(chatImg)
+        const themeData = {
+            id: user?._id, chatBG: user?.chatBG, chatImage: chatImg
+        }
+        dispatch(setChatTheme(themeData))
     }
 
     return (
         <>
             <div style={{
-            }} className={`w-[350px] transition-[1s] min-h-screen bg-[#1A2329] z-50 fixed top-0 ${chatOpen || 'translate-y-[100%]'}`}>
+                background: `rgba(${user?.bgTheme})`,
+            }} className={`transition-[1s] w-full min-h-screen z-50 absolute top-0 ${chatOpen || 'translate-y-[100%]'}`}>
 
                 <div className="flex font-normal px-4 py-3 text-2xl gap-4 text-white mt-auto items-end h-full">
                     <IoArrowBack onClick={() => setChatOpen(false)} size={30} color='white' cursor="pointer" />

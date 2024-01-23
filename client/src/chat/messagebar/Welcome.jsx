@@ -3,7 +3,7 @@ const Welcome = () => {
     return (
         <>
             {/* <img className="welcome min-h-screen w-full" src="" alt="" /> */}
-            <video src="./home.mp4" loop autoPlay muted className="w-full sticky top-0 flex flex-col  min-h-screen"></video>
+            <video src="./home.mp4" loop autoPlay muted className="w-[70%] sticky top-0 flex flex-col  min-h-screen"></video>
         </>
     )
 }

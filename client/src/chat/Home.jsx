@@ -31,12 +31,11 @@ const Home = () => {
         <>
 
 
-            <div className="flex flex-col md:flex-row md:fixed w-full  top-0">
+            <div className="flex flex-col md:flex-row md:fixed w-full sm:overflow-auto  top-0">
 
                 <Sidebar />
                 <Welcome />
 
-                {/* <MessageScreen /> */}
             </div>
 
         </>

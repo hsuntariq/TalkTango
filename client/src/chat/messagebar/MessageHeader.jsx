@@ -5,21 +5,21 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 const MessageHeader = () => {
     const { user, allUsers } = useSelector(state => state.auth);
-    const { id } = useParams();
+    const { receiver_id } = useParams();
     const [userInfo, setUserInfo] = useState([]);
     useEffect(() => {
         const userData = allUsers?.find((user) => {
-            return user?._id === id
+            return user?._id === receiver_id
         })
         setUserInfo(userData)
 
-    }, [id, allUsers])
+    }, [receiver_id, allUsers])
     return (
         <>
             <div style={{
                 background: `rgba(${user?.bgTheme})`,
 
-            }} className="flex w-full bg-[#1A2329] justify-between items-center p-1 px-4  text-white">
+            }} className="flex head bg-[#1A2329] justify-between items-center p-1 px-4  text-white">
                 <div className="flex items-center gap-2">
 
                     <div className="user-image rounded-full w-[45px] h-[45px]">

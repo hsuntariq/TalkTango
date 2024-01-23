@@ -19,7 +19,7 @@ const MessagePanel = () => {
     }, [user, navigate, dispatch])
     return (
         <>
-            <div className="flex flex-col md:flex-row md:fixed w-full  top-0">
+            <div className="flex flex-col md:flex-row  w-[100%] fixed  top-0">
                 <Sidebar />
                 <MessageScreen />
             </div>
