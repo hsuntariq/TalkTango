@@ -1,25 +1,22 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiEmojiHappy, HiMicrophone, HiPlus } from "react-icons/hi"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom";
 import { createMessage } from "../../features/chat/chatSlice";
 import { IoIosSend } from "react-icons/io";
 import { Circles } from "react-loader-spinner";
-import io from 'socket.io-client'
-const socket = io.connect('http://localhost:5174/');
-const Footer = () => {
-    const [message, setMessage] = useState('')
-    const { receiver_id } = useParams()
-    const dispatch = useDispatch()
+
+const Footer = ({ sendMessage, userInfo, message, setMessage, setRoom }) => {
     const { chatLoading } = useSelector(state => state.chat)
     const { user } = useSelector(state => state.auth);
-    const sendMessage = () => {
-        const messageData = {
-            sender_id: user?._id, receiver_id, message
-        }
-        // console.log(messageData)
-        dispatch(createMessage(messageData))
-    }
+    const focus = useRef();
+    useEffect(() => {
+        focus.current.focus();
+        setRoom()
+    }, [userInfo?.username])
+
+
+
     return (
         <>
             <div style={{
@@ -30,7 +27,7 @@ const Footer = () => {
                     <HiEmojiHappy className="cursor-pointer text-2xl" />
                     <HiPlus className="cursor-pointer text-2xl" />
                 </div>
-                <input style={{
+                <input ref={focus} onFocus={setRoom} style={{
                     background: `rgba(${user?.bgTheme})`
                 }} type="text" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a message" className={`border focus:outline-none rounded-md w-full p-1`} />
                 <HiMicrophone className="cursor-pointer text-2xl" />

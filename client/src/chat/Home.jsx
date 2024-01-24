@@ -31,7 +31,7 @@ const Home = () => {
         <>
 
 
-            <div className="flex flex-col md:flex-row md:fixed w-full sm:overflow-auto  top-0">
+            <div className="flex flex-col md:flex-row md:fixed w-full sm:overflow-y-scroll h-[100vh]  top-0">
 
                 <Sidebar />
                 <Welcome />

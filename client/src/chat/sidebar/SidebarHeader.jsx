@@ -30,8 +30,13 @@ const SidebarHeader = ({ toggleSettings }) => {
                 background: `rgba(${user?.bgTheme})`,
 
             }} className="flex justify-between items-center px-3 p-1 bg-[#202C33] ">
-                <div className="user-image  rounded-full w-[45px] h-[45px]">
-                    <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png'} alt="" />
+                <div className="user-image flex items-center gap-2 capitalize font-bold">
+                    <div className="img rounded-full w-[45px] h-[45px]">
+                        <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png'} alt="" />
+                    </div>
+                    <div className="text-1xl text-white">
+                        {user?.username}
+                    </div>
                 </div>
                 <div className="icons text-1xl text-white flex gap-4">
                     <TiMessages className="transition-all  cuhttps://icon-library.com/images/user-image-icon/user-image-icon-9.jpgrsor-pointer " />

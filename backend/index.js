@@ -19,13 +19,24 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:5173/',
+        origin: 'http://localhost:5173',
         methods: ['POST', 'GET'],
     }
 })
 
 io.on('connection', (socket) => {
     console.log(`user connected on host id:${socket.id.blue}`)
+    // join room
+    socket.on('join_room', (data) => {
+        socket.join(data.chatID);
+    })
+
+    socket.on('sent_message', (data) => {
+        socket.to(data.chatID).emit('received_message', data.message)
+        // console.log(data)
+        const roomSize = io.sockets.adapter.rooms.get(data.chatID)?.size || 0;
+        console.log(`Users in room ${data.chatID}: ${roomSize}`);
+    });
 })
 
 // required dotenv to use .env

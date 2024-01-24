@@ -3,10 +3,9 @@ import { useSelector } from "react-redux";
 import logo from '../../assets/logo.png'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-const MessageHeader = () => {
+const MessageHeader = ({ userInfo, setUserInfo }) => {
     const { user, allUsers } = useSelector(state => state.auth);
     const { receiver_id } = useParams();
-    const [userInfo, setUserInfo] = useState([]);
     useEffect(() => {
         const userData = allUsers?.find((user) => {
             return user?._id === receiver_id
@@ -25,7 +24,7 @@ const MessageHeader = () => {
                     <div className="user-image rounded-full w-[45px] h-[45px]">
                         <img src={user?.image ? user?.image : logo} alt="" />
                     </div>
-                    <div className="text-1">
+                    <div className="text-1xl">
                         {userInfo?.username}
                     </div>
                 </div>

@@ -74,7 +74,6 @@ export const chatSlice = createSlice({
             .addCase(createMessage.fulfilled, (state, action) => {
                 state.chatLoading = false;
                 state.chatSuccess = true;
-                console.log('Received chat data:', action.payload);
                 state.chatData = action.payload;
             })
     }

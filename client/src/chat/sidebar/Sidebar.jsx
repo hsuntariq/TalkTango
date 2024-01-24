@@ -29,6 +29,8 @@ const Sidebar = () => {
         }
         else {
             dispatch(getAllUsers())
+            setFilteredUsers(allUsers)
+
         }
         dispatch(reset());
     }, [isError, message, dispatch, user, navigate])
@@ -59,7 +61,7 @@ const Sidebar = () => {
             <div style={{
                 background: `rgba(${user?.bgTheme})`,
 
-            }} className="lg:w-[55%] md:w-[75%] xl:w-[25%] relative  z-[100] min-h-screen bg-orange-500  top-0 overflow-y-scroll  overflow-hidden">
+            }} className="lg:w-[55%] md:w-[75%] xl:w-[25%] relative  z-[100] min-h-screen bg-orange-500  top-0 overflow-y-scroll h-[100%]">
                 <Settings show={show} toggleSettings={toggleSettings} />
                 <SidebarHeader toggleSettings={toggleSettings} />
                 <form style={{
@@ -69,7 +71,7 @@ const Sidebar = () => {
                     <input type="text" className="w-full rounded-md p-1 px-2" placeholder="Search or start a new chat" value={search} onChange={handleChange} />
                     <IoFilterOutline color="white" size={20} />
                 </form>
-                <div className="max-h-screen overflow-y-scroll">
+                <div className="max-h-[86vh] overflow-y-scroll">
                     {loading ? (
                         <Loader />
                     ) : (
