@@ -46,6 +46,7 @@ const Messages = ({ allMessages, userInfo }) => {
                 {findChat()?.map((message) => {
                     return (
                         <>
+
                             <p>
                                 {message.sent ? (
                                     <div className="w-max px-10 py-2 my-2 rounded-full text-white text-1xl ms-auto bg-green-600">

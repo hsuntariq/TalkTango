@@ -3,11 +3,13 @@ import { HiEmojiHappy, HiMicrophone, HiPlus } from "react-icons/hi"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom";
 import { createMessage } from "../../features/chat/chatSlice";
-import { IoIosSend } from "react-icons/io";
+import { IoIosSend, IoMdClose } from "react-icons/io";
 import { Circles } from "react-loader-spinner";
+import EmojiPicker from 'emoji-picker-react';
 
 const Footer = ({ sendMessage, userInfo, message, setMessage, setRoom }) => {
     const { chatLoading } = useSelector(state => state.chat)
+    const [showEmoji, setShowEmoji] = useState(false);
     const { user } = useSelector(state => state.auth);
     const focus = useRef();
     useEffect(() => {
@@ -17,14 +19,26 @@ const Footer = ({ sendMessage, userInfo, message, setMessage, setRoom }) => {
 
 
 
+
+
     return (
         <>
             <div style={{
                 background: `rgba(${user?.bgTheme})`,
 
             }} className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative md:bottom-[6.8rem] text-white">
-                <div className="flex gap-3">
-                    <HiEmojiHappy className="cursor-pointer text-2xl" />
+                <div className="flex gap-3 relative">
+                    <div className={`absolute bottom-[30px]  transition ${showEmoji ? 'opacity-1 scale-1 ' : 'opacity-0 scale-0 '}`}>
+                        <EmojiPicker onEmojiClick={(e) => {
+                            setMessage(prevValue => prevValue + e.emoji)
+                        }} />
+                    </div>
+
+                    {showEmoji ? (
+                        <IoMdClose onClick={() => setShowEmoji(false)} className="cursor-pointer text-2xl" />
+                    ) : (
+                        <HiEmojiHappy onClick={() => setShowEmoji(true)} className="cursor-pointer text-2xl" />
+                    )}
                     <HiPlus className="cursor-pointer text-2xl" />
                 </div>
                 <input ref={focus} onFocus={setRoom} style={{
