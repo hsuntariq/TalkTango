@@ -16,6 +16,8 @@ const MessageScreen = () => {
     const [receivedMessages, setReceivedMessages] = useState([]); const { receiver_id } = useParams()
     const { chatLoading, chatData } = useSelector(state => state.chat)
     const { user, isLoading } = useSelector(state => state.auth);
+    const [selectedImages, setSelectedImages] = useState([])
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -59,11 +61,18 @@ const MessageScreen = () => {
         return a.id - b.id;
     })
 
+
+    // handle multiple image upload
+    const handleImageChange = (e) => {
+        const files = e.target.files;
+        setSelectedImages(Array.from(files))
+    }
+
     return (
         <div className='w-full sticky top-0 flex flex-col  min-h-screen '>
             <MessageHeader userInfo={userInfo} setUserInfo={setUserInfo} />
-            <Messages userInfo={userInfo} receivedMessages={receivedMessages} allMessages={allMessages} />
-            <Footer userInfo={userInfo} setRoom={setRoom} sendMessage={sendMessage} setMessage={setMessage} message={message} />
+            <Messages selectedImages={selectedImages} userInfo={userInfo} receivedMessages={receivedMessages} allMessages={allMessages} />
+            <Footer setSelectedImages={setSelectedImages} selectedImages={selectedImages} handleImageChange={handleImageChange} userInfo={userInfo} setRoom={setRoom} sendMessage={sendMessage} setMessage={setMessage} message={message} />
         </div>
     )
 }

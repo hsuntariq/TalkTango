@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { reset } from "../../features/auth/authSlice";
 
-const Messages = ({ allMessages, userInfo }) => {
+const Messages = ({ allMessages, userInfo, selectedImages }) => {
     const { user, isLoading } = useSelector(state => state.auth);
     const { chatData } = useSelector(state => state.chat);
     const navigate = useNavigate()
@@ -41,7 +41,7 @@ const Messages = ({ allMessages, userInfo }) => {
             <div style={{
                 backgroundImage: `linear-gradient(rgba(${user?.chatBG},0.6),rgba(${user?.chatBG},0.3)), url('${user?.chatImage ? user?.chatImage : 'https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/background.jpg?raw=true'}')`,
 
-            }} className="messages overflow-y-scroll h-[100%] sticky top-0  bg-contain min-h-screen">
+            }} className="messages overflow-y-scroll h-[100%] sticky top-0  bg-contain min-h-screen ">
 
                 {findChat()?.map((message) => {
                     return (
@@ -62,6 +62,10 @@ const Messages = ({ allMessages, userInfo }) => {
                         </>
                     )
                 })}
+                {selectedImages.length > 0 && <div className='image-panel bg-white h-[100%] bottom-0'>
+
+                </div>}
+
             </div>
 
         </>
