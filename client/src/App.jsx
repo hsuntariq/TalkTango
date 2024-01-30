@@ -7,6 +7,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Error from "./components/error/Error"
 import OTP from "./authentication/OTP"
+import 'react-loading-skeleton/dist/skeleton.css'
+
 const App = () => {
   return (
     <>

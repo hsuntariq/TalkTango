@@ -8,7 +8,9 @@ import { getAllUsers, reset } from "../../features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import { useNavigate } from "react-router-dom";
 import Settings from "./Settings";
+import Ske from "../../components/loader/Skeleton";
 const Sidebar = () => {
+    let loop = Array.from({ length: 10 })
     const [search, setSearch] = useState('');
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -72,13 +74,16 @@ const Sidebar = () => {
                     <IoFilterOutline color="white" size={20} />
                 </form>
                 <div className="max-h-[86vh] overflow-y-scroll">
-                    {loading ? (
-                        <Loader />
-                    ) : (
-                        filteredUsers?.map((users) => {
-                            return <UserMessages key={users._id} {...users} />
+                    {loading ?
+                        loop.map(() => {
+                            return <Ske />
                         })
-                    )}
+
+                        : (
+                            filteredUsers?.map((users) => {
+                                return <UserMessages key={users._id} {...users} />
+                            })
+                        )}
 
 
                 </div>

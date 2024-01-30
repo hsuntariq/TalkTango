@@ -7,17 +7,18 @@ import { reset } from "../../features/auth/authSlice";
 import { useEffect, useState } from "react";
 import io from 'socket.io-client'
 import { createMessage } from "../../features/chat/chatSlice";
+import { toast } from 'react-toastify'
 const socket = io.connect('http://localhost:5174/');
 const MessageScreen = () => {
     const [userInfo, setUserInfo] = useState([]);
-
+    const [imageLoading, setImageLoading] = useState(false);
     const [message, setMessage] = useState('')
     const [sentMessages, setSentMessages] = useState([]);
     const [receivedMessages, setReceivedMessages] = useState([]); const { receiver_id } = useParams()
     const { chatLoading, chatData } = useSelector(state => state.chat)
     const { user, isLoading } = useSelector(state => state.auth);
     const [selectedImages, setSelectedImages] = useState([])
-
+    const [images, setImages] = useState(null)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -36,18 +37,23 @@ const MessageScreen = () => {
     }
 
     const sendMessage = () => {
-        const messageData = {
-            sender_id: user?._id, receiver_id, message
-        }
-        // emit the message to the backend server
-        socket.emit('sent_message', { message, chatID: chatData?._id })
-        setSentMessages([...sentMessages, { message, sent: true, id: chatData?._id, sortID: Date.now() }])
+        if (!message) {
+            toast.error('Messages can not be empty!')
+        } else {
 
-        // return the input to an empty state
-        if (!chatLoading) {
-            setMessage('')
+            const messageData = {
+                sender_id: user?._id, receiver_id, message
+            }
+            // emit the message to the backend server
+            socket.emit('sent_message', { message, chatID: chatData?._id })
+            setSentMessages([...sentMessages, { message, sent: true, id: chatData?._id, sortID: Date.now() }])
+
+            // return the input to an empty state
+            if (!chatLoading) {
+                setMessage('')
+            }
+            dispatch(createMessage(messageData))
         }
-        dispatch(createMessage(messageData))
 
     }
 
@@ -66,12 +72,55 @@ const MessageScreen = () => {
     const handleImageChange = (e) => {
         const files = e.target.files;
         setSelectedImages(Array.from(files))
+        setImages(files)
+    }
+
+    const uploadImage = async () => {
+        if (selectedImages && selectedImages.length > 0) {
+            const promises = selectedImages.map(async (file) => {
+                const data = new FormData();
+                data.append('file', file);
+                data.append('upload_preset', 'vgvxg0kj');
+
+                try {
+                    setImageLoading(true)
+                    const res = await fetch('https://api.cloudinary.com/v1_1/djo5zsnlq/image/upload', {
+                        method: 'POST',
+                        body: data,
+                    });
+
+                    const imageData = await res.json();
+                    setImageLoading(false);
+                    return imageData.url;
+                } catch (error) {
+                    console.log(error);
+                }
+            });
+            try {
+                const imageURLs = await Promise.all(promises)
+                return imageURLs;
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    const handleUpload = async () => {
+        const images = await uploadImage();
+        images?.map((image) => {
+            const messageData = {
+                sender_id: user?._id, receiver_id, message: image
+            }
+            dispatch(createMessage(messageData))
+        })
     }
 
     return (
+
         <div className='w-full sticky top-0 flex flex-col  min-h-screen '>
+
             <MessageHeader userInfo={userInfo} setUserInfo={setUserInfo} />
-            <Messages selectedImages={selectedImages} userInfo={userInfo} receivedMessages={receivedMessages} allMessages={allMessages} />
+            <Messages imageLoading={imageLoading} handleUpload={handleUpload} selectedImages={selectedImages} setSelectedImages={setSelectedImages} userInfo={userInfo} receivedMessages={receivedMessages} allMessages={allMessages} />
             <Footer setSelectedImages={setSelectedImages} selectedImages={selectedImages} handleImageChange={handleImageChange} userInfo={userInfo} setRoom={setRoom} sendMessage={sendMessage} setMessage={setMessage} message={message} />
         </div>
     )

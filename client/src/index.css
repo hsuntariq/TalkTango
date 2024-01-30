@@ -5,15 +5,30 @@
 
 ::-webkit-scrollbar{
   height: 2px;
-  width: 3px;
+  width: 2px;
   background: #111B21;
 }
 
 ::-webkit-scrollbar-thumb{
   
   height: 2px;
-  width: 3px;
-  background: #111B21;
+  width: 1px;
+  background:gray;
+  border-radius: 30px;
+}
+.images::-webkit-scrollbar{
+  height: 7px;
+  width: 30px;
+  background: white;
+  border-radius: 30px;
+}
+
+.images::-webkit-scrollbar-thumb{
+  
+  height: 20px;
+  width: 30px;
+  background: black;
+  border-radius: 30px;
 }
 
 ::placeholder{

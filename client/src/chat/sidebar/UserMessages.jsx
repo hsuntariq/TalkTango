@@ -2,6 +2,10 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import Loader from "../../components/loader/Loader";
 import { createChat } from "../../features/chat/chatSlice";
+import Skeleton from 'react-loading-skeleton'
+import { useState } from "react";
+import 'react-loading-skeleton/dist/skeleton.css'
+import Ske from "../../components/loader/Skeleton";
 
 const UserMessages = ({ _id, username, phone }) => {
     const { user } = useSelector(state => state.auth);
@@ -16,7 +20,9 @@ const UserMessages = ({ _id, username, phone }) => {
         dispatch(createChat(chatData))
     }
     if (chatLoading) {
-        return <Loader />
+        return <>
+            <Ske />
+        </>
     }
     return (
         <Link onClick={addChat} to={`/message-panel/${_id}/${user?._id}`} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">

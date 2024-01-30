@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { HiEmojiHappy, HiMicrophone, HiPlus } from "react-icons/hi"
 import { useDispatch, useSelector } from "react-redux"
@@ -32,7 +33,7 @@ const Footer = ({ sendMessage, userInfo, message, setMessage, setRoom, selectedI
         <>
             <div style={{
                 background: `rgba(${user?.bgTheme})`,
-
+                zIndex: `${selectedImages.length > 0 ? '-1' : '333'}`
             }} className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative md:bottom-[6.8rem] text-white">
                 <div className="flex gap-3 relative">
                     <div className={`absolute bottom-[30px]  transition ${showEmoji ? 'opacity-1 scale-1 ' : 'opacity-0 scale-0 '}`}>
