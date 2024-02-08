@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Error from "./components/error/Error"
 import OTP from "./authentication/OTP"
 import 'react-loading-skeleton/dist/skeleton.css'
+import EnterEmail from "./authentication/forgotten_password/EnterEmail"
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path='/home' element={<Home />} />
             <Route path='/message-panel/:receiver_id/:sender_id' element={<MessagePanel />} />
             <Route path='/verify/:id' element={<OTP />} />
+            <Route path='/forgotten-password' element={<EnterEmail />} />
             <Route path='*' element={<Error />} />
           </Route>
         </Routes>

@@ -61,6 +61,15 @@ const setChatTheme = async (themeData) => {
     }
 
 }
+const sendResetLink = async (data) => {
+    try {
+        const response = await axios.post(`${base_url}/send-reset-link`,data)
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+
+}
 
 
 
@@ -71,5 +80,7 @@ export const authService = {
     logoutUser,
     verifyOTP,
     setTheme,
-    setChatTheme
+    setChatTheme,
+    sendResetLink
+
 }

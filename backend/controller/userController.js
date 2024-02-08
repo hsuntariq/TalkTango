@@ -3,7 +3,7 @@ const User = require('../models/userModel')
 const AsyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer')
-
+const {v4:uuidv4} = require('uuid')
 // generate otp
 
 const generateOTP = () => {
@@ -45,6 +45,7 @@ const registerUser = AsyncHandler(async (req, res) => {
             password: hashedPassword,
             image,
             otp,
+            resetToken:newUser.resetToken,
             token: generateToken({ id: newUser._id }),
             bgTheme: newUser.bgTheme,
             chatBG: newUser.chatBG,
@@ -183,6 +184,63 @@ const setChatTheme = AsyncHandler(async (req, res) => {
 })
 
 
+// send reset link 
+const sendResetLink = AsyncHandler(async (req, res) => {
+    const { email } = req.body;
+    // find user
+    const foundUser = await User.findOne({email});
+    if(!foundUser){
+        res.status(404);
+        throw new Error('Invalid email address');
+    } else {
+        // generate unique token
+        const token = uuidv4()
+        foundUser.resetToken = token;
+        foundUser.expirationTime = new Date(Date.now() + 3600000)
+        await foundUser.save()
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.MAIL_USERNAME,
+                pass: process.env.MAIL_PASS
+            }
+        });
+
+        const options = {
+            from: process.env.MAIL_USERNAME,
+            to: email,
+            subject: "Reset password to start the tango",
+            html:`
+                <img width='200px' height='200px' src='https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/logo.png?raw=true' style='display:block;margin:auto;border-radius:50%;'/>
+            <h5 style='text-align:center'>
+            Reset Your Password <b>Please follow the following link to reset your password <br>
+            Following is the reset link <br>  <span style="color:orange">
+                ${process.env.BASE_URL}/reset-password/${token}
+            </span> 
+            </h5>
+            `
+        }
+
+        try {
+            transporter.sendMail(options, (err, info) => {
+                if (err) {
+                    console.log(err)
+                }else{
+                    console.log(info.response)
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }   
+
+        res.send('Reset link sent successfully to the provided email address')
+
+    }
+})
+
+
+
+
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '1d'
@@ -198,5 +256,6 @@ module.exports = {
     loginUser,
     verifyOTP,
     setTheme,
-    setChatTheme
+    setChatTheme,
+    sendResetLink
 }

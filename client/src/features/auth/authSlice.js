@@ -111,6 +111,19 @@ export const setChatTheme = createAsyncThunk('auth/set-chat-theme', async (data,
         return thunkAPI.rejectWithValue(message)
     }
 })
+export const sendResetLink = createAsyncThunk('auth/reset-link', async (data, thunkAPI) => {
+    try {
+        return await authService.sendResetLink(data);
+    } catch (error) {
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.error) ||
+            error.message ||
+            error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -229,6 +242,19 @@ export const authSlice = createSlice({
                 state.user = action.payload;
                 localStorage.removeItem('user');
                 localStorage.setItem('user', JSON.stringify(action.payload))
+            })
+            .addCase(sendResetLink.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(sendResetLink.rejected, (state, action) => {
+                state.isError = true;
+                state.message = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(sendResetLink.fulfilled, (state,action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.message = action.payload
             })
     }
 });

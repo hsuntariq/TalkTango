@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom"
-import LogForm from "./LogForm"
-import Footer from "./Footer"
-import logo from '../assets/logo.png'
+import LogForm from "../LogForm"
+import Footer from "../Footer"
+import logo from '../../assets/logo.png'
+import EmailForm from "./EmailForm"
+import Skeleton from "react-loading-skeleton"
 
-const Login = () => {
+const EnterEmail = () => {
+
+
     return (
         <>
             <div className="min-h-screen bg-gray-50">
@@ -14,11 +18,9 @@ const Login = () => {
                     <div className="flex justify-between items-center flex-col md:flex-row p-10 bg-white border-orange-500 mx-auto">
 
                         <div className="right w-full flex flex-col justify-center items-center ">
-                            <LogForm />
-                            <div className="left flex flex-col gap-3 justify-between w-full">
-                                <div className="mt-auto  flex items-end">New to the App? <Link to="/" className="text-orange-500 font-bold mx-1"> SignUp</Link> instead
-                                </div>
-                            </div>
+
+                            <EmailForm />
+
                         </div>
 
                     </div>
@@ -29,4 +31,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default EnterEmail

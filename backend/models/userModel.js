@@ -28,6 +28,14 @@ const userSchema = mongoose.Schema({
         default:null,
         
     },
+    resetToken: {
+        type: String,
+        default:null
+    },
+    expirationTime: {
+        type: Date,
+        default:null
+    },
     bgTheme:{
         type: String,
         default:"32,44,51",
