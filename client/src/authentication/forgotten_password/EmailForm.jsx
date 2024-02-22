@@ -31,8 +31,12 @@ const EmailForm = () => {
     if (isLoading) {
 
         return <>
-            <Skeleton width={400} height={30} />
-            <Skeleton width={300} />
+            <div className="w-full  d-flex flex-col items-center justify-center ">
+
+                <Skeleton width={400} height={30} />
+                <Skeleton width={300} />
+            </div>
+
         </>
     }
 

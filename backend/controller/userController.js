@@ -3,7 +3,7 @@ const User = require('../models/userModel')
 const AsyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer')
-const {v4:uuidv4} = require('uuid')
+const { v4: uuidv4 } = require('uuid')
 // generate otp
 
 const generateOTP = () => {
@@ -45,7 +45,7 @@ const registerUser = AsyncHandler(async (req, res) => {
             password: hashedPassword,
             image,
             otp,
-            resetToken:newUser.resetToken,
+            resetToken: newUser.resetToken,
             token: generateToken({ id: newUser._id }),
             bgTheme: newUser.bgTheme,
             chatBG: newUser.chatBG,
@@ -188,8 +188,8 @@ const setChatTheme = AsyncHandler(async (req, res) => {
 const sendResetLink = AsyncHandler(async (req, res) => {
     const { email } = req.body;
     // find user
-    const foundUser = await User.findOne({email});
-    if(!foundUser){
+    const foundUser = await User.findOne({ email });
+    if (!foundUser) {
         res.status(404);
         throw new Error('Invalid email address');
     } else {
@@ -210,12 +210,12 @@ const sendResetLink = AsyncHandler(async (req, res) => {
             from: process.env.MAIL_USERNAME,
             to: email,
             subject: "Reset password to start the tango",
-            html:`
+            html: `
                 <img width='200px' height='200px' src='https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/logo.png?raw=true' style='display:block;margin:auto;border-radius:50%;'/>
             <h5 style='text-align:center'>
             Reset Your Password <b>Please follow the following link to reset your password <br>
             Following is the reset link <br>  <span style="color:orange">
-                ${process.env.BASE_URL}/reset-password/${token}
+                ${process.env.BASE_URL_FRONTEND}/reset-password/${token}
             </span> 
             </h5>
             `
@@ -225,19 +225,37 @@ const sendResetLink = AsyncHandler(async (req, res) => {
             transporter.sendMail(options, (err, info) => {
                 if (err) {
                     console.log(err)
-                }else{
+                } else {
                     console.log(info.response)
                 }
             })
         } catch (error) {
             console.log(error)
-        }   
+        }
 
         res.send('Reset link sent successfully to the provided email address')
 
     }
 })
 
+
+
+// reset the password 
+const resetPassword = AsyncHandler(async (req, res) => {
+    const { token, newPassword } = req.body;
+    const findUser = await User.findOne({ resetToken: token });
+    if (!findUser) {
+        res.status(401)
+        throw new Error('Token expired')
+    } else {
+        const salt = await bcrypt.genSalt(10);
+        const hashed = await bcrypt.hash(newPassword, salt)
+        findUser.password = hashed;
+        findUser.resetToken = null;
+        await findUser.save();
+        res.send('Password reset successfully')
+    }
+})
 
 
 
@@ -257,5 +275,6 @@ module.exports = {
     verifyOTP,
     setTheme,
     setChatTheme,
-    sendResetLink
+    sendResetLink,
+    resetPassword
 }

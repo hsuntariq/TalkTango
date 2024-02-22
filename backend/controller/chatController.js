@@ -1,5 +1,5 @@
 const AsyncHandler = require('express-async-handler');
-const {v4:uuidv4} = require('uuid')
+const { v4: uuidv4 } = require('uuid')
 const Chat = require('../models/ChatModel');
 const addChat = AsyncHandler(async (req, res) => {
     const { sender_id, receiver_id } = req.body;
@@ -22,7 +22,7 @@ const addMessages = AsyncHandler(async (req, res) => {
         users: { $all: [sender_id, receiver_id] }
     })
     findChat.chat.push({
-        _id:uuidv4(),
+        _id: uuidv4(),
         message
     })
     await findChat.save();
@@ -30,13 +30,28 @@ const addMessages = AsyncHandler(async (req, res) => {
 })
 
 
+const addImageMessage = AsyncHandler(async (req, res) => {
+    const { image, message, sender_id, receiver_id } = req.body;
+    const findChat = await Chat.findOne({
+        users: { $all: [sender_id, receiver_id] }
+    });
+    findChat.chat.imageMessage ? findChat.chat.imageMessage.push({ image, message }) : findChat.chat.push({
+        imageMessage: [{ image, message }]
+    })
+
+    await findChat.save();
+    res.send(findChat)
+})
+
+
 const findChat = AsyncHandler(async (req, res) => {
     const { sender_id, receiver_id } = req.body;
-    const findChat = await Chat.find({
-        users:{$all: [sender_id, receiver_id]}
+    const findChat = await Chat.findOne({
+        users: { $all: [sender_id, receiver_id] }
     });
     if (findChat) {
-        res.send(findChat[0].chat)
+
+        res.send(findChat.chat)
     } else {
         throw new Error('No Data found')
     }
@@ -45,5 +60,6 @@ const findChat = AsyncHandler(async (req, res) => {
 module.exports = {
     addChat,
     addMessages,
-    findChat
+    findChat,
+    addImageMessage
 }

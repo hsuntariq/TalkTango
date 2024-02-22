@@ -36,6 +36,20 @@ export const createMessage = createAsyncThunk('chat/add-message', async (data, t
         return thunkAPI.rejectWithValue(message)
     }
 })
+export const createImageMessage = createAsyncThunk('chat/add-image-message', async (data, thunkAPI) => {
+    try {
+        // console.log(data)
+        return await chatService.addImageMessage(data)
+    } catch (error) {
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.error) ||
+            error.message ||
+            error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 export const chatSlice = createSlice({
     name: 'chat',
@@ -72,6 +86,19 @@ export const chatSlice = createSlice({
                 state.message = action.payload
             })
             .addCase(createMessage.fulfilled, (state, action) => {
+                state.chatLoading = false;
+                state.chatSuccess = true;
+                state.chatData = action.payload;
+            })
+            .addCase(createImageMessage.pending, (state) => {
+                state.chatLoading = true;
+            })
+            .addCase(createImageMessage.rejected, (state, action) => {
+                state.chatLoading = false;
+                state.chatError = true;
+                state.message = action.payload
+            })
+            .addCase(createImageMessage.fulfilled, (state, action) => {
                 state.chatLoading = false;
                 state.chatSuccess = true;
                 state.chatData = action.payload;

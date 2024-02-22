@@ -6,12 +6,13 @@ import { reset } from "../../features/auth/authSlice";
 import { IoCloseSharp, IoSend } from "react-icons/io5";
 import { ClipLoader } from "react-spinners";
 
-const Messages = ({ allMessages, handleUpload, userInfo, selectedImages, setSelectedImages, imageLoading }) => {
+const Messages = ({ allMessages, handleInputChange, imageInputs, sendImageChat, imageMsg, setImageMsg, handleUpload, userInfo, selectedImages, setSelectedImages, imageLoading }) => {
+
+    const [showImage, setShowImage] = useState(null)
     const { user, isLoading } = useSelector(state => state.auth);
     const { chatData } = useSelector(state => state.chat);
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [respectiveChat, setRespectiveChat] = useState([])
 
     useEffect(() => {
         if (!user) {
@@ -35,6 +36,14 @@ const Messages = ({ allMessages, handleUpload, userInfo, selectedImages, setSele
     useEffect(() => {
         findChat()
     }, [userInfo?.username])
+
+
+    const handleSelectedImage = (name) => {
+        const image = selectedImages.find((img, index) => {
+            return img.name === name
+        })
+        setShowImage(image)
+    }
 
 
 
@@ -66,25 +75,57 @@ const Messages = ({ allMessages, handleUpload, userInfo, selectedImages, setSele
                         </>
                     )
                 })}
-                {selectedImages.length > 0 && <div className='image-panel bg-[rgba(168,168,168,0.9)] min-h-screen flex flex-col items-center justify-start bottom-0'>
+                {selectedImages.length > 0 && <div className='image-panel bg-gray-900 min-h-screen flex flex-col items-center justify-start bottom-0'>
                     <IoCloseSharp color='white' size={40} className='ms-auto' cursor="pointer" onClick={() => setSelectedImages([])} />
-                    <div className="flex images w-3/4 mx-auto gap-4 overflow-x-scroll">
-                        {selectedImages?.map((file, index) => {
-                            return <img className="w-3/4 mx-auto  aspect-video" key={index} src={URL.createObjectURL(file)} alt="" />
-                        })}
-                    </div>
-                    <div className="container w-3/4 my-10 mx-auto">
+                    {isLoading ? (
+                        <ClipLoader size={50} />
+                    ) : (
 
-                        <form className="rounded-md py-1 flex item-center bg-white px-5 w-full">
-                            <input type="text" className="rounded-md bg-transparent py-1 px-5 w-full border-0 focus:border-0 focus:outline-0" placeholder="Write something...." />
-                            <span className="self-center">
-                                {imageLoading ? (
-                                    <ClipLoader />
-                                ) : (<IoSend onClick={handleUpload} cursor="pointer" />)}
 
-                            </span>
-                        </form>
-                    </div>
+                        <div className="container w-3/4  mx-auto">
+
+                            <div className="w-full aspect-video overflow-hidden my-10 flex h-[400px]  flex-col justify-center items-center">
+                                {
+                                    showImage && <img width={'100%'} height={'400px'} className="object-contain " src={URL.createObjectURL(showImage)} alt="" />
+
+                                }
+                            </div>
+
+                            <form className="rounded-md py-1 flex item-center bg-white px-5 w-full">
+                                <input
+                                    value={imageInputs[showImage?.name] || ""} // Use corresponding input value for the shown image
+                                    onChange={(e) => handleInputChange(showImage?.name, e.target.value)} // Pass image name to handleInputChange
+                                    type="text"
+                                    className="rounded-md bg-transparent py-1 px-5 w-full border-0 focus:border-0 focus:outline-0"
+                                    placeholder="Write something...."
+                                />
+                                <span className="self-center">
+                                    {imageLoading ? (
+                                        <ClipLoader />
+                                    ) : (
+                                        <IoSend
+                                            onClick={() => {
+                                                // handleUpload();
+                                                sendImageChat();
+                                            }}
+                                            cursor="pointer"
+                                        />
+                                    )}
+                                </span>
+                            </form>
+                            <div className="flex images w-full mx-auto gap-4 ">
+                                {selectedImages?.map((file, index) => {
+                                    return (
+                                        <>
+                                            <div className="flex gap-3">
+                                                <img onClick={() => handleSelectedImage(file.name)} className="w-[80px]  my-10 mx-auto  aspect-square border cursor-pointer" key={index} src={URL.createObjectURL(file)} alt="" />
+                                            </div>
+                                        </>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    )}
                 </div>}
 
             </div>

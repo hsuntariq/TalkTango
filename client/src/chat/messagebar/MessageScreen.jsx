@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { reset } from "../../features/auth/authSlice";
 import { useEffect, useState } from "react";
 import io from 'socket.io-client'
-import { createMessage } from "../../features/chat/chatSlice";
+import { createImageMessage, createMessage } from "../../features/chat/chatSlice";
 import { toast } from 'react-toastify'
 const socket = io.connect('http://localhost:5174/');
 const MessageScreen = () => {
@@ -14,7 +14,8 @@ const MessageScreen = () => {
     const [imageLoading, setImageLoading] = useState(false);
     const [message, setMessage] = useState('')
     const [sentMessages, setSentMessages] = useState([]);
-    const [receivedMessages, setReceivedMessages] = useState([]); const { receiver_id } = useParams()
+    const [receivedMessages, setReceivedMessages] = useState([]);
+    const { receiver_id } = useParams()
     const { chatLoading, chatData } = useSelector(state => state.chat)
     const { user, isLoading } = useSelector(state => state.auth);
     const [selectedImages, setSelectedImages] = useState([])
@@ -56,6 +57,7 @@ const MessageScreen = () => {
         }
 
     }
+
 
     useEffect(() => {
         socket.on('received_message', (data) => {
@@ -115,12 +117,38 @@ const MessageScreen = () => {
         })
     }
 
+
+
+    const [imageInputs, setImageInputs] = useState({}); // State to keep track of inputs for each image
+
+    // send image messages
+    const handleInputChange = (name, value) => {
+        setImageInputs(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const sendImageChat = async () => {
+        const images = await uploadImage();
+        selectedImages?.forEach((img, index) => {
+            const data = {
+                message: imageInputs[img.name],
+                sender_id: user?._id,
+                receiver_id: receiver_id,
+                image: images[index]
+            };
+            dispatch(createImageMessage(data));
+        });
+        setImageInputs({})
+    };
+
     return (
 
         <div className='w-full sticky top-0 flex flex-col  min-h-screen '>
 
             <MessageHeader userInfo={userInfo} setUserInfo={setUserInfo} />
-            <Messages imageLoading={imageLoading} handleUpload={handleUpload} selectedImages={selectedImages} setSelectedImages={setSelectedImages} userInfo={userInfo} receivedMessages={receivedMessages} allMessages={allMessages} />
+            <Messages imageInputs={imageInputs} handleInputChange={handleInputChange} setImageInputs={setImageInputs} sendImageChat={sendImageChat} imageLoading={imageLoading} handleUpload={handleUpload} selectedImages={selectedImages} setSelectedImages={setSelectedImages} userInfo={userInfo} receivedMessages={receivedMessages} allMessages={allMessages} />
             <Footer setSelectedImages={setSelectedImages} selectedImages={selectedImages} handleImageChange={handleImageChange} userInfo={userInfo} setRoom={setRoom} sendMessage={sendMessage} setMessage={setMessage} message={message} />
         </div>
     )

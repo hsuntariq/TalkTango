@@ -11,8 +11,13 @@ const addMessage = async (messageData) => {
     const response = await axios.post(`${base_url}/create-message`, messageData)
     return response.data;
 }
+const addImageMessage = async (messageData) => {
+    const response = await axios.post(`${base_url}/create-image-message`, messageData)
+    return response.data;
+}
 
 export const chatService = {
     addChat,
-    addMessage
+    addMessage,
+    addImageMessage
 }
