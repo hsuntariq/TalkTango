@@ -61,7 +61,7 @@ const MessageScreen = () => {
 
     useEffect(() => {
         socket.on('received_message', (data) => {
-            setReceivedMessages([...receivedMessages, { message: data, sent: false, id: chatData?._id, sortID: Date.now() }]);
+            setReceivedMessages([...receivedMessages, { message: data.message, image: data.image, sent: false, id: chatData?._id, sortID: Date.now() }]);
         })
     }, [receivedMessages])
 
@@ -132,6 +132,13 @@ const MessageScreen = () => {
     const sendImageChat = async () => {
         const images = await uploadImage();
         selectedImages?.forEach((img, index) => {
+
+            // socket messages
+            // emit the message to the backend server
+            socket.emit('sent_message', { message, chatID: chatData?._id, image: images[index] })
+            setSentMessages([...sentMessages, { message: imageInputs[img.name], sent: true, id: chatData?._id, sortID: Date.now(), image: images[index] }])
+
+
             const data = {
                 message: imageInputs[img.name],
                 sender_id: user?._id,

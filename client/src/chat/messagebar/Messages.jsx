@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { reset } from "../../features/auth/authSlice";
@@ -7,12 +7,20 @@ import { IoCloseSharp, IoSend } from "react-icons/io5";
 import { ClipLoader } from "react-spinners";
 
 const Messages = ({ allMessages, handleInputChange, imageInputs, sendImageChat, imageMsg, setImageMsg, handleUpload, userInfo, selectedImages, setSelectedImages, imageLoading }) => {
-
+    const messagesEndRef = useRef(null);
     const [showImage, setShowImage] = useState(null)
     const { user, isLoading } = useSelector(state => state.auth);
     const { chatData } = useSelector(state => state.chat);
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [allMessages]);
 
     useEffect(() => {
         if (!user) {
@@ -62,12 +70,18 @@ const Messages = ({ allMessages, handleInputChange, imageInputs, sendImageChat, 
 
                             <p>
                                 {message.sent ? (
-                                    <div className="w-max px-10 py-2 my-2 rounded-full text-white text-1xl ms-auto bg-green-600">
+                                    <div className="w-max px-3 mx-3 py-1 my-2 rounded-md text-white text-1xl ms-auto bg-green-600">
+                                        {message?.image
+                                            &&
+                                            <img width={'200px'} height={'200px'} className="aspect-square object-cover" src={message.image} />}
                                         {message.message}
                                     </div>
 
                                 ) : (
-                                    <div className="w-max px-10 py-2 my-2 rounded-full text-white text-1xl bg-gray-400">
+                                    <div className="w-max px-3 mx-3 py-2 my-2 rounded-md text-white text-1xl bg-gray-400">
+                                        {message?.image
+                                            &&
+                                            <img width={'200px'} height={'200px'} className="aspect-square object-cover" src={message.image} />}
                                         {message.message}
                                     </div>
                                 )}
@@ -75,6 +89,9 @@ const Messages = ({ allMessages, handleInputChange, imageInputs, sendImageChat, 
                         </>
                     )
                 })}
+
+                <div ref={messagesEndRef} />
+
                 {selectedImages.length > 0 && <div className='image-panel bg-gray-900 min-h-screen flex flex-col items-center justify-start bottom-0'>
                     <IoCloseSharp color='white' size={40} className='ms-auto' cursor="pointer" onClick={() => setSelectedImages([])} />
                     {isLoading ? (
