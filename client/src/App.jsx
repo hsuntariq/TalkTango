@@ -10,6 +10,7 @@ import OTP from "./authentication/OTP"
 import 'react-loading-skeleton/dist/skeleton.css'
 import EnterEmail from "./authentication/forgotten_password/EnterEmail"
 import ResetPass from "./authentication/forgotten_password/ResetPass"
+import Audio from "./Audio"
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             <Route path='/verify/:id' element={<OTP />} />
             <Route path='/forgotten-password' element={<EnterEmail />} />
             <Route path='/reset-password/:id' element={<ResetPass />} />
+            <Route path='/audio' element={<Audio />} />
             <Route path='*' element={<Error />} />
           </Route>
         </Routes>
