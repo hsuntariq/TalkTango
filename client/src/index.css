@@ -3,81 +3,103 @@
 @tailwind utilities;
 
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   height: 2px;
   width: 2px;
   background: #111B21;
 }
 
-::-webkit-scrollbar-thumb{
-  
+::-webkit-scrollbar-thumb {
+
   height: 2px;
   width: 1px;
-  background:gray;
+  background: gray;
   border-radius: 30px;
 }
-.images::-webkit-scrollbar{
+
+.images::-webkit-scrollbar {
   height: 7px;
   width: 30px;
   background: white;
   border-radius: 30px;
 }
 
-.images::-webkit-scrollbar-thumb{
-  
+.images::-webkit-scrollbar-thumb {
+
   height: 20px;
   width: 30px;
   background: black;
   border-radius: 30px;
 }
 
-::placeholder{
-  font-size:0.8rem;
+::placeholder {
+  font-size: 0.8rem;
   text-transform: capitalize;
 }
 
-.small-img{
+.small-img {
   object-fit: contain;
   aspect-ratio: 3/2;
 }
 
-.react-tel-input input{
-width: 100% !important;
+.react-tel-input input {
+  width: 100% !important;
 }
-.react-tel-input input:focus{
+
+.react-tel-input input:focus {
   border: 1px solid orange;
 }
 
 
-.messages{
+.messages {
   /* background-image:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.3)), url('./assets/background.jpg'); */
 }
 
-.welcome{
+.welcome {
   background-image: url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3JtNjg1ZGVzaWduLXRuLXJlbWl4LTAwMmIuanBn.jpg') !important;
   background-position: left center;
 
 }
 
 
-.test .otp{
+.test .otp {
   justify-content: center;
 }
 
 
-.test input{
-    border: 1px solid orange;
-    padding: 0.5rem 1rem ;
-    width: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    font-weight: 900;
-    font-size: 2rem;
-    text-align: center;
+.test input {
+  border: 1px solid orange;
+  padding: 0.5rem 1rem;
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-weight: 900;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.toggle-settings {
+  transform: translateX(0%)
+}
+
+
+.mic {
+  animation: rec 2s infinite alternate-reverse;
+
+  position: sticky;
+}
+
+@keyframes rec {
+  from {
+    background: linear-gradient(orange, red);
+    background-position: 400% 500%;
   }
 
-  .toggle-settings{
-    transform:translateX(0%)
+  to {
+
+    background: linear-gradient(orange, red);
+    background-position: 100% 230%;
   }
+}

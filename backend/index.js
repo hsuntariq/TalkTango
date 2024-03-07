@@ -32,8 +32,8 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sent_message', (data) => {
-        socket.to(data.chatID).emit('received_message', data)
         // console.log(data)
+        socket.to(data.chatID).emit('received_message', data)
         const roomSize = io.sockets.adapter.rooms.get(data.chatID)?.size || 0;
         console.log(`Users in room ${data.chatID}: ${roomSize}`);
     });

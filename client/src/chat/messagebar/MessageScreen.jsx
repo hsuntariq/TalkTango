@@ -24,6 +24,46 @@ const MessageScreen = () => {
     const dispatch = useDispatch()
 
 
+
+    // handle audio input
+    const [stream, setStream] = useState(null);
+    const [recording, setRecording] = useState(false);
+    const [mediaRecorder, setMediaRecorder] = useState(null);
+    const [audioChunks, setAudioChunks] = useState([]);
+    const chunks = [];
+
+
+    // start recording
+    const startRecording = async () => {
+        try {
+            const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            setRecording((true))
+            setStream(audioStream);
+            const recorder = new MediaRecorder(audioStream);
+            setMediaRecorder(recorder);
+            recorder.ondataavailable = (e) => {
+                chunks.push(e.data);
+                setAudioChunks([...audioChunks, ...chunks]);
+            }
+            recorder.start();
+        } catch (error) {
+            toast.error('Please enable microphone to access this feature')
+        }
+    }
+
+    // stop recording
+    const stopRecording = () => {
+        if (mediaRecorder) {
+            mediaRecorder.stop()
+            setRecording(false);
+            setStream(null)
+        }
+    }
+
+
+
+
+
     useEffect(() => {
         if (!user) {
             navigate('/')
@@ -156,7 +196,7 @@ const MessageScreen = () => {
 
             <MessageHeader userInfo={userInfo} setUserInfo={setUserInfo} />
             <Messages imageInputs={imageInputs} handleInputChange={handleInputChange} setImageInputs={setImageInputs} sendImageChat={sendImageChat} imageLoading={imageLoading} handleUpload={handleUpload} selectedImages={selectedImages} setSelectedImages={setSelectedImages} userInfo={userInfo} receivedMessages={receivedMessages} allMessages={allMessages} />
-            <Footer setSelectedImages={setSelectedImages} selectedImages={selectedImages} handleImageChange={handleImageChange} userInfo={userInfo} setRoom={setRoom} sendMessage={sendMessage} setMessage={setMessage} message={message} />
+            <Footer stopRecording={stopRecording} startRecording={startRecording} recording={recording} audioChunks={audioChunks} setSelectedImages={setSelectedImages} selectedImages={selectedImages} handleImageChange={handleImageChange} userInfo={userInfo} setRoom={setRoom} sendMessage={sendMessage} setMessage={setMessage} message={message} />
         </div>
     )
 }

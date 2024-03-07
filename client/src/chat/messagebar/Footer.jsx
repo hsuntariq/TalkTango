@@ -34,7 +34,7 @@ const Footer = ({ sendMessage, userInfo, message, setMessage, setRoom, selectedI
             <div style={{
                 background: `rgba(${user?.bgTheme})`,
                 zIndex: `${selectedImages.length > 0 ? '-1' : '333'}`
-            }} className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative md:bottom-[6.8rem] text-white">
+            }} className="flex relative w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative md:bottom-[6.8rem] text-white">
                 <div className="flex gap-3 relative">
                     <div className={`absolute bottom-[30px]  transition ${showEmoji ? 'opacity-1 scale-1 ' : 'opacity-0 scale-0 '}`}>
                         <EmojiPicker onEmojiClick={(e) => {
@@ -89,7 +89,7 @@ const Footer = ({ sendMessage, userInfo, message, setMessage, setRoom, selectedI
                 <input ref={focus} onFocus={setRoom} style={{
                     background: `rgba(${user?.bgTheme})`
                 }} type="text" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a message" className={`border focus:outline-none rounded-md w-full p-1`} />
-                <HiMicrophone className="cursor-pointer text-2xl" />
+                <HiMicrophone className="cursor-pointer mic text-2xl" />
                 {chatLoading ? <Circles
                     height="20"
                     width="20"
