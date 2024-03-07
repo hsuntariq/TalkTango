@@ -2,15 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
 ::-webkit-scrollbar {
   height: 2px;
   width: 2px;
-  background: #111B21;
+  background: #111b21;
 }
 
 ::-webkit-scrollbar-thumb {
-
   height: 2px;
   width: 1px;
   background: gray;
@@ -25,7 +23,6 @@
 }
 
 .images::-webkit-scrollbar-thumb {
-
   height: 20px;
   width: 30px;
   background: black;
@@ -50,22 +47,18 @@
   border: 1px solid orange;
 }
 
-
 .messages {
   /* background-image:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.3)), url('./assets/background.jpg'); */
 }
 
 .welcome {
-  background-image: url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3JtNjg1ZGVzaWduLXRuLXJlbWl4LTAwMmIuanBn.jpg') !important;
+  background-image: url("https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3JtNjg1ZGVzaWduLXRuLXJlbWl4LTAwMmIuanBn.jpg") !important;
   background-position: left center;
-
 }
-
 
 .test .otp {
   justify-content: center;
 }
-
 
 .test input {
   border: 1px solid orange;
@@ -81,25 +74,48 @@
 }
 
 .toggle-settings {
-  transform: translateX(0%)
+  transform: translateX(0%);
 }
 
-
-.mic {
-  animation: rec 2s infinite alternate-reverse;
-
-  position: sticky;
+.anim {
+  background-color: green;
+  /* padding: 0.4rem; */
+  border-radius: 50%;
+  position: relative;
 }
 
-@keyframes rec {
-  from {
-    background: linear-gradient(orange, red);
-    background-position: 400% 500%;
+.anim::before {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: rgb(0, 128, 0, 0.9);
+  z-index: -2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 0.7s infinite linear alternate;
+  border-radius: 50%;
+}
+.anim::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: rgb(0, 128, 0, 0.7);
+  z-index: -2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 0.9s infinite linear alternate;
+  border-radius: 50%;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
   }
-
-  to {
-
-    background: linear-gradient(orange, red);
-    background-position: 100% 230%;
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
   }
 }
