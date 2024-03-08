@@ -25,8 +25,11 @@ const Footer = ({
   stopRecording,
   recording,
   audioChunks,
+  sentMessages,
+  setSentMessages
 }) => {
-  const { chatLoading } = useSelector((state) => state.chat);
+  const { chatLoading, chatData } = useSelector((state) => state.chat);
+
   const [showEmoji, setShowEmoji] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const { user } = useSelector((state) => state.auth);
@@ -34,14 +37,16 @@ const Footer = ({
   const focus = useRef();
   const record = useRef();
 
-  const startRec = () => {
+  const startRec = async () => {
     if (recording) {
-      stopRecording();
+      stopRecording()
     } else {
-      startRecording();
+      startRecording()
     }
     record.current.classList.toggle("anim");
   };
+
+
 
   useEffect(() => {
     if (message.length > 0) {
@@ -63,13 +68,12 @@ const Footer = ({
           background: `rgba(${user?.bgTheme})`,
           zIndex: `${selectedImages.length > 0 ? "-1" : "333"}`,
         }}
-        className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative md:bottom-[6.8rem] text-white"
+        className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative  text-white"
       >
         <div className="flex gap-3 relative">
           <div
-            className={`absolute bottom-[30px]  transition ${
-              showEmoji ? "opacity-1 scale-1 " : "opacity-0 scale-0 "
-            }`}
+            className={`absolute bottom-[30px]  transition ${showEmoji ? "opacity-1 scale-1 " : "opacity-0 scale-0 "
+              }`}
           >
             <EmojiPicker
               onEmojiClick={(e) => {
@@ -98,9 +102,8 @@ const Footer = ({
             style={{
               background: `rgba(${user?.bgTheme})`,
             }}
-            className={`absolute bottom-[40px] opacity-0 left-[40px] border rounded-md  transition ${
-              showMenu ? "scale-1 opacity-100" : "scale:0 rotate-[360deg]"
-            } `}
+            className={`absolute bottom-[40px] opacity-0 left-[40px] border rounded-md  transition ${showMenu ? "scale-1 opacity-100" : "scale:0 rotate-[360deg]"
+              } `}
           >
             <ul className="list-none">
               <li className="flex cursor-pointer hover:bg-gray-700 transition px-3 py-1 my-2 gap-3 items-center text-1xl">
@@ -143,9 +146,8 @@ const Footer = ({
               setShowEmoji(false);
               setShowMenu(!showMenu);
             }}
-            className={`cursor-pointer transition  text-2xl ${
-              showMenu && "rotate-45"
-            } `}
+            className={`cursor-pointer transition  text-2xl ${showMenu && "rotate-45"
+              } `}
           />
         </div>
         <input

@@ -30,39 +30,27 @@ const MessageScreen = () => {
   const [stream, setStream] = useState(null);
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [audioChunks, setAudioChunks] = useState([]);
-  const chunks = [];
+  const [audioBlob, setAudioBlob] = useState(null);
 
   // start recording
   const startRecording = async () => {
     try {
-      const audioStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-      });
+      const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setRecording(true);
       setStream(audioStream);
       const recorder = new MediaRecorder(audioStream);
       setMediaRecorder(recorder);
+      const chunks = [];
       recorder.ondataavailable = (e) => {
         chunks.push(e.data);
-        setAudioChunks([...audioChunks, ...chunks]);
       };
-      recorder.start();
-    } catch (error) {
-      toast.error("Please enable microphone to access this feature");
-    }
-  };
-
-  // stop recording
-  const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      setRecording(false);
-      const latestAudioChunk = audioChunks[audioChunks.length - 1];
-      if (latestAudioChunk) {
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/webm' });
+        setAudioBlob(blob);
         socket.emit("sent_message", {
           chatID: chatData?._id,
-          voice: latestAudioChunk,
+          voice: blob,
+
         });
         setSentMessages([
           ...sentMessages,
@@ -70,10 +58,21 @@ const MessageScreen = () => {
             sent: true,
             id: chatData?._id,
             sortID: Date.now(),
-            voice: latestAudioChunk,
+            voice: blob,
           },
         ]);
-      }
+      };
+      recorder.start();
+    } catch (error) {
+      toast.error('Please enable microphone to access this feature');
+    }
+  };
+
+  // stop recording
+  const stopRecording = () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      setAudioBlob(null)
       setRecording(false);
       setStream(null);
     }
@@ -126,15 +125,16 @@ const MessageScreen = () => {
       setReceivedMessages([
         ...receivedMessages,
         {
-          message: data.message,
-          image: data.image,
+          message: data?.message,
+          image: data?.image,
           sent: false,
           id: chatData?._id,
           sortID: Date.now(),
-          voice: data.voice,
+          voice: data?.voice,
         },
       ]);
     });
+    console.log(allMessages)
   }, [receivedMessages]);
 
   const allMessages = [...sentMessages, ...receivedMessages].sort((a, b) => {
@@ -236,10 +236,10 @@ const MessageScreen = () => {
   };
 
   return (
-    <div className="w-full sticky top-0 flex flex-col  min-h-screen ">
+    <div className="w-full top-0 flex flex-col justify-between  ">
       <MessageHeader userInfo={userInfo} setUserInfo={setUserInfo} />
       <Messages
-        audioChunks={audioChunks}
+        audioBlob={audioBlob}
         imageInputs={imageInputs}
         handleInputChange={handleInputChange}
         setImageInputs={setImageInputs}
@@ -253,10 +253,11 @@ const MessageScreen = () => {
         allMessages={allMessages}
       />
       <Footer
+        sentMessages={sentMessages}
+        setSentMessages={setSentMessages}
         stopRecording={stopRecording}
         startRecording={startRecording}
         recording={recording}
-        audioChunks={audioChunks}
         setSelectedImages={setSelectedImages}
         selectedImages={selectedImages}
         handleImageChange={handleImageChange}
@@ -265,6 +266,7 @@ const MessageScreen = () => {
         sendMessage={sendMessage}
         setMessage={setMessage}
         message={message}
+        audioBlob={audioBlob}
       />
     </div>
   );

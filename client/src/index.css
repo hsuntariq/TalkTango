@@ -8,6 +8,10 @@
   background: #111b21;
 }
 
+body {
+  /* overflow-y: hidden; */
+}
+
 ::-webkit-scrollbar-thumb {
   height: 2px;
   width: 1px;
@@ -97,6 +101,7 @@
   animation: pulse 0.7s infinite linear alternate;
   border-radius: 50%;
 }
+
 .anim::after {
   content: "";
   position: absolute;
@@ -115,6 +120,7 @@
   0% {
     transform: translate(-50%, -50%) scale(1);
   }
+
   100% {
     transform: translate(-50%, -50%) scale(1.5);
   }

@@ -19,11 +19,6 @@ const UserMessages = ({ _id, username, phone }) => {
         // console.log(chatData)
         dispatch(createChat(chatData))
     }
-    if (chatLoading) {
-        return <>
-            <Ske />
-        </>
-    }
     return (
         <Link onClick={addChat} to={`/message-panel/${_id}/${user?._id}`} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">
             <div className="flex items-center  my-2 gap-4 text-white">

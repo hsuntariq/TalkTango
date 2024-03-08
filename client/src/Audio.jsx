@@ -1,37 +1,41 @@
-import React, { useState } from 'react'
-import { toast } from 'react-toastify'
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+
 const Audio = () => {
     const [stream, setStream] = useState(null);
     const [recording, setRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
-    const [audioChunks, setAudioChunks] = useState([]);
-    const chunks = [];
+    const [audioBlob, setAudioBlob] = useState(null);
+
     const startRecording = async () => {
         try {
             const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            setRecording((true))
+            setRecording(true);
             setStream(audioStream);
             const recorder = new MediaRecorder(audioStream);
             setMediaRecorder(recorder);
+            const chunks = [];
             recorder.ondataavailable = (e) => {
                 chunks.push(e.data);
-                setAudioChunks([...audioChunks, ...chunks]);
-            }
+            };
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'audio/webm' });
+                setAudioBlob(blob);
+            };
             recorder.start();
         } catch (error) {
-            toast.error('Please enable microphone to access this feature')
+            toast.error('Please enable microphone to access this feature');
         }
-    }
-
+    };
 
     const stopRecording = () => {
         if (mediaRecorder) {
-            mediaRecorder.stop()
+            mediaRecorder.stop();
+            setAudioBlob(null)
             setRecording(false);
-            setStream(null)
+            setStream(null);
         }
-    }
-
+    };
 
     return (
         <>
@@ -45,19 +49,13 @@ const Audio = () => {
                 </button>
             )}
 
-
-            {audioChunks && (
-                <>
-                    {audioChunks.map((ch, index) => {
-                        return <audio controls>
-                            <source src={URL.createObjectURL(ch)} />
-                        </audio>
-                    })}
-                </>
+            {audioBlob && (
+                <audio controls>
+                    <source src={URL.createObjectURL(audioBlob)} />
+                </audio>
             )}
-
         </>
-    )
-}
+    );
+};
 
-export default Audio
+export default Audio;

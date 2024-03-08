@@ -29,12 +29,14 @@ const Sidebar = () => {
     }
     if (isError) {
       toast.error(message);
-    } else {
-      dispatch(getAllUsers());
-      setFilteredUsers(allUsers);
     }
     dispatch(reset());
   }, [isError, message, dispatch, user, navigate]);
+
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [navigate, search])
 
   const searchUser = () => {
     const filteredItem = allUsers.filter((user) =>
@@ -46,7 +48,7 @@ const Sidebar = () => {
   // search the users
   useEffect(() => {
     searchUser();
-  }, [search, allUsers]);
+  }, [search]);
 
   const handleChange = (e) => {
     setSearch(e.target.value);
@@ -80,11 +82,11 @@ const Sidebar = () => {
         <div className="max-h-[86vh] overflow-y-scroll">
           {loading
             ? loop.map(() => {
-                return <Ske />;
-              })
+              return <Ske />;
+            })
             : searchUser()?.map((users) => {
-                return <UserMessages key={users._id} {...users} />;
-              })}
+              return <UserMessages key={users._id} {...users} />;
+            })}
         </div>
       </div>
     </>

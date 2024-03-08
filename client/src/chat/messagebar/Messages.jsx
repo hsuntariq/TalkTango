@@ -19,6 +19,7 @@ const Messages = ({
   setSelectedImages,
   imageLoading,
   audioChunks,
+  audioBlob
 }) => {
   const messagesEndRef = useRef(null);
   const [showImage, setShowImage] = useState(null);
@@ -66,127 +67,127 @@ const Messages = ({
     <>
       <div
         style={{
-          backgroundImage: `linear-gradient(rgba(${user?.chatBG},0.6),rgba(${
-            user?.chatBG
-          },0.3)), url('${
-            user?.chatImage
+          backgroundImage: `linear-gradient(rgba(${user?.chatBG},0.6),rgba(${user?.chatBG
+            },0.3)), url('${user?.chatImage
               ? user?.chatImage
               : "https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/background.jpg?raw=true"
-          }')`,
+            }')`,
         }}
-        className="messages overflow-y-scroll h-[100%] sticky top-0  bg-contain min-h-screen "
+        className="h-[90%] bg-contain"
       >
-        {findChat()?.map((message) => {
-          return (
-            <>
-              <p>
-                {message.sent ? (
-                  <div className="w-max px-3 mx-3 py-1 my-2 rounded-md text-white text-1xl ms-auto bg-green-600">
-                    {message?.image && (
-                      <img
-                        width={"200px"}
-                        height={"200px"}
-                        className="aspect-square object-cover"
-                        src={message.image}
-                      />
-                    )}
-                    {message?.voice && (
-                      <audio controls>
-                        <source src={URL.createObjectURL(message?.voice)} />
-                      </audio>
-                    )}
-                    {message.message}
-                  </div>
-                ) : (
-                  <div className="w-max px-3 mx-3 py-2 my-2 rounded-md text-white text-1xl bg-gray-400">
-                    {message?.image && (
-                      <img
-                        width={"200px"}
-                        height={"200px"}
-                        className="aspect-square object-cover"
-                        src={message.image}
-                      />
-                    )}
-                    {message.message}
-                  </div>
-                )}
-              </p>
-            </>
-          );
-        })}
-
-        <div ref={messagesEndRef} />
-
-        {selectedImages.length > 0 && (
-          <div className="image-panel bg-gray-900 min-h-screen flex flex-col items-center justify-start bottom-0">
-            <IoCloseSharp
-              color="white"
-              size={40}
-              className="ms-auto"
-              cursor="pointer"
-              onClick={() => setSelectedImages([])}
-            />
-            {isLoading ? (
-              <ClipLoader size={50} />
-            ) : (
-              <div className="container w-3/4  mx-auto">
-                <div className="w-full aspect-video overflow-hidden my-10 flex h-[400px]  flex-col justify-center items-center">
-                  {showImage && (
-                    <img
-                      width={"100%"}
-                      height={"400px"}
-                      className="object-contain "
-                      src={URL.createObjectURL(showImage)}
-                      alt=""
-                    />
+        <div className="messages overflow-y-scroll  h-[85vh]">
+          {findChat()?.map((message) => {
+            return (
+              <>
+                <p>
+                  {message.sent ? (
+                    <div className="w-max px-3 mx-3 py-1 my-2 rounded-md text-white text-1xl ms-auto bg-green-600">
+                      {message?.image && (
+                        <img
+                          width={"200px"}
+                          height={"200px"}
+                          className="aspect-square object-cover"
+                          src={message.image}
+                        />
+                      )}
+                      {message?.voice && (
+                        <audio controls>
+                          <source src={URL.createObjectURL(message?.voice)} />
+                        </audio>
+                      )}
+                      {message.message}
+                    </div>
+                  ) : (
+                    <div className="w-max px-3 mx-3 py-2 my-2 rounded-md text-white text-1xl bg-gray-400">
+                      {message?.image && (
+                        <img
+                          width={"200px"}
+                          height={"200px"}
+                          className="aspect-square object-cover"
+                          src={message.image}
+                        />
+                      )}
+                      {message.message}
+                    </div>
                   )}
-                </div>
+                </p>
+              </>
+            );
+          })}
 
-                <form className="rounded-md py-1 flex item-center bg-white px-5 w-full">
-                  <input
-                    value={imageInputs[showImage?.name] || ""} // Use corresponding input value for the shown image
-                    onChange={(e) =>
-                      handleInputChange(showImage?.name, e.target.value)
-                    } // Pass image name to handleInputChange
-                    type="text"
-                    className="rounded-md bg-transparent py-1 px-5 w-full border-0 focus:border-0 focus:outline-0"
-                    placeholder="Write something...."
-                  />
-                  <span className="self-center">
-                    {imageLoading ? (
-                      <ClipLoader />
-                    ) : (
-                      <IoSend
-                        onClick={() => {
-                          // handleUpload();
-                          sendImageChat();
-                        }}
-                        cursor="pointer"
+          <div ref={messagesEndRef} />
+
+          {selectedImages.length > 0 && (
+            <div className="image-panel bg-gray-900 min-h-screen flex flex-col items-center justify-start bottom-0">
+              <IoCloseSharp
+                color="white"
+                size={40}
+                className="ms-auto"
+                cursor="pointer"
+                onClick={() => setSelectedImages([])}
+              />
+              {isLoading ? (
+                <ClipLoader size={50} />
+              ) : (
+                <div className="container w-3/4  mx-auto">
+                  <div className="w-full aspect-video overflow-hidden my-10 flex h-[400px]  flex-col justify-center items-center">
+                    {showImage && (
+                      <img
+                        width={"100%"}
+                        height={"400px"}
+                        className="object-contain "
+                        src={URL.createObjectURL(showImage)}
+                        alt=""
                       />
                     )}
-                  </span>
-                </form>
-                <div className="flex images w-full mx-auto gap-4 ">
-                  {selectedImages?.map((file, index) => {
-                    return (
-                      <>
-                        <div className="flex gap-3">
-                          <img
-                            onClick={() => handleSelectedImage(file.name)}
-                            className="w-[80px]  my-10 mx-auto  aspect-square border cursor-pointer"
-                            key={index}
-                            src={URL.createObjectURL(file)}
-                            alt=""
-                          />
-                        </div>
-                      </>
-                    );
-                  })}
+                  </div>
+
+                  <form className="rounded-md py-1 flex item-center bg-white px-5 w-full">
+                    <input
+                      value={imageInputs[showImage?.name] || ""} // Use corresponding input value for the shown image
+                      onChange={(e) =>
+                        handleInputChange(showImage?.name, e.target.value)
+                      } // Pass image name to handleInputChange
+                      type="text"
+                      className="rounded-md bg-transparent py-1 px-5 w-full border-0 focus:border-0 focus:outline-0"
+                      placeholder="Write something...."
+                    />
+                    <span className="self-center">
+                      {imageLoading ? (
+                        <ClipLoader />
+                      ) : (
+                        <IoSend
+                          onClick={() => {
+                            // handleUpload();
+                            sendImageChat();
+                          }}
+                          cursor="pointer"
+                        />
+                      )}
+                    </span>
+                  </form>
+                  <div className="flex images w-full mx-auto gap-4 ">
+                    {selectedImages?.map((file, index) => {
+                      return (
+                        <>
+                          <div className="flex gap-3">
+                            <img
+                              onClick={() => handleSelectedImage(file.name)}
+                              className="w-[80px]  my-10 mx-auto  aspect-square border cursor-pointer"
+                              key={index}
+                              src={URL.createObjectURL(file)}
+                              alt=""
+                            />
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
