@@ -13,7 +13,6 @@ import {
 import { toast } from "react-toastify";
 const socket = io.connect("http://localhost:5174/");
 const MessageScreen = () => {
-  const [userInfo, setUserInfo] = useState([]);
   const [imageLoading, setImageLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [sentMessages, setSentMessages] = useState([]);
@@ -108,7 +107,6 @@ const MessageScreen = () => {
         sent: true,
         id: chatData?._id,
         sortID: Date.now(),
-        test: "hello",
       },
     ]);
 
@@ -236,8 +234,8 @@ const MessageScreen = () => {
   };
 
   return (
-    <div className="w-full top-0 flex flex-col justify-between  ">
-      <MessageHeader userInfo={userInfo} setUserInfo={setUserInfo} />
+    <div className="w-full top-0 flex flex-col relative justify-between  ">
+      <MessageHeader />
       <Messages
         audioBlob={audioBlob}
         imageInputs={imageInputs}
@@ -248,7 +246,6 @@ const MessageScreen = () => {
         handleUpload={handleUpload}
         selectedImages={selectedImages}
         setSelectedImages={setSelectedImages}
-        userInfo={userInfo}
         receivedMessages={receivedMessages}
         allMessages={allMessages}
       />
@@ -261,7 +258,6 @@ const MessageScreen = () => {
         setSelectedImages={setSelectedImages}
         selectedImages={selectedImages}
         handleImageChange={handleImageChange}
-        userInfo={userInfo}
         setRoom={setRoom}
         sendMessage={sendMessage}
         setMessage={setMessage}

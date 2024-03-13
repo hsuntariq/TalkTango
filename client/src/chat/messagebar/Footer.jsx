@@ -68,7 +68,7 @@ const Footer = ({
           background: `rgba(${user?.bgTheme})`,
           zIndex: `${selectedImages.length > 0 ? "-1" : "333"}`,
         }}
-        className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative  text-white"
+        className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative bottom-[1.1rem]  text-white"
       >
         <div className="flex gap-3 relative">
           <div
@@ -102,7 +102,7 @@ const Footer = ({
             style={{
               background: `rgba(${user?.bgTheme})`,
             }}
-            className={`absolute bottom-[40px] opacity-0 left-[40px] border rounded-md  transition ${showMenu ? "scale-1 opacity-100" : "scale:0 rotate-[360deg]"
+            className={`absolute bottom-[40px] opacity-0 left-[40px] border rounded-md  transition ${showMenu ? "scale-1 z-20 opacity-100" : "scale-0 -z-[100] rotate-[360deg]"
               } `}
           >
             <ul className="list-none">

@@ -26,20 +26,15 @@ io.on("connection", (socket) => {
   console.log(`user connected on host id:${socket.id.blue}`);
   // join room
   socket.on("join_room", (data) => {
-    socket.join(data.chatID);
+    const roomSize = io.sockets.adapter.rooms.get(data.chatID)?.size || 0;
+    console.log(roomSize)
+    if (roomSize < 2) {
+      socket.join(data.chatID);
+    }
   });
 
   socket.on("sent_message", (data) => {
     console.log(data);
-    const roomSize = io.sockets.adapter.rooms.get(data.chatID)?.size || 0;
-    console.log(`Users in room ${data.chatID}: ${roomSize}`);
-
-    // Check if the user is not already in the room
-    if (roomSize < 2) {
-      // User is not in the room, emit "join_room" event
-      socket.join(data.chatID);
-      console.log(`User joined room ${data.chatID}`);
-    }
 
     // Emit "received_message" event to all users in the room
     socket.to(data.chatID).emit("received_message", data);

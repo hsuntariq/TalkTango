@@ -3,16 +3,19 @@ import { useSelector } from "react-redux";
 import logo from '../../assets/logo.png'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-const MessageHeader = ({ userInfo, setUserInfo }) => {
+const MessageHeader = () => {
     const { user, allUsers } = useSelector(state => state.auth);
     const { receiver_id } = useParams();
-    useEffect(() => {
+    const displayUserInfo = () => {
         const userData = allUsers?.find((user) => {
             return user?._id === receiver_id
         })
-        setUserInfo(userData)
 
-    }, [receiver_id, allUsers])
+        return userData;
+    }
+    useEffect(() => {
+        displayUserInfo()
+    }, [receiver_id])
     return (
         <>
             <div style={{
@@ -25,7 +28,7 @@ const MessageHeader = ({ userInfo, setUserInfo }) => {
                         <img src={user?.image ? user?.image : logo} alt="" />
                     </div>
                     <div className="text-1xl">
-                        {userInfo?.username}
+                        {displayUserInfo()?.username}
                     </div>
                 </div>
                 <div className="flex gap-2">

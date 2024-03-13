@@ -151,7 +151,7 @@ export const authSlice = createSlice({
             state.themeSuccess = false;
             state.themeError = false;
             state.message = '';
-            state.allUsers = []
+            // state.allUsers = []
         }
     },
     extraReducers: (builder) => {

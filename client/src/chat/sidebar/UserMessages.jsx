@@ -1,15 +1,15 @@
+/* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import Loader from "../../components/loader/Loader";
-import { createChat } from "../../features/chat/chatSlice";
-import Skeleton from 'react-loading-skeleton'
-import { useState } from "react";
+import { createChat, reset } from "../../features/chat/chatSlice";
 import 'react-loading-skeleton/dist/skeleton.css'
-import Ske from "../../components/loader/Skeleton";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { getAllUsers } from "../../features/auth/authSlice";
 
 const UserMessages = ({ _id, username, phone }) => {
     const { user } = useSelector(state => state.auth);
-    const { chatLoading } = useSelector(state => state.chat);
+    const { chatError, message, chatSuccess } = useSelector(state => state.chat);
     const dispatch = useDispatch()
     const addChat = (e) => {
 
@@ -20,7 +20,7 @@ const UserMessages = ({ _id, username, phone }) => {
         dispatch(createChat(chatData))
     }
     return (
-        <Link onClick={addChat} to={`/message-panel/${_id}/${user?._id}`} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">
+        <Link to={`/message-panel/${_id}`} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">
             <div className="flex items-center  my-2 gap-4 text-white">
                 <img src="https://github.com/hsuntariq/whatsapp_clone/raw/main/assets/whatsapp.PNG" alt="" className="w-[50px] h-[50px] rounded-full" />
                 <div className="">

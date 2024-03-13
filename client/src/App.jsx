@@ -22,7 +22,7 @@ const App = () => {
             <Route path='/' element={<Register />} />
             <Route path='/login' element={<Login />} />
             <Route path='/home' element={<Home />} />
-            <Route path='/message-panel/:receiver_id/:sender_id' element={<MessagePanel />} />
+            <Route path='/message-panel/:receiver_id' element={<MessagePanel />} />
             <Route path='/verify/:id' element={<OTP />} />
             <Route path='/forgotten-password' element={<EnterEmail />} />
             <Route path='/reset-password/:id' element={<ResetPass />} />

@@ -16,16 +16,13 @@ const Home = () => {
         if (!user) {
             navigate('/')
         }
-
-
-        dispatch(reset())
     }, [user, navigate, dispatch])
 
 
 
-    if (isLoading) {
-        return <Loader />
-    }
+    // if (isLoading) {
+    //     return <Loader />
+    // }
 
     return (
         <>

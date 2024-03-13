@@ -9,7 +9,8 @@
 }
 
 body {
-  /* overflow-y: hidden; */
+  /* min-height:90vh; */
+  overflow-y: hidden;
 }
 
 ::-webkit-scrollbar-thumb {

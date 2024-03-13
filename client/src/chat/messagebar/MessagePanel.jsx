@@ -16,9 +16,6 @@ const MessagePanel = () => {
         if (!user) {
             navigate('/')
         }
-
-
-        dispatch(reset())
     }, [user, navigate, dispatch])
     return (
         <>

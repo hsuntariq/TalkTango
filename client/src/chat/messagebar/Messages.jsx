@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { reset } from "../../features/auth/authSlice";
 import { IoCloseSharp, IoSend } from "react-icons/io5";
 import { ClipLoader } from "react-spinners";
+import { FaCheck } from "react-icons/fa6";
+import { PiClockBold } from "react-icons/pi";
 
 const Messages = ({
   allMessages,
@@ -24,7 +26,7 @@ const Messages = ({
   const messagesEndRef = useRef(null);
   const [showImage, setShowImage] = useState(null);
   const { user, isLoading } = useSelector((state) => state.auth);
-  const { chatData } = useSelector((state) => state.chat);
+  const { chatData, chatLoading } = useSelector((state) => state.chat);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -72,40 +74,73 @@ const Messages = ({
               ? user?.chatImage
               : "https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/background.jpg?raw=true"
             }')`,
+          backgroundSize: `${user.chatImage == 'https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/background.jpg?raw=true' ? 'contain' : 'cover'}`
         }}
-        className="h-[90%] bg-contain"
+        className={`h-[90%] bg-center `}
       >
-        <div className="messages overflow-y-scroll  h-[85vh]">
+        <div className="messages overflow-y-scroll py-10  h-[85vh]">
           {findChat()?.map((message) => {
             return (
               <>
-                <p>
+                <p className='relative'>
                   {message.sent ? (
-                    <div className="w-max px-3 mx-3 py-1 my-2 rounded-md text-white text-1xl ms-auto bg-green-600">
+                    <div className="w-max px-5 mx-3 py-1 my-2 rounded-md text-white text-1xl ms-auto max-w-[400px] break-all bg-green-600">
                       {message?.image && (
-                        <img
-                          width={"200px"}
-                          height={"200px"}
-                          className="aspect-square object-cover"
-                          src={message.image}
-                        />
+                        <div className='relative'>
+                          <img
+                            width={"200px"}
+                            height={"200px"}
+                            className="aspect-square object-cover"
+                            src={message.image}
+                          />
+                          <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                            {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
+                          </div>
+                        </div>
+
                       )}
                       {message?.voice && (
-                        <audio controls>
-                          <source src={URL.createObjectURL(message?.voice)} />
-                        </audio>
+                        <div className='relative'>
+                          <audio controls>
+                            <source src={URL.createObjectURL(new Blob([message.voice]))} />
+
+                          </audio>
+                          <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                            {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
+                          </div>
+                        </div>
                       )}
+                      <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                        {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
+                      </div>
                       {message.message}
                     </div>
                   ) : (
-                    <div className="w-max px-3 mx-3 py-2 my-2 rounded-md text-white text-1xl bg-gray-400">
+                    <div className="w-max px-5 relative mx-3 py-1 my-2 rounded-md text-white text-1xl bg-gray-400">
                       {message?.image && (
-                        <img
-                          width={"200px"}
-                          height={"200px"}
-                          className="aspect-square object-cover"
-                          src={message.image}
-                        />
+                        <div className='relative'>
+                          <img
+                            width={"200px"}
+                            height={"200px"}
+                            className="aspect-square object-cover"
+                            src={message.image}
+                          />
+                          <div className="text-end flex justify-end absolute right-1 bottom-1 flex-end">
+                          </div>
+
+                        </div>
+                      )}
+                      <div className="text-end flex justify-end absolute right-1 bottom-1 flex-end">
+                      </div>
+                      {message?.voice && (
+                        <div className='relative'>
+                          {message?.voice && <audio controls>
+                            <source src={URL.createObjectURL(new Blob([message.voice]))} />
+
+                          </audio>}
+                          <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                          </div>
+                        </div>
                       )}
                       {message.message}
                     </div>
@@ -118,7 +153,7 @@ const Messages = ({
           <div ref={messagesEndRef} />
 
           {selectedImages.length > 0 && (
-            <div className="image-panel bg-gray-900 min-h-screen flex flex-col items-center justify-start bottom-0">
+            <div className="image-panel bg-gray-900 min-h-screen flex flex-col items-center absolute top-10 w-full justify-start ">
               <IoCloseSharp
                 color="white"
                 size={40}
@@ -130,7 +165,7 @@ const Messages = ({
                 <ClipLoader size={50} />
               ) : (
                 <div className="container w-3/4  mx-auto">
-                  <div className="w-full aspect-video overflow-hidden my-10 flex h-[400px]  flex-col justify-center items-center">
+                  <div className="w-full aspect-video overflow-hidden my-10 flex   flex-col justify-center items-center">
                     {showImage && (
                       <img
                         width={"100%"}
