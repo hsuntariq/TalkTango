@@ -20,7 +20,7 @@ const UserMessages = ({ _id, username, phone }) => {
         dispatch(createChat(chatData))
     }
     return (
-        <Link to={`/message-panel/${_id}`} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">
+        <Link onClick={addChat} to={`/message-panel/${_id}`} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">
             <div className="flex items-center  my-2 gap-4 text-white">
                 <img src="https://github.com/hsuntariq/whatsapp_clone/raw/main/assets/whatsapp.PNG" alt="" className="w-[50px] h-[50px] rounded-full" />
                 <div className="">

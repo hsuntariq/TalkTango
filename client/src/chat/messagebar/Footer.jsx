@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { HiEmojiHappy, HiMicrophone, HiPlus } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { createMessage } from "../../features/chat/chatSlice";
+import { createMessage, createVoiceMessage } from "../../features/chat/chatSlice";
 import { IoIosSend, IoMdClose } from "react-icons/io";
 import { Circles } from "react-loader-spinner";
 import EmojiPicker from "emoji-picker-react";
@@ -24,9 +24,7 @@ const Footer = ({
   startRecording,
   stopRecording,
   recording,
-  audioChunks,
-  sentMessages,
-  setSentMessages
+  audioBlob
 }) => {
   const { chatLoading, chatData } = useSelector((state) => state.chat);
 
@@ -36,10 +34,22 @@ const Footer = ({
   const [active, setActive] = useState(false);
   const focus = useRef();
   const record = useRef();
-
+  const { receiver_id } = useParams()
+  const dispatch = useDispatch()
   const startRec = async () => {
+
     if (recording) {
       stopRecording()
+      if (audioBlob) {
+        console.log(audioBlob)
+        dispatch(createVoiceMessage(
+          {
+            sender_id: user?._id,
+            receiver_id,
+            voice: audioBlob
+          }
+        ))
+      }
     } else {
       startRecording()
     }
@@ -68,7 +78,7 @@ const Footer = ({
           background: `rgba(${user?.bgTheme})`,
           zIndex: `${selectedImages.length > 0 ? "-1" : "333"}`,
         }}
-        className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative bottom-[1.1rem]  text-white"
+        className="flex w-full bg-[#1A2329] justify-between items-center  p-3 gap-3 relative bottom-[0rem]  text-white"
       >
         <div className="flex gap-3 relative">
           <div
