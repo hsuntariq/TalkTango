@@ -3,6 +3,9 @@ import { useSelector } from "react-redux";
 import logo from '../../assets/logo.png'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { MdCall } from "react-icons/md";
+import { IoMdVideocam } from "react-icons/io";
+import { toast } from 'react-toastify'
 const MessageHeader = () => {
     const { user, allUsers } = useSelector(state => state.auth);
     const { receiver_id } = useParams();
@@ -16,6 +19,17 @@ const MessageHeader = () => {
     useEffect(() => {
         displayUserInfo()
     }, [receiver_id])
+
+
+    const makeCall = async () => {
+        try {
+            const videoStream = navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+        } catch (error) {
+            toast.error('Access denied')
+        }
+    }
+
+
     return (
         <>
             <div style={{
@@ -31,10 +45,11 @@ const MessageHeader = () => {
                         {displayUserInfo()?.username}
                     </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-4">
+                    <MdCall className="cursor-pointer text-2xl" />
+                    <IoMdVideocam className="cursor-pointer text-2xl" />
                     <HiSearch className="cursor-pointer text-2xl" />
                     <HiOutlineDotsVertical className="cursor-pointer text-2xl" />
-
                 </div>
             </div >
         </>
