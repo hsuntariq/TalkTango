@@ -6,19 +6,30 @@ import Error from '../components/error/Error';
 import { useNavigate } from 'react-router-dom';
 import { reset } from '../features/auth/authSlice';
 import Loader from '../components/loader/Loader';
-
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:5174')
 const Home = () => {
     const { user, isLoading } = useSelector(state => state.auth);
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
+    const [list, SetList] = useState([])
     useEffect(() => {
         if (!user) {
             navigate('/')
         }
     }, [user, navigate, dispatch])
 
+    useEffect(() => {
+        socket.on('user_list', (data) => {
+            SetList(data)
+        })
+    }, [])
 
+    useEffect(() => {
+        socket.emit('user_connected', { id: user?._id })
+    }, [])
+
+    console.log(list)
 
     // if (isLoading) {
     //     return <Loader />

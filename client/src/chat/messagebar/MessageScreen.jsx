@@ -4,15 +4,16 @@ import Messages from "./Messages";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { reset } from "../../features/auth/authSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import {
   createImageMessage,
   createMessage,
 } from "../../features/chat/chatSlice";
 import { toast } from "react-toastify";
+import Video from "./Video";
 const socket = io.connect("http://localhost:5174/");
-const MessageScreen = () => {
+const MessageScreen = ({ list }) => {
   const [imageLoading, setImageLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [sentMessages, setSentMessages] = useState([]);
@@ -30,6 +31,10 @@ const MessageScreen = () => {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
+
+
+
+
 
   // start recording
   const startRecording = async () => {
@@ -132,7 +137,6 @@ const MessageScreen = () => {
         },
       ]);
     });
-    console.log(allMessages)
   }, [receivedMessages]);
 
   const allMessages = [...sentMessages, ...receivedMessages].sort((a, b) => {
@@ -233,9 +237,36 @@ const MessageScreen = () => {
     setImageInputs({});
   };
 
+  const vidRef = useRef()
+  const [vidRecording, setVidRecording] = useState(false);
+  const startCall = async () => {
+    try {
+      setVidRecording(true)
+      const videoStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      if (vidRef.current) {
+        vidRef.current.srcObject = videoStream;
+      }
+    }
+    catch (error) {
+      setVidRecording(false)
+      toast.error('Access denied')
+    }
+  }
+
+  const stopVidRecording = () => {
+    setVidRecording(false);
+    if (vidRef.current && vidRef.current.srcObject) {
+      const tracks = vidRef.current.srcObject.getTracks();
+      tracks.forEach(track => track.stop);
+      vidRef.current.srcObject = null
+    }
+  }
+
+
   return (
-    <div className="w-full top-0 flex flex-col relative justify-between  ">
-      <MessageHeader />
+    <div className="w-full top-0 flex  flex-col relative justify-between  ">
+      {vidRecording && <Video vidRef={vidRef} stopVidRecording={stopVidRecording} />}
+      <MessageHeader list={list} startCall={startCall} />
       <Messages
         audioBlob={audioBlob}
         imageInputs={imageInputs}

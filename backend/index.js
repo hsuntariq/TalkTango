@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const http = require("http");
 // require cors to  handle cross server request
 const cors = require("cors");
+const { disconnect } = require("process");
 
 // initialize the intance of the express to get all the features
 const app = express();
@@ -22,8 +23,30 @@ const io = new Server(server, {
   },
 });
 
+
+
+// get the connected users
+let connectedUsers = {};
+
+
 io.on("connection", (socket) => {
   console.log(`user connected on host id:${socket.id.blue}`);
+  // populate the connectedUsers with the connected users
+
+  socket.on('user_connected', user => {
+
+    connectedUsers[socket.id] = user.id;
+    io.emit('user_list', Object.values(connectedUsers))
+  })
+
+  socket.on('disconnect', () => {
+    console.log('user disconneted')
+    delete connectedUsers[socket.id]
+    io.emit('user_list', Object.values(connectedUsers))
+    console.log('user disconnect')
+  })
+
+
   // join room
   socket.on("join_room", (data) => {
     const roomSize = io.sockets.adapter.rooms.get(data.chatID)?.size || 0;
