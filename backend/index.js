@@ -26,7 +26,7 @@ const io = new Server(server, {
 
 
 // get the connected users
-let connectedUsers = {};
+let connectedUsers = [];
 
 
 io.on("connection", (socket) => {
@@ -34,17 +34,19 @@ io.on("connection", (socket) => {
   // populate the connectedUsers with the connected users
 
   socket.on('user_connected', user => {
-
-    connectedUsers[socket.id] = user.id;
-    io.emit('user_list', Object.values(connectedUsers))
+    if (!connectedUsers.includes(user.id)) {
+      connectedUsers.push(user.id);
+    }
+    io.emit('user_list',connectedUsers)
+  console.log(connectedUsers)    
   })
+  
+    socket.on('dis', (user) => {     
+         connectedUsers = connectedUsers.filter((connectedUserId) => connectedUserId !== user.id);
+          io.emit('user_list', connectedUsers);
+          console.log(connectedUsers);
+  });
 
-  socket.on('disconnect', () => {
-    console.log('user disconneted')
-    delete connectedUsers[socket.id]
-    io.emit('user_list', Object.values(connectedUsers))
-    console.log('user disconnect')
-  })
 
 
   // join room
@@ -60,8 +62,25 @@ io.on("connection", (socket) => {
     console.log(data);
 
     // Emit "received_message" event to all users in the room
-    socket.to(data.chatID).emit("received_message", data);
+    io.to(data.chatID).emit("received_message", data);
   });
+
+
+  socket.on('callUser', (data) => {
+    console.log(data)
+  })
+
+
+  socket.on("user:call", (data) => {
+    console.log(data)
+    io.to(data.chatID).emit("incoming:call", { from:data.from, offer:data.offer });
+    // socket.broadcast.emit('incoming:call',data)
+  })
+
+  socket.on("call:accepted", (data) => {
+    io.to(data.chatID).emit("call:accepted",{from:data.from,ans:data.ans,})
+  })
+
 
 });
 

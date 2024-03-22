@@ -10,7 +10,7 @@
 
 body {
   /* min-height:90vh; */
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 
 ::-webkit-scrollbar-thumb {

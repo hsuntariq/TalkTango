@@ -1,7 +1,6 @@
 const AsyncHandler = require('express-async-handler');
 const { v4: uuidv4 } = require('uuid')
 const Chat = require('../models/ChatModel');
-const streamToBlob = require('stream-to-blob');
 
 const addChat = AsyncHandler(async (req, res) => {
     const { sender_id, receiver_id } = req.body;
@@ -25,7 +24,10 @@ const addMessages = AsyncHandler(async (req, res) => {
     })
     findChat.chat.push({
         _id: uuidv4(),
-        message
+        message,
+        sender_id,
+        receiver_id,
+        time:Date.now()
     })
     await findChat.save();
     res.send(findChat)
@@ -87,7 +89,7 @@ const findChat = AsyncHandler(async (req, res) => {
     const { sender_id, receiver_id } = req.body;
     const findChat = await Chat.findOne({
         users: { $all: [sender_id, receiver_id] }
-    });
+    }).sort({ time: -1 });
     if (findChat) {
 
         res.send(findChat.chat)

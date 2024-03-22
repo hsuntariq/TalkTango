@@ -19,8 +19,11 @@ const Home = () => {
         }
     }, [user, navigate, dispatch])
 
+
+
     useEffect(() => {
         socket.on('user_list', (data) => {
+            console.log(data)
             SetList(data)
         })
     }, [])
@@ -29,11 +32,7 @@ const Home = () => {
         socket.emit('user_connected', { id: user?._id })
     }, [])
 
-    console.log(list)
 
-    // if (isLoading) {
-    //     return <Loader />
-    // }
 
     return (
         <>

@@ -25,9 +25,16 @@ const addVoiceMessage = async (messageData) => {
     return response.data;
 }
 
+
+const findChat = async (chatData) => {
+    const response = await axios.get(`${base_url}/find-messages`, chatData);
+    return response.data
+}
+
 export const chatService = {
     addChat,
     addMessage,
     addImageMessage,
-    addVoiceMessage
+    addVoiceMessage,
+    findChat
 }

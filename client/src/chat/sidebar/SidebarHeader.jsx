@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { logoutUser, reset } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:5174')
 const SidebarHeader = ({ toggleSettings }) => {
     const { user, isSuccess } = useSelector(state => state.auth);
     const [open, setOpen] = useState(false)
@@ -22,6 +23,13 @@ const SidebarHeader = ({ toggleSettings }) => {
     const openMenu = () => {
         setOpen(!open)
         show.current.classList.toggle('scale-100')
+    }
+
+
+    const handleLogout = () => {
+        dispatch(logoutUser())
+        socket.emit('dis', { id: user?._id })
+        navigate('/')
     }
 
     return (
@@ -54,10 +62,7 @@ const SidebarHeader = ({ toggleSettings }) => {
                         }} ref={show} className="flex-flex-col rounded-md bg-[#17242c] absolute right-1 scale-0 top-5 transition">
                             <ul className="list-unstyled  flex flex-col gap-1 text-white font-semibold py-2 ">
                                 <li onClick={toggleSettings} className="cursor-pointer w-full px-4 py-1 transition-all hover:bg-gray-400 mt-1">Setting</li>
-                                <li onClick={() => {
-                                    dispatch(logoutUser())
-                                    navigate('/')
-                                }} className="cursor-pointer w-full px-4 py-1 transition-all hover:bg-gray-400 ">Logout</li>
+                                <li onClick={handleLogout} className="cursor-pointer w-full px-4 py-1 transition-all hover:bg-gray-400 ">Logout</li>
                             </ul>
                         </div>
                     </div>

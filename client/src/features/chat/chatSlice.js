@@ -23,6 +23,19 @@ export const createChat = createAsyncThunk('chat/add-chat', async (data, thunkAP
         return thunkAPI.rejectWithValue(message)
     }
 })
+export const getChat = createAsyncThunk('chat/get-chat', async (data, thunkAPI) => {
+    try {
+        return await chatService.findChat(data)
+    } catch (error) {
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.error) ||
+            error.message ||
+            error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 export const createMessage = createAsyncThunk('chat/add-message', async (data, thunkAPI) => {
     try {
         return await chatService.addMessage(data)
@@ -102,7 +115,7 @@ export const chatSlice = createSlice({
             .addCase(createMessage.fulfilled, (state, action) => {
                 state.chatLoading = false;
                 state.chatSuccess = true;
-                state.chatData = action.payload;
+                // state.chatData = action.payload;
             })
             .addCase(createImageMessage.pending, (state) => {
                 state.chatLoading = true;
@@ -115,7 +128,7 @@ export const chatSlice = createSlice({
             .addCase(createImageMessage.fulfilled, (state, action) => {
                 state.chatLoading = false;
                 state.chatSuccess = true;
-                state.chatData = action.payload;
+                // state.chatData = action.payload;
             })
             .addCase(createVoiceMessage.pending, (state) => {
                 state.chatLoading = true;
@@ -126,6 +139,19 @@ export const chatSlice = createSlice({
                 state.message = action.payload
             })
             .addCase(createVoiceMessage.fulfilled, (state, action) => {
+                state.chatLoading = false;
+                state.chatSuccess = true;
+                state.chatData = action.payload;
+            })
+            .addCase(getChat.pending, (state) => {
+                state.chatLoading = true;
+            })
+            .addCase(getChat.rejected, (state, action) => {
+                state.chatLoading = false;
+                state.chatError = true;
+                state.message = action.payload
+            })
+            .addCase(getChat.fulfilled, (state, action) => {
                 state.chatLoading = false;
                 state.chatSuccess = true;
                 state.chatData = action.payload;

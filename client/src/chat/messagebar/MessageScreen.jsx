@@ -4,8 +4,9 @@ import Messages from "./Messages";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { reset } from "../../features/auth/authSlice";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
+import Peer from '../../services/peer'
 import {
   createImageMessage,
   createMessage,
@@ -237,18 +238,33 @@ const MessageScreen = ({ list }) => {
     setImageInputs({});
   };
 
+
+  // handle video call
+
   const vidRef = useRef()
+  const partnerVid = useRef()
   const [vidRecording, setVidRecording] = useState(false);
+  const [videoStream, setVideoStream] = useState(null);
+  const [callAccepted, setCallAccepted] = useState(false)
   const startCall = async () => {
     try {
       setVidRecording(true)
       const videoStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      setVideoStream(videoStream)
+
+      const offer = await Peer.getOffer()
+      socket.emit('user:call', { to: receiver_id, offer, from: user?._id, chatID: chatData?._id })
+
       if (vidRef.current) {
         vidRef.current.srcObject = videoStream;
       }
+
+
+
     }
     catch (error) {
       setVidRecording(false)
+      console.log(error)
       toast.error('Access denied')
     }
   }
@@ -257,10 +273,32 @@ const MessageScreen = ({ list }) => {
     setVidRecording(false);
     if (vidRef.current && vidRef.current.srcObject) {
       const tracks = vidRef.current.srcObject.getTracks();
-      tracks.forEach(track => track.stop);
+      tracks.forEach(track => track.stop());
       vidRef.current.srcObject = null
     }
   }
+
+
+  // handle incoming call
+
+  useEffect(() => {
+    socket.on("incoming:call", async ({ from, offer }) => {
+      console.log(from, offer)
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      setStream(stream);
+      const ans = Peer.getAnswer(offer);
+      socket.emit("call:accepted", { to: from, ans, from: receiver_id, chatID: chatData?._id })
+    })
+
+    socket.on('call:accepted', (data) => {
+      Peer.setLocalDescription(data.ans);
+      console.log('Call Accepted')
+    })
+
+  }, [])
+
+
+
 
 
   return (

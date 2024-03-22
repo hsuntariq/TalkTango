@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { reset } from "../../features/auth/authSlice";
 import { IoCloseSharp, IoSend } from "react-icons/io5";
 import { ClipLoader } from "react-spinners";
 import { FaCheck } from "react-icons/fa6";
 import { PiClockBold } from "react-icons/pi";
+import { getChat } from "../../features/chat/chatSlice";
 
 const Messages = ({
   allMessages,
@@ -29,7 +30,7 @@ const Messages = ({
   const { chatData, chatLoading } = useSelector((state) => state.chat);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { receiver_id } = useParams();
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -53,6 +54,13 @@ const Messages = ({
     const sortedChat = foundChat.sort((a, b) => a.sortID - b.sortID);
     return sortedChat;
   };
+
+  useEffect(() => {
+    const chatData = {
+      sender_id: user?._id, receiver_id
+    }
+    dispatch(getChat(chatData))
+  }, [receiver_id])
 
   useEffect(() => {
     findChat();
@@ -79,6 +87,76 @@ const Messages = ({
         className={`h-[90%] bg-center `}
       >
         <div className="messages overflow-y-scroll py-10  h-[85vh]">
+          {chatData?.chat?.map((message) => {
+            return (
+              <>
+                <p className='relative'>
+                  {message?.sender_id == user?._id ? (
+                    <div className="w-max px-5 mx-3 py-1 my-2 rounded-md text-white text-1xl ms-auto max-w-[400px] break-all bg-green-600">
+                      {message?.image && (
+                        <div className='relative'>
+                          <img
+                            width={"200px"}
+                            height={"200px"}
+                            className="aspect-square object-cover"
+                            src={message.image}
+                          />
+                          <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                            {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
+                          </div>
+                        </div>
+
+                      )}
+                      {message?.voice && (
+                        <div className='relative'>
+                          <audio controls>
+                            <source src={URL.createObjectURL(new Blob([message.voice]))} />
+
+                          </audio>
+                          <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                            {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
+                          </div>
+                        </div>
+                      )}
+                      <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                        {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
+                      </div>
+                      {message.message}
+                    </div>
+                  ) : (
+                    <div className="w-max px-5 relative mx-3 py-1 my-2 rounded-md text-white text-1xl bg-gray-400">
+                      {message?.image && (
+                        <div className='relative'>
+                          <img
+                            width={"200px"}
+                            height={"200px"}
+                            className="aspect-square object-cover"
+                            src={message.image}
+                          />
+                          <div className="text-end flex justify-end absolute right-1 bottom-1 flex-end">
+                          </div>
+
+                        </div>
+                      )}
+                      <div className="text-end flex justify-end absolute right-1 bottom-1 flex-end">
+                      </div>
+                      {message?.voice && (
+                        <div className='relative'>
+                          {message?.voice && <audio controls>
+                            <source src={URL.createObjectURL(new Blob([message.voice]))} />
+
+                          </audio>}
+                          <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                          </div>
+                        </div>
+                      )}
+                      {message.message}
+                    </div>
+                  )}
+                </p>
+              </>
+            );
+          })}
           {findChat()?.map((message) => {
             return (
               <>

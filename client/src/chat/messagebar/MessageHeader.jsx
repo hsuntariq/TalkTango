@@ -4,8 +4,10 @@ import logo from '../../assets/logo.png'
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { IoMdVideocam, IoMdCall } from "react-icons/io";
+import { GoDotFill } from "react-icons/go";
 
 const MessageHeader = ({ startCall, list }) => {
+
     const { user, allUsers } = useSelector(state => state.auth);
     const { receiver_id } = useParams();
     const displayUserInfo = () => {
@@ -22,6 +24,7 @@ const MessageHeader = ({ startCall, list }) => {
 
 
 
+
     const isActive = () => {
         const check = list.find((id) => {
             return id == displayUserInfo()?._id
@@ -32,8 +35,10 @@ const MessageHeader = ({ startCall, list }) => {
 
 
 
+    const handleVideoCall = () => {
+        startCall();
 
-
+    }
 
 
     return (
@@ -51,7 +56,7 @@ const MessageHeader = ({ startCall, list }) => {
                     <div className="text-1xl">
                         {displayUserInfo()?.username}
                         {isActive() ? (
-                            <p className="text-sm text-green-500">Online</p>
+                            <p className="text-sm flex items-center text-green-500"> <GoDotFill color="green" /> Online</p>
                         ) : (
                             <p className="text-sm text-gray-500">Offline</p>
 
@@ -60,7 +65,7 @@ const MessageHeader = ({ startCall, list }) => {
                 </div>
                 <div className="flex gap-4">
                     <IoMdCall className="cursor-pointer text-2xl" />
-                    <IoMdVideocam onClick={startCall} className="cursor-pointer text-2xl" />
+                    <IoMdVideocam onClick={handleVideoCall} className="cursor-pointer text-2xl" />
                     <HiSearch className="cursor-pointer text-2xl" />
                     <HiOutlineDotsVertical className="cursor-pointer text-2xl" />
 
