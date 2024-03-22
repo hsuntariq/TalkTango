@@ -281,19 +281,32 @@ const MessageScreen = ({ list }) => {
 
   // handle incoming call
 
-  useEffect(() => {
-    socket.on("incoming:call", async ({ from, offer }) => {
-      console.log(from, offer)
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+  const handleIncommingCall = useCallback(
+    async ({ from, offer }) => {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
       setStream(stream);
-      const ans = Peer.getAnswer(offer);
+      console.log(`Incoming Call`, from, offer);
+      const ans = await Peer.getAnswer(offer);
       socket.emit("call:accepted", { to: from, ans, from: receiver_id, chatID: chatData?._id })
-    })
+    },
+    [socket]
+  );
 
-    socket.on('call:accepted', (data) => {
-      Peer.setLocalDescription(data.ans);
-      console.log('Call Accepted')
-    })
+  const handleCallAccepted = useCallback(
+    ({ from, ans }) => {
+      Peer.setLocalDescription(ans);
+      console.log("Call Accepted!");
+    },
+    []
+  );
+
+
+  useEffect(() => {
+    socket.on("incoming:call", handleIncommingCall)
+    socket.on('call:accepted', handleCallAccepted)
 
   }, [])
 
