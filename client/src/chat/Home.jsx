@@ -23,14 +23,13 @@ const Home = () => {
 
     useEffect(() => {
         socket.on('user_list', (data) => {
-            console.log(data)
             SetList(data)
         })
     }, [])
 
     useEffect(() => {
         socket.emit('user_connected', { id: user?._id })
-    }, [])
+    }, [user?._id])
 
 
 

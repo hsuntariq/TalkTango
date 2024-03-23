@@ -244,7 +244,11 @@ const MessageScreen = ({ list }) => {
   const vidRef = useRef()
   const partnerVid = useRef()
   const [vidRecording, setVidRecording] = useState(false);
+  // local stream
   const [videoStream, setVideoStream] = useState(null);
+  // remote stream
+  const [remoteStream, setRemoteStream] = useState(null);
+
   const [callAccepted, setCallAccepted] = useState(false)
   const startCall = async () => {
     try {
@@ -299,16 +303,51 @@ const MessageScreen = ({ list }) => {
     ({ from, ans }) => {
       Peer.setLocalDescription(ans);
       console.log("Call Accepted!");
+      // send the stream to the other user
+      for (const track of videoStream.getTracks()) {
+        Peer.peer.addTrack(track, videoStream);
+      }
     },
-    []
+    [videoStream]
   );
 
+
+    //negotiate
+
+  const handleNegoNeeded = useCallback(async () => {
+        const offer = await Peer.getOffer()
+        socket.emit('peer:nego:needed',{offer,from: receiver_id, chatID: chatData?._id})
+      },[chatData?._id, receiver_id])
+
+  const handleIncomingNego = useCallback(async({from,offer}) => {
+    const ans = Peer.getAnswer(offer);
+    socket.emit('peer:nego:done', { to: from, ans, chatID: chatData?._id });
+  }, [chatData?._id])
+  
+  const handleNegoFinal = useCallback(async({ from, ans }) => {
+      await Peer.setLocalDescription(ans)
+  },[])
+    
+  
+  
+  useEffect(() => {
+    Peer.peer.addEventListener('negotiationneeded',handleNegoNeeded )
+    },[handleNegoNeeded])
+
+  // whenever we get a track
+  useEffect(() => {
+    Peer.peer.addEventListener('track', async (e) => {
+      const remStream = e.streams;
+      setRemoteStream(remStream)
+      })
+  },[])
 
   useEffect(() => {
     socket.on("incoming:call", handleIncommingCall)
     socket.on('call:accepted', handleCallAccepted)
-
-  }, [])
+    socket.on('peer:nego:needed',handleIncomingNego)
+    socket.on('peer:nego:final',handleNegoFinal)
+  }, [handleCallAccepted, handleIncomingNego, handleIncommingCall, handleNegoFinal])
 
 
 
@@ -316,7 +355,7 @@ const MessageScreen = ({ list }) => {
 
   return (
     <div className="w-full top-0 flex  flex-col relative justify-between  ">
-      {vidRecording && <Video vidRef={vidRef} stopVidRecording={stopVidRecording} />}
+      {vidRecording && <Video remoteStream={remoteStream} vidRef={vidRef} stopVidRecording={stopVidRecording} />}
       <MessageHeader list={list} startCall={startCall} />
       <Messages
         audioBlob={audioBlob}

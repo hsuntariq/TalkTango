@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
 
 
   socket.on("user:call", (data) => {
-    console.log(data)
+    // console.log(data)
     socket.to(data.chatID).emit("incoming:call", { from: data.from, offer: data.offer });
     // socket.broadcast.emit('incoming:call', { from: data.from, offer: data.offer })
   })
@@ -77,6 +77,16 @@ io.on("connection", (socket) => {
     // console.log(data)
     socket.to(data.chatID).emit("call:accepted", { from: data.from, ans: data.ans })
     // socket.broadcast.emit('call:accepted', { from: data.from, ans: data.ans })
+  })
+
+
+  socket.on('peer:nego:needed', (data) => {
+    socket.to(data.chatID).emit("peer:nego:needed", { from: data.from, offer:data.offer })
+    
+  })
+  socket.on('peer:nego:done', (data) => {
+    socket.to(data.chatID).emit("peer:nego:final", { from: data.from, ans:data.ans })
+    
   })
 
 
