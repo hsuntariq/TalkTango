@@ -13,7 +13,7 @@ import ResetPass from "./authentication/forgotten_password/ResetPass"
 import Audio from "./Audio"
 import Video from "./chat/messagebar/Video"
 import VideoCall from "./Video"
-
+import Home2 from './facebook/pages/home/Home'
 const App = () => {
   return (
     <>
@@ -30,6 +30,14 @@ const App = () => {
             <Route path='/reset-password/:id' element={<ResetPass />} />
             <Route path='/audio' element={<Audio />} />
             <Route path='/video' element={<VideoCall />} />
+
+
+            {/* facebook */}
+
+            <Route path='/fb-home' element={<Home2 />} />
+
+
+            {/* not-found */}
             <Route path='*' element={<Error />} />
           </Route>
         </Routes>
