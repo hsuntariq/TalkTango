@@ -2,7 +2,7 @@ import Header from './Header'
 
 import Sidebar from '../../components/sidebar/Sidebar'
 import Timeline from '../../components/timeline/Timeline'
-import { Col, Row } from 'react-bootstrap'
+import Story from '../../components/timeline/stories/Story'
 
 const Home = () => {
 
@@ -11,14 +11,15 @@ const Home = () => {
     return (
         <>
             <Header />
-            <Row>
-                <Col xl={3}>
+            <div className="flex flex-col md:flex-row">
+                <div className="w-full md:w-1/5">
                     <Sidebar />
-                </Col>
-                <Col xl={6}>
+                </div>
+                <div className="w-full md:w-3/5">
+                    <Story />
                     <Timeline />
-                </Col>
-            </Row>
+                </div>
+            </div>
         </>
 
     )

@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { SyncLoader } from 'react-spinners'
+import { PiVideoBold } from "react-icons/pi";
+
 const Sidebar = () => {
     const { user, isLoading } = useSelector(state => state.auth)
     if (isLoading) {
@@ -8,23 +10,40 @@ const Sidebar = () => {
     }
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center">
-                <h4>Home</h4>
-                <a href="">Create</a>
-
-            </div>
-            <div className="d-flex align-items-center gap-3">
+            <div className="flex items-center gap-3 p-4 hover:bg-gray-200">
                 <img width={'60px'} style={{
                     height: '60px',
                     borderRadius: '50%'
-                }} src="https://4.bp.blogspot.com/-23zvGymeTyA/XhV9fNzozsI/AAAAAAAAL2E/Gru5mTIARdAoiO4wVFAVOqv6K916UP89QCLcBGAsYHQ/s1600/Facebook-new-design.jpg" alt="" />
-                <h6 className='text-capitalize'>
+                }} src={user.image ? user.image : 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='} alt="" />
+                <h6 className='capitalize'>
                     {isLoading ? (
                         <SyncLoader />
                     ) : (
-                        `${user?.f_name} ${user?.l_name} `
+                        `${user?.username}`
                     )}
                 </h6>
+            </div>
+            <div className="flex text-3xl flex-col gap-10 p-4">
+                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
+                    <PiVideoBold color='' />
+                    <h4>Watch</h4>
+                </div>
+                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
+                    <PiVideoBold />
+                    <h4>Events</h4>
+                </div>
+                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
+                    <PiVideoBold />
+                    <h4>Friends</h4>
+                </div>
+                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
+                    <PiVideoBold />
+                    <h4>Memories</h4>
+                </div>
+                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
+                    <PiVideoBold />
+                    <h4>Saved</h4>
+                </div>
             </div>
             <hr />
         </>

@@ -10,7 +10,7 @@ import { TbUsersMinus } from "react-icons/tb";
 const Header = () => {
     return (
         <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between shadow mb-3">
 
                 <div className="search flex items-center justify-between">
                     <div className="img">
@@ -20,7 +20,7 @@ const Header = () => {
                         <span>
                             <IoSearchOutline size={30} />
                         </span>
-                        <Form.Control type='search' className='border-0' placeholder='Search the facebook' />
+                        <Form.Control type='search' className='border-0' placeholder='Search the Tango' />
                     </div>
                 </div>
 
