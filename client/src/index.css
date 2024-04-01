@@ -126,3 +126,23 @@ body {
     transform: translate(-50%, -50%) scale(1.5);
   }
 }
+
+.head{
+  background-image: url('https://media0.giphy.com/media/1zj5V9hQlkWHJ8m5kv/giphy.webp?cid=790b7611s651zhlm0jlwym291l17eviqr8xyca5xpgocswk0&ep=v1_gifs_search&rid=giphy.webp&ct=g');
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+
+@keyframes moveGradient {
+  0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}

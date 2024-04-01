@@ -13,6 +13,7 @@ import ResetPass from "./authentication/forgotten_password/ResetPass"
 import Audio from "./Audio"
 import Video from "./chat/messagebar/Video"
 import VideoCall from "./Video"
+import HomePage from "./home/HomePage"
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
             <Route path='/reset-password/:id' element={<ResetPass />} />
             <Route path='/audio' element={<Audio />} />
             <Route path='/video' element={<VideoCall />} />
+            <Route path='/main' element={<HomePage />} />
             <Route path='*' element={<Error />} />
           </Route>
         </Routes>
