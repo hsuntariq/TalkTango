@@ -14,6 +14,7 @@ import Audio from "./Audio"
 import Video from "./chat/messagebar/Video"
 import VideoCall from "./Video"
 import Home2 from './facebook/pages/home/Home'
+import SinglePost from "./facebook/components/singlePost/SinglePost"
 const App = () => {
   return (
     <>
@@ -35,6 +36,7 @@ const App = () => {
             {/* facebook */}
 
             <Route path='/fb-home' element={<Home2 />} />
+            <Route path='/single-post/:id/:user_id' element={<SinglePost />} />
 
 
             {/* not-found */}

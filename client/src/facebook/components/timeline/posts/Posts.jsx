@@ -86,7 +86,7 @@ const Posts = ({ caption, images }) => {
                                 </div>
                             </div>
                             <div className='rounded-0'>
-                                <Link to={`/single-post/${post?._id}`}>
+                                <Link to={`/single-post/${post?._id}/${post?.user}`}>
                                     <img width={'100%'} className='h-[300px] object-cover' src={post?.image} alt="" />
                                 </Link>
 
