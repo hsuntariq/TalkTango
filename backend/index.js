@@ -103,6 +103,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/chats", require("./routes/chatRoutes"));
+app.use("/api/posts", require("./routes/postRoutes"));
 
 // check for the errors
 app.use(errorHandler);

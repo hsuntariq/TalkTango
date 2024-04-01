@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { SyncLoader } from 'react-spinners'
 import { PiVideoBold } from "react-icons/pi";
+import { Card } from '@mui/material';
 
 const Sidebar = () => {
     const { user, isLoading } = useSelector(state => state.auth)
@@ -10,7 +11,9 @@ const Sidebar = () => {
     }
     return (
         <>
-            <div className="flex items-center gap-3 p-4 hover:bg-gray-200">
+            <Card className="min-h-screen bg-white sticky top-10">
+
+            <div className="flex items-center gap-3 p-4  hover:bg-gray-200">
                 <img width={'60px'} style={{
                     height: '60px',
                     borderRadius: '50%'
@@ -23,7 +26,7 @@ const Sidebar = () => {
                     )}
                 </h6>
             </div>
-            <div className="flex text-3xl flex-col gap-10 p-4">
+            <div className="flex text-1xl xl:text-2xl flex-col gap-5 xl:gap-10 p-4">
                 <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
                     <PiVideoBold color='' />
                     <h4>Watch</h4>
@@ -46,6 +49,8 @@ const Sidebar = () => {
                 </div>
             </div>
             <hr />
+            </Card>
+
         </>
     )
 }

@@ -10,16 +10,19 @@ const Home = () => {
 
     return (
         <>
+            <div className="w-full bg-gray-100">
+                
             <Header />
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col gap-5 md:flex-row">
                 <div className="w-full md:w-1/5">
                     <Sidebar />
                 </div>
-                <div className="w-full md:w-3/5">
+                <div className="w-full md:w-3/5 ">
                     <Story />
                     <Timeline />
                 </div>
             </div>
+        </div>
         </>
 
     )

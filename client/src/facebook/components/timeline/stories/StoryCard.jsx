@@ -6,11 +6,11 @@ const StoryCard = () => {
     return (
         <>
             <div className="w-full relative md:w-1/2">
-                <div className="relative border w-[100px] h-[200px] rounded-md">
+                <div className="relative border w-[100px] h-[120px] rounded-md">
                     <img className='object-cover' style={{ height: '100%' }} src="https://centaur-wp.s3.eu-central-1.amazonaws.com/designweek/prod/content/uploads/2019/05/01151040/News-Feed-no-Frame-%402x.jpg" alt="" />
                     <div className="user-image absolute top-0">
-                        <img width={'60px'} style={{
-                            height: '60px',
+                        <img width={'40px'} style={{
+                            height: '40px',
                             borderRadius: '50%'
                         }} src={user.image ? user.image : 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='} alt="" />
                     </div>

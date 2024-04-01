@@ -4,7 +4,7 @@ import './story.css'
 const Story = () => {
     return (
         <>
-            <div className="container mt-4" >
+            <div className="container mt-4 relative top-20" >
                 <div className="flex story-bar" style={{
                     flexWrap: 'nowrap',
                     overflowX: 'scroll'
