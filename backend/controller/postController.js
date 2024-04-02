@@ -57,11 +57,49 @@ const sharePost = AsyncHandler(async (req, res) => {
     res.send(sharedPost)
 })
 
+const makeComment = AsyncHandler(async (req, res) => {
+    const { user_id, post_id, comment } = req.body; 
+    if (!user_id || !post_id || !comment) {
+        res.status(400)
+        throw new Error('Please add a comment')
+    }
+    const findPost = await Post.findOne({ _id: post_id });
+    if (!findPost) {
+        res.status(404)
+        throw new Error('No post found')
+    } else {
+        findPost.comments.push({
+            user_id,comment
+        })
+        await findPost.save()
+        res.send(findPost)
+    }
+    
+})
+const getComments = AsyncHandler(async (req, res) => {
+    const { post_id } = req.body; 
+    if (!post_id) {
+        res.status(400)
+        throw new Error('Please Select a post')
+    }
+    const findPost = await Post.findOne({ _id: post_id });
+    if (!findPost) {
+        res.status(404)
+        throw new Error('No post found')
+    } else {
+        
+        res.send(findPost.comments)
+    }
+    
+})
+
 
 module.exports = {
     createPosts,
     getPosts,
     likes,
     findSinglePost,
-    sharePost
+    sharePost,
+    makeComment,
+    getComments
 }
