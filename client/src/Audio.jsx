@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const Audio = () => {
     const [stream, setStream] = useState(null);

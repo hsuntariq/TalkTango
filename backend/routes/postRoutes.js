@@ -9,7 +9,7 @@ router.post('/like-post', likes)
 router.get('/get-single-post', findSinglePost)
 router.post('/share-post', sharePost)
 router.post('/make-comment', makeComment)
-router.post('/get-comments', getComments)
+router.get('/get-comments/:id', getComments)
 
 
 module.exports = router

@@ -3,7 +3,6 @@ import Register from './authentication/Register'
 import Login from "./authentication/Login"
 import Home from "./chat/Home"
 import MessagePanel from "./chat/messagebar/MessagePanel"
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Error from "./components/error/Error"
 import OTP from "./authentication/OTP"
@@ -15,10 +14,11 @@ import Video from "./chat/messagebar/Video"
 import VideoCall from "./Video"
 import Home2 from './facebook/pages/home/Home'
 import SinglePost from "./facebook/components/singlePost/SinglePost"
+import { Toaster } from "react-hot-toast"
 const App = () => {
   return (
     <>
-      <ToastContainer />
+      <Toaster />
       <Router>
         <Routes>
           <Route>

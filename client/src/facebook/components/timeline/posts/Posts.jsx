@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSelector,useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { getPostData, getPostLikes, reset, sharedPost } from '../../../../features/posts/postSlice';
 import 'react-loading-skeleton/dist/skeleton.css'
 import Loader from './Loader';
@@ -9,7 +9,7 @@ import { FaRegCommentDots } from "react-icons/fa6";
 import { RiShareForwardLine } from "react-icons/ri";
 import { BsFillHeartFill } from "react-icons/bs";
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import { Card, CardHeader } from '@mui/material';
 
 import moment from 'moment'
@@ -61,7 +61,7 @@ const Posts = ({ caption, images }) => {
                 const userData = allUsers.find((user) => {
                     return user?._id === post?.user
                 })
-                
+
                 return (
                     <>
                         <Card key={post?._id} className='my-2'>
@@ -103,7 +103,7 @@ const Posts = ({ caption, images }) => {
                                     )
                                 }
                                 <div className="text-center px-2 py-2  "><FaRegCommentDots className='text-xl font-bold' /></div>
-                                <div onClick={() => sharePost(user?._id, caption, post?.image)} className="py-2 px-2 text-xl"><RiShareForwardLine  /></div>
+                                <div onClick={() => sharePost(user?._id, caption, post?.image)} className="py-2 px-2 text-xl"><RiShareForwardLine /></div>
                             </div>
                         </Card>
                     </>

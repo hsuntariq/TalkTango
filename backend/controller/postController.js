@@ -59,6 +59,7 @@ const sharePost = AsyncHandler(async (req, res) => {
 
 const makeComment = AsyncHandler(async (req, res) => {
     const { user_id, post_id, comment } = req.body; 
+    let date = Date.now()
     if (!user_id || !post_id || !comment) {
         res.status(400)
         throw new Error('Please add a comment')
@@ -69,29 +70,34 @@ const makeComment = AsyncHandler(async (req, res) => {
         throw new Error('No post found')
     } else {
         findPost.comments.push({
-            user_id,comment
+            user_id,comment,date
         })
         await findPost.save()
-        res.send(findPost)
+        res.send({user_id,comment,post_id,date})
     }
     
 })
-const getComments = AsyncHandler(async (req, res) => {
-    const { post_id } = req.body; 
+const getComments = async (req, res) => {
+    const post_id  = req.params.id;
     if (!post_id) {
-        res.status(400)
-        throw new Error('Please Select a post')
-    }
-    const findPost = await Post.findOne({ _id: post_id });
-    if (!findPost) {
-        res.status(404)
-        throw new Error('No post found')
-    } else {
-        
-        res.send(findPost.comments)
+        res.status(400).json({ error: 'Please provide a post_id' });
+        return;
     }
     
-})
+    try {
+        const findPost = await Post.findOne({ _id: post_id }).sort({ 'createdAt': -1 });
+        if (!findPost) {
+            res.status(404).json({ error: 'No post found' });
+            return;
+        }
+        
+        res.json(findPost.comments);
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 
 
 module.exports = {

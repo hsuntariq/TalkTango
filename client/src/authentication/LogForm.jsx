@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom'
 import Loader from '../components/loader/Loader'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import { loginUser, reset } from "../features/auth/authSlice";
 
 const LogForm = () => {

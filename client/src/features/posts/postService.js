@@ -19,6 +19,17 @@ const getPosts = async () => {
 }
 
 
+const getComments = async (data) => {
+    console.log(data)
+    const response = await axios.get(`${base_url}/get-comments/${data.post_id}`);
+    return response.data
+}
+const makeComment = async (data) => {
+    const response = await axios.post(`${base_url}/make-comment`, data);
+    return response.data
+}
+
+
 const likePost = async (likeData) => {
     const response = await axios.post(`${base_url}/like-post`, likeData)
     return response.data
@@ -41,5 +52,7 @@ export const postService = {
     getPosts,
     likePost,
     singlePost,
-    sharePost
+    sharePost,
+    getComments,
+    makeComment
 }

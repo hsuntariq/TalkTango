@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 // import { GrGallery } from "react-icons/gr";
 import { IoMdClose } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
 // import { addStory } from '../../../features/stories/storySlice';
 import Skeleton from 'react-loading-skeleton'

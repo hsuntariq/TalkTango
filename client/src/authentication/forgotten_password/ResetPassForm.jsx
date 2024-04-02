@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { reset, resetPassword, sendResetLink } from '../../features/auth/authSlice';
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import Skeleton from 'react-loading-skeleton';
 import { IoArrowBack } from "react-icons/io5";
 const ResetPassForm = () => {

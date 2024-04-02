@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import { loginUser, reset, sendResetLink } from "../../features/auth/authSlice";
 import Skeleton from 'react-loading-skeleton'
 import ResetPassForm from "./ResetPassForm";

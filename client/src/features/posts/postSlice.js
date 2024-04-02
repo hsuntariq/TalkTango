@@ -3,13 +3,16 @@ import { postService } from './postService';
 
 const initialState = {
     posts: [],
+     comments:[],
     postLoading: false,
     postSuccess: false,
     postError: false,
     postMessage: '',
     postImages: [],
     singlePost: [],
-    shared: false
+    shared: false,
+    commentLoading:false,
+   
 }
 
 
@@ -57,6 +60,22 @@ export const getSinglePostData = createAsyncThunk('posts-get-single', async (dat
 
     }
 })
+export const getCommentsData = createAsyncThunk('posts/get-comments', async (data, thunkAPI) => {
+    try {
+        return await postService.getComments(data)
+    } catch (error) {
+        thunkAPI.rejectWithValue(error.response.data.error)
+
+    }
+})
+export const makeComment = createAsyncThunk('posts/post-comments', async (data, thunkAPI) => {
+    try {
+        return await postService.makeComment(data)
+    } catch (error) {
+        thunkAPI.rejectWithValue(error.response.data.error)
+
+    }
+})
 export const sharedPost = createAsyncThunk('posts-share-post', async (data, thunkAPI) => {
     try {
         // console.log(data)
@@ -78,7 +97,8 @@ export const postSlice = createSlice({
             state.postSuccess = false;
             state.postLoading = false;
             state.postMessage = '';
-            state.shared = false
+            state.shared = false,
+            state.commentLoading = false
         }
     },
     extraReducers: (builder) => {
@@ -166,6 +186,33 @@ export const postSlice = createSlice({
                 state.postLoading = false;
                 state.shared = true;
                 state.posts.push(action.payload)
+            })
+            .addCase(getCommentsData.pending, (state) => {
+                state.commentLoading = true
+            })
+            .addCase(getCommentsData.rejected, (state, action) => {
+                state.commentLoading = false;
+                state.postError = true;
+                state.postMessage = action.payload;
+            })
+            .addCase(getCommentsData.fulfilled, (state, action) => {
+                state.commentLoading = false;
+                state.postSuccess = true
+                state.comments = action.payload
+            })
+            .addCase(makeComment.pending, (state) => {
+                state.commentLoading = true
+            })
+            .addCase(makeComment.rejected, (state, action) => {
+                state.commentLoading = false;
+                state.postError = true;
+                state.postMessage = action.payload;
+            })
+            .addCase(makeComment.fulfilled, (state, action) => {
+                console.log(action)
+                state.commentLoading = false;
+                state.postSuccess = true
+                state.comments?.push(action.payload)
             })
     }
 

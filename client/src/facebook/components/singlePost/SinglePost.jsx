@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { CircleLoader } from 'react-spinners'
 import Loader from '../timeline/posts/Loader'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPostLikes, getSinglePostData, sharedPost } from '../../../features/posts/postSlice'
+import { getCommentsData, getPostLikes, getSinglePostData, makeComment, reset, sharedPost } from '../../../features/posts/postSlice'
 import { Button, Card, Container, FormControl, Input, TextareaAutosize } from '@mui/material'
 import Likes from './Likes'
 import moment from 'moment'
-import { BsFillHeartFill } from 'react-icons/bs'
+import { BsFillHeartFill, BsThreeDotsVertical } from 'react-icons/bs'
 import { FaRegCommentDots, FaRegHeart, FaShare } from 'react-icons/fa6'
 import { RiShareForwardLine } from 'react-icons/ri'
 import { IoIosSend } from 'react-icons/io'
+import toast from 'react-hot-toast'
+import Skeleton from 'react-loading-skeleton'
 const SinglePost = () => {
     const { id, user_id } = useParams()
     const { allUsers, user } = useSelector(state => state.auth)
-    const { posts, postLoading } = useSelector(state => state.post)
+    const { posts, postLoading, postError, postSuccess, comments, commentLoading, postMessage } = useSelector(state => state.post)
     const [open, setOpen] = useState(false)
     const [caption, setCaption] = useState('')
     const [comment, setComment] = useState('')
     const [show, setShow] = useState(false)
-
+    const dispatch = useDispatch()
+    const [readMore, setReadMore] = useState(false)
     useEffect(() => {
         if (comment.length > 0) {
             setShow(true)
@@ -28,7 +32,22 @@ const SinglePost = () => {
     }, [comment])
 
 
-    const dispatch = useDispatch()
+
+
+    // get comments
+    useEffect(() => {
+        dispatch(getCommentsData({ post_id: id }))
+    }, [dispatch, id])
+
+
+
+    useState(() => {
+        if (postError) {
+            toast.error(postMessage)
+        }
+        dispatch(reset())
+    }, [])
+
     const findUser = () => {
         const user = allUsers.find((person) => {
             return person._id === user_id
@@ -53,6 +72,18 @@ const SinglePost = () => {
         }
 
         dispatch(sharedPost(data))
+        toast.success('Post shared Successfully!')
+    }
+
+
+    const handleComment = () => {
+        const commentData = {
+            user_id: user?._id, post_id: id, comment
+        }
+
+        dispatch(makeComment(commentData))
+        toast.success('Comment Added Successfully!')
+        setComment('')
     }
 
 
@@ -104,10 +135,52 @@ const SinglePost = () => {
 
                                             {/* display comments */}
 
-                                            <div className="flex flex-col gap-1">
-                                                { }
-                                            </div>
+                                            <div className="flex h-[200px] overflow-y-scroll flex-col gap-1">
+                                                {commentLoading ? (
 
+                                                    <div className="flex gap-4">
+                                                        <Skeleton width={30} height={30} circle />
+                                                        <div className="flex flex-col">
+                                                            <Skeleton width={200} height={9} />
+                                                            <Skeleton width={100} height={9} />
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+                                                ) : (comments?.map((comment) => {
+                                                    const findUser = allUsers.find((user) => {
+                                                        return user?._id == comment?.user_id
+                                                    })
+
+                                                    return (
+                                                        <>
+                                                            <div className="flex ps-3  gap-3">
+                                                                <img className='w-[30px] h-[30px] rounded-full' src={findUser?.image ? (findUser?.image) : ("https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=")} alt="" />
+                                                                <div className="flex flex-col w-full">
+                                                                    <div className="flex justify-between w-full items-center">
+                                                                        <h5 className="text-sm font-bold p-0 m-0">
+                                                                            {findUser?.username}
+
+                                                                        </h5>
+                                                                        <p className="text-[0.7rem] font-semibold text-gray-700">
+                                                                            {moment(comment?.date).fromNow()}
+                                                                        </p>
+                                                                        <BsThreeDotsVertical cursor="pointer" size={13} />
+                                                                    </div>
+                                                                    <p className="text-gray-500 text-sm p-0 m-0">
+                                                                        {
+                                                                            comment?.comment?.length > 60 && !readMore ? `${comment?.comment?.substring(0, 50)}...` : comment?.comment
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    )
+                                                }))}
+                                            </div>
 
 
                                             <div className="flex bg-gray-100 flex-col mt-auto">
@@ -136,8 +209,10 @@ const SinglePost = () => {
                                                             style={{ width: '100%', resize: 'none' }}
                                                         />
                                                         {show &&
-                                                            <IoIosSend size={25} cursor="pointer" className='me-4 text-orange-600' />
+                                                            <IoIosSend onClick={handleComment} size={25} cursor="pointer" className='me-4 text-orange-600' />
                                                         }
+                                                        {commentLoading && <CircleLoader size={25} className='me-4' color="orange" />}
+
                                                     </div>
                                                 </div>
                                             </div>
