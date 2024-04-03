@@ -10,6 +10,7 @@ router.get('/get-single-post', findSinglePost)
 router.post('/share-post', sharePost)
 router.post('/make-comment', makeComment)
 router.get('/get-comments/:id', getComments)
+router.put('/update-comment/:id', getComments)
 
 
 module.exports = router

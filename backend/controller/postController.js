@@ -1,6 +1,9 @@
 const Post = require('../models/postModel');
 const AsyncHandler = require('express-async-handler');
+const { v4: uuidv4 } = require('uuid');
+const { registerUser } = require('./userController');
 const createPosts = AsyncHandler(async (req, res) => {
+    
     const { user, caption, image } = req.body
     if (!caption || !image) {
         res.status(400)
@@ -60,20 +63,22 @@ const sharePost = AsyncHandler(async (req, res) => {
 const makeComment = AsyncHandler(async (req, res) => {
     const { user_id, post_id, comment } = req.body; 
     let date = Date.now()
+    let id = uuidv4()
     if (!user_id || !post_id || !comment) {
         res.status(400)
         throw new Error('Please add a comment')
     }
     const findPost = await Post.findOne({ _id: post_id });
+
     if (!findPost) {
         res.status(404)
         throw new Error('No post found')
     } else {
         findPost.comments.push({
-            user_id,comment,date
+            user_id,comment,date,id
         })
         await findPost.save()
-        res.send({user_id,comment,post_id,date})
+        res.send({user_id,comment,post_id,date,id})
     }
     
 })
@@ -100,6 +105,26 @@ const getComments = async (req, res) => {
 
 
 
+
+const updateComment = AsyncHandler(async(req,res)=>{
+    const { comment_id, updatedComment } = req.body;
+    const postID = req.params.id;
+    const findPost = await Post.findOne({_id:postID});
+    if (!findPost) {
+        res.status(400);
+        throw new Error('No post found')
+    } else {
+        const findComment = await findPost.comments.find((comm) => {
+            console.log(comm)
+            // return comm.id == comment_id
+        })
+      
+    }
+
+    res.send('hello')
+})
+
+
 module.exports = {
     createPosts,
     getPosts,
@@ -107,5 +132,6 @@ module.exports = {
     findSinglePost,
     sharePost,
     makeComment,
-    getComments
+    getComments,
+    updateComment
 }

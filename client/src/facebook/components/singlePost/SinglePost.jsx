@@ -13,6 +13,7 @@ import { RiShareForwardLine } from 'react-icons/ri'
 import { IoIosSend } from 'react-icons/io'
 import toast from 'react-hot-toast'
 import Skeleton from 'react-loading-skeleton'
+import Comments from './Comments'
 const SinglePost = () => {
     const { id, user_id } = useParams()
     const { allUsers, user } = useSelector(state => state.auth)
@@ -157,26 +158,7 @@ const SinglePost = () => {
 
                                                     return (
                                                         <>
-                                                            <div className="flex ps-3  gap-3">
-                                                                <img className='w-[30px] h-[30px] rounded-full' src={findUser?.image ? (findUser?.image) : ("https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=")} alt="" />
-                                                                <div className="flex flex-col w-full">
-                                                                    <div className="flex justify-between w-full items-center">
-                                                                        <h5 className="text-sm font-bold p-0 m-0">
-                                                                            {findUser?.username}
-
-                                                                        </h5>
-                                                                        <p className="text-[0.7rem] font-semibold text-gray-700">
-                                                                            {moment(comment?.date).fromNow()}
-                                                                        </p>
-                                                                        <BsThreeDotsVertical cursor="pointer" size={13} />
-                                                                    </div>
-                                                                    <p className="text-gray-500 text-sm p-0 m-0">
-                                                                        {
-                                                                            comment?.comment?.length > 60 && !readMore ? `${comment?.comment?.substring(0, 50)}...` : comment?.comment
-                                                                        }
-                                                                    </p>
-                                                                </div>
-                                                            </div>
+                                                            <Comments {...comment} findUser={findUser} commentUser={comment.user_id} />
                                                         </>
                                                     )
                                                 }))}
