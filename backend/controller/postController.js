@@ -2,24 +2,26 @@ const Post = require('../models/postModel');
 const AsyncHandler = require('express-async-handler');
 const { v4: uuidv4 } = require('uuid');
 const { registerUser } = require('./userController');
+const mongoose = require('mongoose');
+
 const createPosts = AsyncHandler(async (req, res) => {
-    
+
     const { user, caption, image } = req.body
     if (!caption || !image) {
         res.status(400)
         throw new Error('Please enter data')
     } else {
-        
+
         try {
             const createdPost = await Post.create({
-            caption, image, user
-        })
-        res.send(createdPost)
-    } catch (error) {
-        throw new Error(error)
-    }
-
+                caption, image, user
+            })
+            res.send(createdPost)
+        } catch (error) {
+            throw new Error(error)
         }
+
+    }
 
 })
 
@@ -61,7 +63,7 @@ const sharePost = AsyncHandler(async (req, res) => {
 })
 
 const makeComment = AsyncHandler(async (req, res) => {
-    const { user_id, post_id, comment } = req.body; 
+    const { user_id, post_id, comment } = req.body;
     let date = Date.now()
     let id = uuidv4()
     if (!user_id || !post_id || !comment) {
@@ -75,27 +77,27 @@ const makeComment = AsyncHandler(async (req, res) => {
         throw new Error('No post found')
     } else {
         findPost.comments.push({
-            user_id,comment,date,id
+            user_id, comment, date, id
         })
         await findPost.save()
-        res.send({user_id,comment,post_id,date,id})
+        res.send({ user_id, comment, post_id, date, id })
     }
-    
+
 })
 const getComments = async (req, res) => {
-    const post_id  = req.params.id;
+    const post_id = req.params.id;
     if (!post_id) {
         res.status(400).json({ error: 'Please provide a post_id' });
         return;
     }
-    
+
     try {
         const findPost = await Post.findOne({ _id: post_id }).sort({ 'createdAt': -1 });
         if (!findPost) {
             res.status(404).json({ error: 'No post found' });
             return;
         }
-        
+
         res.json(findPost.comments);
     } catch (error) {
         console.error('Error fetching comments:', error);
@@ -106,23 +108,62 @@ const getComments = async (req, res) => {
 
 
 
-const updateComment = AsyncHandler(async(req,res)=>{
+const updateComment = AsyncHandler(async (req, res) => {
     const { comment_id, updatedComment } = req.body;
-    const postID = req.params.id;
-    const findPost = await Post.findOne({_id:postID});
-    if (!findPost) {
-        res.status(400);
-        throw new Error('No post found')
-    } else {
-        const findComment = await findPost.comments.find((comm) => {
-            console.log(comm)
-            // return comm.id == comment_id
-        })
-      
-    }
+    const postID = new mongoose.Types.ObjectId(req.params.id);
 
-    res.send('hello')
-})
+
+    try {
+        // Update the comment using findOneAndUpdate
+        const updatedPost = await Post.findOneAndUpdate(
+            { _id: postID, 'comments.id': comment_id }, // Find post by ID and comment by comment_id
+            { $set: { 'comments.$.comment': updatedComment } }, // Set the updated comment
+            { new: true } // Return the updated document
+        );
+
+        // Check if the post is found and updated
+        if (!updatedPost) {
+            return res.status(404).json({ error: 'No post found or comment not updated' });
+        }
+
+        // Find the updated comment
+        const updatedCommentObject = updatedPost.comments.find(comment => comment.id == comment_id);
+
+        // Send the updated comment as response
+        res.json(updatedCommentObject);
+    } catch (error) {
+        // Handle any errors
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+const deleteComment = AsyncHandler(async (req, res) => {
+    const { comment_id } = req.body;
+    const postID = new mongoose.Types.ObjectId(req.params.id);
+
+    try {
+        const findPost = await Post.findOneAndUpdate(
+            { _id: postID, 'comments.id': comment_id }, // Find the post by ID and comment by comment_id
+            { $pull: { comments: { id: comment_id } } }, // Remove the comment from the comments array
+            { new: true } // Return the updated document
+        );
+
+        if (!findPost) {
+            res.status(404);
+            throw new Error('No Post found');
+        }
+
+        res.json(findPost);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+
 
 
 module.exports = {
@@ -133,5 +174,6 @@ module.exports = {
     sharePost,
     makeComment,
     getComments,
-    updateComment
+    updateComment,
+    deleteComment
 }

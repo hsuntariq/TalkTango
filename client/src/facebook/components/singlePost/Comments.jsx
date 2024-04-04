@@ -2,21 +2,38 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card } from '@mui/material';
 import { MdOutlineReport } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt, FaTrashAlt } from "react-icons/fa";
 import { GoReply } from "react-icons/go";
-import ReplyModal from './ReplyModal';
+import UpdateModal from './UpdateModal';
+import { deleteComment } from '../../../features/posts/postSlice';
+import { useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
-const Comments = ({ findUser, date, comment, commentUser }) => {
+const Comments = ({ findUser, date, comment, commentUser, comment_id }) => {
     const [open, setOpen] = useState(false)
     const [openReply, setOpenReply] = useState(false)
     const [readMore, setReadMore] = useState(false);
     const { user } = useSelector(state => state.auth);
+    const { id } = useParams()
+    const dispatch = useDispatch()
     const handleClose = () => {
         setOpenReply(false)
+    }
+
+    const handleDeleteComment = (comm_id) => {
+        const data = {
+            post_id: id, comment_id: comm_id
+        }
+        dispatch(deleteComment(data))
+        toast.success('Comment Deleted successfully', {
+            icon: <FaTrashAlt color="red" />
+        })
+
+
     }
     return (
         <div className="flex ps-3 gap-3">
@@ -35,17 +52,20 @@ const Comments = ({ findUser, date, comment, commentUser }) => {
                             <Card className="flex bg-white z-20 py-1 -left-[100px] list-none flex-col gap-1 absolute px-2">
                                 <li className='flex hover:bg-gray-100 p-1 px-3 cursor-pointer gap-2 items-center'><MdOutlineReport color="red" /> Report</li>
 
-                                <li onClick={() => setOpenReply(true)} className='flex hover:bg-gray-100 p-1 px-3 cursor-pointer gap-2 items-center'><GoReply color="blue" /> Reply</li>
+                                <li className='flex hover:bg-gray-100 p-1 px-3 cursor-pointer gap-2 items-center'><GoReply color="blue" /> Reply</li>
 
-                                <ReplyModal openReply={openReply} handleClose={handleClose} setOpenReply={setOpenReply} comment={comment} />
+                                <UpdateModal comment_id={comment_id} openReply={openReply} handleClose={handleClose} setOpenReply={setOpenReply} comment={comment} />
 
-                                <li className='flex hover:bg-gray-100 p-1 px-3 cursor-pointer gap-2 items-center'>
-                                    <CiEdit color="orange" /> {commentUser == user?._id && 'Edit'}
-                                </li>
 
-                                <li className='flex hover:bg-gray-100 p-1 px-3 cursor-pointer gap-2 items-center'>
-                                    <FaRegTrashAlt color="maroon" />{commentUser == user?._id && 'Delete'}
-                                </li>
+                                {commentUser == user?._id && <li onClick={() => setOpenReply(true)} className='flex hover:bg-gray-100 p-1 px-3 cursor-pointer gap-2 items-center'>
+                                    <CiEdit color="orange" />
+                                    Edit
+                                </li>}
+
+                                {commentUser == user?._id && <li onClick={() => handleDeleteComment(comment_id)} className='flex hover:bg-gray-100 p-1 px-3 cursor-pointer gap-2 items-center'>
+                                    <FaRegTrashAlt color="maroon" />Delete
+                                </li>}
+
 
                             </Card>
                         }

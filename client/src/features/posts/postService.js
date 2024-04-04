@@ -44,6 +44,15 @@ const sharePost = async (data) => {
     const response = await axios.post(`${base_url}/share-post`, data);
     return response.data
 }
+const updateComment = async (data) => {
+    const response = await axios.put(`${base_url}/update-comment/${data.post_id}`, data);
+    return response.data
+}
+const deleteComment = async (data) => {
+    const response = await axios.delete(`${base_url}/delete-comment/${data.post_id}`, data);
+    console.log(response)
+    return response.data
+}
 
 
 export const postService = {
@@ -54,5 +63,7 @@ export const postService = {
     singlePost,
     sharePost,
     getComments,
-    makeComment
+    makeComment,
+    updateComment,
+    deleteComment
 }

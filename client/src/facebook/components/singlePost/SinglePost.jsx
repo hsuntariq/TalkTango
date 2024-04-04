@@ -158,7 +158,7 @@ const SinglePost = () => {
 
                                                     return (
                                                         <>
-                                                            <Comments {...comment} findUser={findUser} commentUser={comment.user_id} />
+                                                            <Comments {...comment} findUser={findUser} commentUser={comment?.user_id} comment_id={comment?.id} />
                                                         </>
                                                     )
                                                 }))}

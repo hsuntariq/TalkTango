@@ -3,7 +3,7 @@ import { postService } from './postService';
 
 const initialState = {
     posts: [],
-     comments:[],
+    comments: [],
     postLoading: false,
     postSuccess: false,
     postError: false,
@@ -11,8 +11,8 @@ const initialState = {
     postImages: [],
     singlePost: [],
     shared: false,
-    commentLoading:false,
-   
+    commentLoading: false,
+
 }
 
 
@@ -85,6 +85,24 @@ export const sharedPost = createAsyncThunk('posts-share-post', async (data, thun
 
     }
 })
+export const updateComment = createAsyncThunk('posts/update-comment', async (data, thunkAPI) => {
+    try {
+        // console.log(data)
+        return await postService.updateComment(data)
+    } catch (error) {
+        thunkAPI.rejectWithValue(error.response.data.error)
+
+    }
+})
+export const deleteComment = createAsyncThunk('posts/delete-comment', async (data, thunkAPI) => {
+    try {
+        // console.log(data)
+        return await postService.deleteComment(data)
+    } catch (error) {
+        thunkAPI.rejectWithValue(error.response.data.error)
+
+    }
+})
 
 
 
@@ -98,7 +116,7 @@ export const postSlice = createSlice({
             state.postLoading = false;
             state.postMessage = '';
             state.shared = false,
-            state.commentLoading = false
+                state.commentLoading = false
         }
     },
     extraReducers: (builder) => {
@@ -209,11 +227,43 @@ export const postSlice = createSlice({
                 state.postMessage = action.payload;
             })
             .addCase(makeComment.fulfilled, (state, action) => {
-                console.log(action)
                 state.commentLoading = false;
                 state.postSuccess = true
                 state.comments?.push(action.payload)
             })
+            .addCase(updateComment.pending, (state) => {
+                state.commentLoading = true
+            })
+            .addCase(updateComment.rejected, (state, action) => {
+                state.commentLoading = false;
+                state.postError = true;
+                state.postMessage = action.payload;
+            })
+            .addCase(updateComment.fulfilled, (state, action) => {
+                state.commentLoading = false;
+                state.postSuccess = true
+                state.comments = state.comments.map((item) => {
+                    if (item.id == action.payload.id) {
+                        item.comment = action.payload.comment
+                    }
+                    return item
+                })
+            })
+            .addCase(deleteComment.pending, (state) => {
+                state.commentLoading = true
+            })
+            .addCase(deleteComment.rejected, (state, action) => {
+                state.commentLoading = false;
+                state.postError = true;
+                state.postMessage = action.payload;
+            })
+            .addCase(deleteComment.fulfilled, (state, action) => {
+                state.commentLoading = false;
+                state.postSuccess = true
+                console.log(action.payload)
+                state.comments = action.payload?.comments
+            })
+
     }
 
 })
