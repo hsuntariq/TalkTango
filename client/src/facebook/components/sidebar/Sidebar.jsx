@@ -3,6 +3,11 @@ import { useSelector } from 'react-redux'
 import { SyncLoader } from 'react-spinners'
 import { PiVideoBold } from "react-icons/pi";
 import { Card } from '@mui/material';
+import { FaCalendarAlt } from 'react-icons/fa';
+import { RiGalleryLine, RiUserLine } from 'react-icons/ri';
+import { MdSave } from 'react-icons/md';
+import { PiTagChevronFill } from "react-icons/pi";
+import { IoMdSettings } from "react-icons/io";
 
 const Sidebar = () => {
     const { user, isLoading } = useSelector(state => state.auth)
@@ -13,42 +18,41 @@ const Sidebar = () => {
         <>
             <Card className="min-h-screen bg-white sticky top-10">
 
-            <div className="flex items-center gap-3 p-4  hover:bg-gray-200">
-                <img width={'60px'} style={{
-                    height: '60px',
-                    borderRadius: '50%'
-                }} src={user.image ? user.image : 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='} alt="" />
-                <h6 className='capitalize'>
-                    {isLoading ? (
-                        <SyncLoader />
-                    ) : (
-                        `${user?.username}`
-                    )}
-                </h6>
-            </div>
-            <div className="flex text-1xl xl:text-2xl flex-col gap-5 xl:gap-10 p-4">
-                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
-                    <PiVideoBold color='' />
-                    <h4>Watch</h4>
+                <div className="flex items-center justify-between  gap-3 p-4 pt-5  hover:bg-gray-200">
+                    <h3 className="font-bold text-dark text-1xl">
+                        Home
+                    </h3>
+                    <button className="text-blue-500">
+                        Create
+                    </button>
                 </div>
-                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
-                    <PiVideoBold />
-                    <h4>Events</h4>
+                <div className="flex text-sm flex-col gap-5 xl:gap-10 p-4">
+                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                        <PiVideoBold color='blue' />
+                        <h4>Watch</h4>
+                    </div>
+                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                        <FaCalendarAlt color="hotpink" />
+                        <h4>Events</h4>
+                    </div>
+                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                        <RiUserLine color="orange" />
+                        <h4>Friends</h4>
+                    </div>
+                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                        <RiGalleryLine color='green' />
+                        <h4>Memories</h4>
+                    </div>
+                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                        <PiTagChevronFill color="red" style={{ rotate: '90deg' }} />
+                        <h4>Saved</h4>
+                    </div>
+                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                        <IoMdSettings color="yellow" style={{ rotate: '90deg' }} />
+                        <h4>Settings</h4>
+                    </div>
                 </div>
-                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
-                    <PiVideoBold />
-                    <h4>Friends</h4>
-                </div>
-                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
-                    <PiVideoBold />
-                    <h4>Memories</h4>
-                </div>
-                <div className="flex items-center hover:bg-gray-200 p-3 cursor-pointer gap-3 item-center">
-                    <PiVideoBold />
-                    <h4>Saved</h4>
-                </div>
-            </div>
-            <hr />
+                <hr />
             </Card>
 
         </>

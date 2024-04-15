@@ -104,6 +104,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/chats", require("./routes/chatRoutes"));
 app.use("/api/posts", require("./routes/postRoutes"));
+app.use("/api/friends", require("./routes/friendRoutes"));
+app.use("/api/notifications", require("./routes/notificationRoutes"));
 
 // check for the errors
 app.use(errorHandler);

@@ -55,6 +55,10 @@ const userSchema = mongoose.Schema({
         type:String,
         default: 'https://github.com/hsuntariq/TalkTango/blob/main/client/src/assets/background.jpg?raw=true',
         required:false,
+    },
+    requests: {
+        type: Array,
+        default:[]    
     }
 }, { timestamps: true });
 

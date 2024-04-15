@@ -27,8 +27,21 @@ const createPosts = AsyncHandler(async (req, res) => {
 
 
 const getPosts = AsyncHandler(async (req, res) => {
-    const posts = await Post.find().sort({ createdAt: -1 });
-    res.send(posts)
+    try {
+        const posts = await Post.aggregate([
+            {
+                $addFields: {
+                    likesCount: { $size: "$likes" } // Add a new field with the length of the likes array
+                }
+            },
+            {
+                $sort: { likesCount: -1 } // Sort by the likesCount field in descending order
+            }
+        ]);
+        res.send(posts);
+    } catch (error) {
+        res.status(500).send({ message: 'Internal Server Error' });
+    }
 })
 
 

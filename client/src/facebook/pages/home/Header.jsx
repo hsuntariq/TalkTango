@@ -5,8 +5,10 @@ import { MdHome } from "react-icons/md";
 import { CiPlay1 } from "react-icons/ci";
 import { BsShop } from "react-icons/bs";
 import { TbUsersMinus } from "react-icons/tb";
-import { FormControl } from '@mui/material';
+import { FormControl, Card } from '@mui/material';
 import logo from '../../../assets/logo.png'
+import { FaRegBell } from "react-icons/fa";
+
 const Header = () => {
     return (
         <>
@@ -18,7 +20,7 @@ const Header = () => {
                     </div>
                     <div className="search-bar flex items-center border rounded-full px-4">
                         <span>
-                            <IoSearchOutline className='text-1xl xl:text-2xl'  />
+                            <IoSearchOutline className='text-1xl xl:text-2xl' />
                         </span>
                         <FormControl type='search' className='border-0' placeholder='Search the Tango' />
                     </div>
@@ -31,8 +33,13 @@ const Header = () => {
                     <TbUsersMinus />
                 </div>
 
-                <div className="right">
-
+                <div className="right flex gap-3 pe-5">
+                    <div className="notifications relative">
+                        <FaRegBell />
+                        <Card className="bg-gray-400 -translate-x-full p-3 absolute">
+                            <h1>hello</h1>
+                        </Card>
+                    </div>
                 </div>
             </div>
         </>

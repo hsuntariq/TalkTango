@@ -96,7 +96,7 @@ const SinglePost = () => {
                 animation: 'moveGradient 9s infinite alternate-reverse',
                 backgroundSize: '400% 400%'
             }}></div>
-            <div className="w-3/4 min-h-screen flex justify-center items-center mx-auto">
+            <div className="md:w-3/4 min-h-screen flex justify-center items-center mx-auto">
                 {posts?.map((post) => {
                     const likes = post?.likes?.map((like) => {
                         const users = allUsers.find((user) => {
@@ -112,15 +112,15 @@ const SinglePost = () => {
 
                             <>
                                 <Container className='rounded-xl shadow-xl backdrop-blur-[20px]'>
-                                    <div className="flex shadow pt-5">
+                                    <div className="flex flex-col md:flex-row shadow pt-5">
 
-                                        <div className="w-[70%]">
+                                        <div className="w-full md:w-[70%]">
                                             <Card>
 
                                                 <img className='w-full h-[400px] object-contain' src={post?.image} />
                                             </Card>
                                         </div>
-                                        <div className="flex w-[30%] flex-col gap-4">
+                                        <div className="flex md:w-[30%] flex-col gap-4">
                                             <div className="flex gap-4 ms-4">
                                                 <img className='w-[40px] h-[40px] rounded-full' src={findUser()?.image ? (findUser?.image) : ("https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=")} alt="" />
                                                 <div className="flex flex-col">
