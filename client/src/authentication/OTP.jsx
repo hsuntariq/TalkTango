@@ -20,7 +20,7 @@ const OTP = () => {
         if (isError) {
             toast.error('Invali OTP')
         } else if (isSuccess) {
-            navigate('/home')
+            navigate(`/fb-home/${user?._id}`)
         }
         dispatch(reset());
     }, [isError, dispatch, isSuccess, navigate, user])

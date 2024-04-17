@@ -10,10 +10,15 @@ const cancelRequest = async (friendData) => {
     const response = await axios.post(`${base_url}/cancel-request`, friendData);
     return response.data
 }
+const acceptRequest = async (friendData) => {
+    const response = await axios.post(`${base_url}/accept-request`, friendData);
+    return response.data
+}
 
 
 
 export const friendService = {
     addFriend,
-    cancelRequest
+    cancelRequest,
+    acceptRequest
 }

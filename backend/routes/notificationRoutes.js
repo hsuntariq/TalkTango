@@ -3,7 +3,7 @@ const { getFriendRequests } = require('../controller/notificationController');
 
 const router = express.Router();
 
-router.get('/get-requests', getFriendRequests);
+router.get('/get-requests/:id', getFriendRequests);
 
 
 

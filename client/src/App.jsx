@@ -35,7 +35,7 @@ const App = () => {
 
             {/* facebook */}
 
-            <Route path='/fb-home' element={<Home2 />} />
+            <Route path='/fb-home/:user_id' element={<Home2 />} />
             <Route path='/single-post/:id/:user_id' element={<SinglePost />} />
 
 

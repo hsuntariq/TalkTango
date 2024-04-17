@@ -1,15 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoSearchOutline } from "react-icons/io5";
 import './header.css'
 import { MdHome } from "react-icons/md";
 import { CiPlay1 } from "react-icons/ci";
 import { BsShop } from "react-icons/bs";
 import { TbUsersMinus } from "react-icons/tb";
-import { FormControl, Card } from '@mui/material';
+import { FormControl, Card, Button } from '@mui/material';
 import logo from '../../../assets/logo.png'
 import { FaRegBell } from "react-icons/fa";
-
+import { useDispatch, useSelector } from 'react-redux'
+import { getRequestData } from '../../../features/notifications/notificationSlice';
+import { useParams } from 'react-router-dom';
 const Header = () => {
+    const [show, setShow] = useState(false)
+    const dispatch = useDispatch()
+    const { user, allUsers } = useSelector(state => state.auth);
+    const { requests } = useSelector(state => state.notification);
+    const { user_id } = useParams()
+
+    useEffect(() => {
+        dispatch(getRequestData(user_id))
+    }, [dispatch, user_id])
+
     return (
         <>
             <div className="flex fixed w-full bg-white z-50 items-center justify-between shadow">
@@ -30,7 +42,57 @@ const Header = () => {
                     <MdHome />
                     <CiPlay1 />
                     <BsShop />
-                    <TbUsersMinus />
+                    <div className="notifications relative">
+                        <div className="requests relative">
+                            {requests?.length && requests?.length > 0 ?
+                                (<div style={{ clipPath: 'circle()' }} className="absolute bg-gradient-to-t from-pink-500 to-violet-500 text-white font-bold text-center  p-1 -top-5 -right-2 text-sm">
+                                    {requests?.length}
+                                </div>)
+                                :
+                                null}
+                            <TbUsersMinus className='cursor-pointer' onClick={() => setShow(!show)} />
+                        </div>
+                        {show ? (
+                            requests && requests.length > 0 ? (
+                                <Card className="bg-gray-400 w-max -translate-x-full p-3 absolute">
+                                    {requests.map((item) => {
+                                        console.log(item);
+                                        const findUser = allUsers.find((u) => u?._id === item.from);
+
+                                        return (
+                                            <div key={item._id} className="bg-gray-100 my-1 hover:scale-110 transition-all hover:shadow cursor-pointer flex item-center p-3">
+                                                <img width={'40px'} style={{ height: '40px', borderRadius: '50%' }} src={findUser?.image || 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='} alt="" />
+                                                <div className="flex flex-col">
+                                                    <h5 className="font-bold text-sm">
+                                                        New Friend Request
+                                                    </h5>
+                                                    <p className="text-sm">
+                                                        <span className="font-bold text-blue-500 me-1 capitalize">
+                                                            {findUser?.username}
+                                                        </span>
+                                                        wants to be your friend
+                                                    </p>
+                                                    <button className="bg-gradient-to-r from-pink-800 font-bold to-purple-600 text-white hover:bg-gradient-to-bl transition self-start px-4  rounded-full ">
+                                                        Accept
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </Card>
+                            ) : (
+                                <Card className="bg-gray-400 w-max -translate-x-full p-3 absolute">
+                                    <div className="bg-gray-100 my-1 hover:scale-110 transition-all hover:shadow cursor-pointer flex item-center p-3">
+                                        <h5 className="font-bold">
+                                            No new requests
+                                        </h5>
+                                    </div>
+                                </Card>
+                            )
+                        ) : null}
+
+                    </div>
+
                 </div>
 
                 <div className="right flex gap-3 pe-5">
@@ -41,7 +103,7 @@ const Header = () => {
                         </Card>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

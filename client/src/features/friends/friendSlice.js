@@ -35,6 +35,19 @@ export const cancelFriend = createAsyncThunk('friend/cancel-request', async (dat
         return thunkAPI.rejectWithValue(message)
     }
 })
+export const accceptFriend = createAsyncThunk('friend/accept-request', async (data,thunkAPI) => {
+    try {
+        return await friendService.acceptRequest(data)
+    } catch (error) {
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.error) ||
+            error.message ||
+            error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 
 
@@ -65,7 +78,7 @@ export const friendSlice = createSlice({
             state.friendSuccess = true;
             state.friends = action.payload
         })
-            .addCase(cancelFriend.pending, (state) => {
+        .addCase(cancelFriend.pending, (state) => {
             state.friendLoading = true
             })
         .addCase(cancelFriend.rejected,(state,action)=>{
@@ -76,8 +89,22 @@ export const friendSlice = createSlice({
         .addCase(cancelFriend.fulfilled,(state,action)=>{
             state.friendLoading = false;
             state.friendSuccess = true;
+            console.log(action.payload)
             state.friends = action.payload
         })
+        // .addCase(cancelFriend.pending, (state) => {
+        //     state.friendLoading = true
+        //     })
+        // .addCase(cancelFriend.rejected,(state,action)=>{
+        //     state.friendLoading = false;
+        //     state.friendError = true;
+        //     state.friendMessage = action.payload
+        // })
+        // .addCase(cancelFriend.fulfilled,(state,action)=>{
+        //     state.friendLoading = false;
+        //     state.friendSuccess = true;
+        //     state.friends = action.payload
+        // })
      }
 
 })
