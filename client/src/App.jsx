@@ -11,10 +11,10 @@ import EnterEmail from "./authentication/forgotten_password/EnterEmail"
 import ResetPass from "./authentication/forgotten_password/ResetPass"
 import Audio from "./Audio"
 import Video from "./chat/messagebar/Video"
-import VideoCall from "./Video"
 import Home2 from './facebook/pages/home/Home'
 import SinglePost from "./facebook/components/singlePost/SinglePost"
 import { Toaster } from "react-hot-toast"
+import VideoCallZego from "./videoCall/VideoCall"
 const App = () => {
   return (
     <>
@@ -30,7 +30,7 @@ const App = () => {
             <Route path='/forgotten-password' element={<EnterEmail />} />
             <Route path='/reset-password/:id' element={<ResetPass />} />
             <Route path='/audio' element={<Audio />} />
-            <Route path='/video' element={<VideoCall />} />
+            <Route path='/video' element={<VideoCallZego />} />
 
 
             {/* facebook */}

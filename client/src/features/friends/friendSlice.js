@@ -4,12 +4,12 @@ import { friendService } from "./friendService";
 const initialState = {
     friends: [],
     friendLoading: false,
-    friendSuccess : false,
+    friendSuccess: false,
     friendError: false,
-    friendMessage : ''
+    friendMessage: ''
 };
 
-export const addFriendData = createAsyncThunk('friend/add-friend', async (data,thunkAPI) => {
+export const addFriendData = createAsyncThunk('friend/add-friend', async (data, thunkAPI) => {
     try {
         return await friendService.addFriend(data)
     } catch (error) {
@@ -22,7 +22,7 @@ export const addFriendData = createAsyncThunk('friend/add-friend', async (data,t
         return thunkAPI.rejectWithValue(message)
     }
 })
-export const cancelFriend = createAsyncThunk('friend/cancel-request', async (data,thunkAPI) => {
+export const cancelFriend = createAsyncThunk('friend/cancel-request', async (data, thunkAPI) => {
     try {
         return await friendService.cancelRequest(data)
     } catch (error) {
@@ -35,7 +35,7 @@ export const cancelFriend = createAsyncThunk('friend/cancel-request', async (dat
         return thunkAPI.rejectWithValue(message)
     }
 })
-export const accceptFriend = createAsyncThunk('friend/accept-request', async (data,thunkAPI) => {
+export const accceptFriend = createAsyncThunk('friend/accept-request', async (data, thunkAPI) => {
     try {
         return await friendService.acceptRequest(data)
     } catch (error) {
@@ -66,49 +66,49 @@ export const friendSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(addFriendData.pending, (state) => {
-            state.friendLoading = true
+                state.friendLoading = true
             })
-        .addCase(addFriendData.rejected,(state,action)=>{
-            state.friendLoading = false;
-            state.friendError = true;
-            state.friendMessage = action.payload
-        })
-        .addCase(addFriendData.fulfilled,(state,action)=>{
-            state.friendLoading = false;
-            state.friendSuccess = true;
-            state.friends = action.payload
-        })
-        .addCase(cancelFriend.pending, (state) => {
-            state.friendLoading = true
+            .addCase(addFriendData.rejected, (state, action) => {
+                state.friendLoading = false;
+                state.friendError = true;
+                state.friendMessage = action.payload
             })
-        .addCase(cancelFriend.rejected,(state,action)=>{
-            state.friendLoading = false;
-            state.friendError = true;
-            state.friendMessage = action.payload
-        })
-        .addCase(cancelFriend.fulfilled,(state,action)=>{
-            state.friendLoading = false;
-            state.friendSuccess = true;
-            console.log(action.payload)
-            state.friends = action.payload
-        })
-        // .addCase(cancelFriend.pending, (state) => {
-        //     state.friendLoading = true
-        //     })
-        // .addCase(cancelFriend.rejected,(state,action)=>{
-        //     state.friendLoading = false;
-        //     state.friendError = true;
-        //     state.friendMessage = action.payload
-        // })
-        // .addCase(cancelFriend.fulfilled,(state,action)=>{
-        //     state.friendLoading = false;
-        //     state.friendSuccess = true;
-        //     state.friends = action.payload
-        // })
-     }
+            .addCase(addFriendData.fulfilled, (state, action) => {
+                state.friendLoading = false;
+                state.friendSuccess = true;
+                state.friends = action.payload
+            })
+            .addCase(cancelFriend.pending, (state) => {
+                state.friendLoading = true
+            })
+            .addCase(cancelFriend.rejected, (state, action) => {
+                state.friendLoading = false;
+                state.friendError = true;
+                state.friendMessage = action.payload
+            })
+            .addCase(cancelFriend.fulfilled, (state, action) => {
+                state.friendLoading = false;
+                state.friendSuccess = true;
+                console.log(action.payload)
+                state.friends = action.payload
+            })
+            .addCase(accceptFriend.pending, (state) => {
+                state.friendLoading = true
+            })
+            .addCase(accceptFriend.rejected, (state, action) => {
+                state.friendLoading = false;
+                state.friendError = true;
+                state.friendMessage = action.payload
+            })
+            .addCase(accceptFriend.fulfilled, (state, action) => {
+                state.friendLoading = false;
+                state.friendSuccess = true;
+                state.friends = action.payload
+            })
+    }
 
 })
 
 
-export const {reset} = friendSlice.actions
+export const { reset } = friendSlice.actions
 export default friendSlice.reducer

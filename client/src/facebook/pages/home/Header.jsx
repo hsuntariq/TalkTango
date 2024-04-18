@@ -11,6 +11,8 @@ import { FaRegBell } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux'
 import { getRequestData } from '../../../features/notifications/notificationSlice';
 import { useParams } from 'react-router-dom';
+import { accceptFriend } from '../../../features/friends/friendSlice';
+import { toast } from 'react-hot-toast'
 const Header = () => {
     const [show, setShow] = useState(false)
     const dispatch = useDispatch()
@@ -21,6 +23,20 @@ const Header = () => {
     useEffect(() => {
         dispatch(getRequestData(user_id))
     }, [dispatch, user_id])
+
+
+
+    const acceptRequest = (from, to) => {
+        dispatch(accceptFriend({
+            from, user: to
+        })).then((res) => {
+            toast.success('Friend Accepted Successfully', {
+                icon: '🤗'
+            })
+        }).catch((error) => {
+            toast.error(error)
+        })
+    }
 
     return (
         <>
@@ -54,13 +70,13 @@ const Header = () => {
                         </div>
                         {show ? (
                             requests && requests.length > 0 ? (
-                                <Card className="bg-gray-400 w-max -translate-x-full p-3 absolute">
+                                <Card className="bg-gray-400 w-max p-5 -translate-x-full p-3 absolute">
                                     {requests.map((item) => {
-                                        console.log(item);
+
                                         const findUser = allUsers.find((u) => u?._id === item.from);
 
                                         return (
-                                            <div key={item._id} className="bg-gray-100 my-1 hover:scale-110 transition-all hover:shadow cursor-pointer flex item-center p-3">
+                                            <div key={item._id} className="bg-gray-100 my-1  transition-all  cursor-pointer flex item-center p-3">
                                                 <img width={'40px'} style={{ height: '40px', borderRadius: '50%' }} src={findUser?.image || 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='} alt="" />
                                                 <div className="flex flex-col">
                                                     <h5 className="font-bold text-sm">
@@ -72,7 +88,7 @@ const Header = () => {
                                                         </span>
                                                         wants to be your friend
                                                     </p>
-                                                    <button className="bg-gradient-to-r from-pink-800 font-bold to-purple-600 text-white hover:bg-gradient-to-bl transition self-start px-4  rounded-full ">
+                                                    <button onClick={() => acceptRequest(item?.from, item?.to)} className="bg-gradient-to-r border-none  text-sm w-full  from-pink-800 font-bold to-purple-600 text-white hover:bg-gradient-to-bl transition py-1 px-4  rounded-full ">
                                                         Accept
                                                     </button>
                                                 </div>
