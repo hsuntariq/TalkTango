@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { reset } from "../../features/auth/authSlice";
 import io from 'socket.io-client'
 const socket = io.connect('http://localhost:5174')
-const MessagePanel = () => {
+const MessagePanel = ({ link }) => {
     const { user, isLoading } = useSelector(state => state.auth);
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -33,7 +33,7 @@ const MessagePanel = () => {
         <>
             <div className="flex flex-col md:flex-row  w-[100%] h-[100vh] top-0">
                 <Sidebar />
-                <MessageScreen list={list} />
+                <MessageScreen link={link} list={list} />
             </div>
         </>
     )

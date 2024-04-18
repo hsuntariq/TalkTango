@@ -4,7 +4,7 @@ import Messages from "./Messages";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { reset } from "../../features/auth/authSlice";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from '../../services/peer'
 import {
@@ -13,8 +13,9 @@ import {
 } from "../../features/chat/chatSlice";
 import { toast } from "react-toastify";
 import Incoming from "./Incoming";
+import { AppContext } from "../../context/Context";
 const socket = io.connect("http://localhost:5174/");
-const MessageScreen = ({ list }) => {
+const MessageScreen = ({ list, link }) => {
   const [imageLoading, setImageLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [sentMessages, setSentMessages] = useState([]);
@@ -386,11 +387,9 @@ const MessageScreen = ({ list }) => {
 
 
 
-
-
   return (
     <>
-      {showIncoming && <Incoming declineCall={declineCall} data={myData} />}
+      {showIncoming && <Incoming link={link} declineCall={declineCall} data={myData} />}
 
       <div className="w-full top-0 flex  flex-col relative justify-between  ">
         <MessageHeader list={list} startCall={startCall} />

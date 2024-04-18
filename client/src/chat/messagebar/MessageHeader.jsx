@@ -2,12 +2,16 @@ import { HiOutlineDotsVertical, HiSearch } from "react-icons/hi"
 import { useSelector } from "react-redux";
 import logo from '../../assets/logo.png'
 import { Link, redirect, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { IoMdVideocam, IoMdCall } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
 import io from 'socket.io-client'
+import { AppContext } from "../../context/Context";
 const socket = io.connect('http://localhost:5174')
 const MessageHeader = ({ startCall, list }) => {
+    const { videoLink } = useContext(AppContext)
+    const data = useContext(AppContext)
+
     const navigate = useNavigate()
     const { user, allUsers } = useSelector(state => state.auth);
     const { receiver_id } = useParams();
@@ -38,7 +42,15 @@ const MessageHeader = ({ startCall, list }) => {
 
     const handleVideo = () => {
         socket.emit('incoming_call', { from: user?._id, to: receiver_id, user_from: user?.username, image: user?.image })
+
+
+
+
+
+
     }
+
+
 
 
     return (

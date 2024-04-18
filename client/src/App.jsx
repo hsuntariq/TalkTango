@@ -14,7 +14,15 @@ import Home2 from './facebook/pages/home/Home'
 import SinglePost from "./facebook/components/singlePost/SinglePost"
 import { Toaster } from "react-hot-toast"
 import VideoCallZego from "./videoCall/VideoCall"
+import { useState } from "react"
 const App = () => {
+  const [videoLink, setVideoLink] = useState('');
+
+  const handleVideoLink = (link) => {
+    setVideoLink(link);
+  };
+
+  const [link, setLink] = useState('')
   return (
     <>
       <Toaster />
@@ -24,12 +32,12 @@ const App = () => {
             <Route path='/' element={<Register />} />
             <Route path='/login' element={<Login />} />
             <Route path='/home' element={<Home />} />
-            <Route path='/message-panel/:receiver_id' element={<MessagePanel />} />
+            <Route path='/message-panel/:receiver_id' element={<MessagePanel link={videoLink} />} />
             <Route path='/verify/:id' element={<OTP />} />
             <Route path='/forgotten-password' element={<EnterEmail />} />
             <Route path='/reset-password/:id' element={<ResetPass />} />
             <Route path='/audio' element={<Audio />} />
-            <Route path='/video' element={<VideoCallZego />} />
+            <Route path='/video' element={<VideoCallZego onVideoLink={handleVideoLink} setLink={setLink} link={link} />} />
 
 
             {/* facebook */}

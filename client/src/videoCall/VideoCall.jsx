@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
-import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../context/Context';
+
+
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:5174')
 
 const generateRandomID = (len) => {
     let result = '';
@@ -13,21 +17,21 @@ const generateRandomID = (len) => {
     return result;
 };
 
-const VideoCallZego = () => {
+
+const VideoCallZego = ({ onVideoLink }) => {
+    const { setVideoLink } = useContext(AppContext);
     const [roomID, setRoomID] = useState('');
-    const navigate = useNavigate();
-    let zpInstance; // Declare zpInstance in the outer scope
 
     useEffect(() => {
-        const newRoomID = generateRandomID(5); // Generate a new random room ID
-        setRoomID(newRoomID); // Set the room ID state with the new value
+        const newRoomID = generateRandomID(5);
+        setRoomID(newRoomID);
 
         const myMeeting = async (element) => {
             const appID = 663029736;
             const serverSecret = "6d6ce5a3ac1570056d044ba09b879feb";
             const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, newRoomID, generateRandomID(5), generateRandomID(5));
 
-            zpInstance = ZegoUIKitPrebuilt.create(kitToken); // Assign the Zego instance to zpInstance
+            const zpInstance = ZegoUIKitPrebuilt.create(kitToken);
             zpInstance.joinRoom({
                 container: element,
                 sharedLinks: [
@@ -40,6 +44,13 @@ const VideoCallZego = () => {
                     mode: ZegoUIKitPrebuilt.GroupCall,
                 },
             });
+
+            const videoLink = window.location.protocol + '//' + window.location.host + window.location.pathname + '?roomID=' + newRoomID;
+            setVideoLink(videoLink);
+            onVideoLink(videoLink);
+
+            socket.emit('answer', videoLink)
+            // Pass link to parent
         };
 
         const element = document.querySelector('.myCallContainer');
@@ -47,25 +58,13 @@ const VideoCallZego = () => {
             myMeeting(element);
         }
 
-        // Clean-up function
         return () => {
-            // Clean up Zego instance
-            if (zpInstance) {
-                // Stop the call or any other necessary cleanup
-                zpInstance.stop();
-                // Disconnect any event listeners
-                // Clear state variables
-                setRoomID('');
-                // Additional cleanup if needed
-            }
+            // Clean up Zego instance if needed
         };
-    }, []); // Run only once when component mounts
+    }, []);
 
     return (
-        <div
-            className="myCallContainer"
-            style={{ width: '100vw', height: '100vh' }}
-        ></div>
+        <div className="myCallContainer" style={{ width: '100vw', height: '100vh' }}></div>
     );
 };
 

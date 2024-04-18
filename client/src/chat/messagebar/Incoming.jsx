@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
-const Incoming = ({ data, declineCall }) => {
+const Incoming = ({ data, declineCall, link }) => {
+    // const { videoLink } = useContext(AppContext)
+    const accept = () => {
+        console.log(link)
+    }
     return (
         <>
             <div className="min-h-screen flex flex-col justify-center items-center w-full bg-white/50 text-center z-[400] gap-7 fixed top-0">
@@ -14,7 +18,7 @@ const Incoming = ({ data, declineCall }) => {
                     {data?.user_from} is calling...
                 </h1>
                 <div className="flex gap-3">
-                    <button className="py-2 rounded-full font-bold text-capitalize px-10 bg-green-500 text-white">
+                    <button onClick={accept} className="py-2 rounded-full font-bold text-capitalize px-10 bg-green-500 text-white">
                         Accept
                     </button>
                     <button onClick={declineCall} className="py-2 rounded-full font-bold text-capitalize px-10 bg-red-500 text-white">

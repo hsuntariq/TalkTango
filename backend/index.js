@@ -55,6 +55,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit('declined', data)
   })
 
+  socket.on('answer', (data) => {
+    console.log(data)
+  })
+
 
 
   // join room
