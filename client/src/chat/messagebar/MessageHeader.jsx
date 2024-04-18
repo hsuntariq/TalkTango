@@ -1,13 +1,14 @@
 import { HiOutlineDotsVertical, HiSearch } from "react-icons/hi"
 import { useSelector } from "react-redux";
 import logo from '../../assets/logo.png'
-import { useParams } from "react-router-dom";
+import { Link, redirect, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { IoMdVideocam, IoMdCall } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
-
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:5174')
 const MessageHeader = ({ startCall, list }) => {
-
+    const navigate = useNavigate()
     const { user, allUsers } = useSelector(state => state.auth);
     const { receiver_id } = useParams();
     const displayUserInfo = () => {
@@ -35,9 +36,8 @@ const MessageHeader = ({ startCall, list }) => {
 
 
 
-    const handleVideoCall = () => {
-        startCall();
-
+    const handleVideo = () => {
+        socket.emit('incoming_call', { from: user?._id, to: receiver_id, user_from: user?.username, image: user?.image })
     }
 
 
@@ -45,16 +45,18 @@ const MessageHeader = ({ startCall, list }) => {
         <>
             <div style={{
                 background: `rgba(${user?.bgTheme})`,
-
+                color: 'white'
             }} className="flex head bg-[#1A2329] justify-between items-center p-1 px-4  text-white">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-white">
 
                     <div className="user-image rounded-full w-[45px] h-[45px]">
                         <img src={user?.image ? user?.image : logo} alt="" />
 
                     </div>
-                    <div className="text-1xl">
-                        {displayUserInfo()?.username}
+                    <div className="text-1xl text-white">
+                        <h1 style={{ color: 'white' }} className="text-1xl text-white">
+                            {displayUserInfo()?.username}
+                        </h1>
                         {isActive() ? (
                             <p className="text-sm flex items-center text-green-500"> <GoDotFill color="green" /> Online</p>
                         ) : (
@@ -65,7 +67,9 @@ const MessageHeader = ({ startCall, list }) => {
                 </div>
                 <div className="flex gap-4">
                     <IoMdCall className="cursor-pointer text-2xl" />
-                    <IoMdVideocam onClick={handleVideoCall} className="cursor-pointer text-2xl" />
+                    <Link to="/video" target="_blank">
+                        <IoMdVideocam onClick={handleVideo} className="cursor-pointer text-2xl" />
+                    </Link>
                     <HiSearch className="cursor-pointer text-2xl" />
                     <HiOutlineDotsVertical className="cursor-pointer text-2xl" />
 

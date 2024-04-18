@@ -10,7 +10,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import EnterEmail from "./authentication/forgotten_password/EnterEmail"
 import ResetPass from "./authentication/forgotten_password/ResetPass"
 import Audio from "./Audio"
-import Video from "./chat/messagebar/Video"
 import Home2 from './facebook/pages/home/Home'
 import SinglePost from "./facebook/components/singlePost/SinglePost"
 import { Toaster } from "react-hot-toast"

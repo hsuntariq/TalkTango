@@ -1,64 +1,72 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+import { useNavigate } from 'react-router-dom';
 
-
-function randomID(len) {
+const generateRandomID = (len) => {
     let result = '';
-    if (result) return result;
-    var chars = '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP',
-        maxPos = chars.length,
-        i;
+    const chars = '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP';
+    const maxPos = chars.length;
     len = len || 5;
-    for (i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) {
         result += chars.charAt(Math.floor(Math.random() * maxPos));
     }
     return result;
-}
+};
 
-export function getUrlParams(
-    url = window.location.href
-) {
-    let urlStr = url.split('?')[1];
-    return new URLSearchParams(urlStr);
-}
+const VideoCallZego = () => {
+    const [roomID, setRoomID] = useState('');
+    const navigate = useNavigate();
+    let zpInstance; // Declare zpInstance in the outer scope
 
-export default function VideoCallZego() {
-    const roomID = getUrlParams().get('roomID') || randomID(5);
-    let myMeeting = async (element) => {
-        // generate Kit Token
-        const appID = 663029736;
-        const serverSecret = "6d6ce5a3ac1570056d044ba09b879feb";
-        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, randomID(5), randomID(5));
+    useEffect(() => {
+        const newRoomID = generateRandomID(5); // Generate a new random room ID
+        setRoomID(newRoomID); // Set the room ID state with the new value
 
+        const myMeeting = async (element) => {
+            const appID = 663029736;
+            const serverSecret = "6d6ce5a3ac1570056d044ba09b879feb";
+            const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, newRoomID, generateRandomID(5), generateRandomID(5));
 
-        // Create instance object from Kit Token.
-        const zp = ZegoUIKitPrebuilt.create(kitToken);
-        // start the call
-        zp.joinRoom({
-            container: element,
-            sharedLinks: [
-                {
-                    name: 'Personal link',
-                    url:
-                        window.location.protocol + '//' +
-                        window.location.host + window.location.pathname +
-                        '?roomID=' +
-                        roomID,
+            zpInstance = ZegoUIKitPrebuilt.create(kitToken); // Assign the Zego instance to zpInstance
+            zpInstance.joinRoom({
+                container: element,
+                sharedLinks: [
+                    {
+                        name: 'Personal link',
+                        url: window.location.protocol + '//' + window.location.host + window.location.pathname + '?roomID=' + newRoomID,
+                    },
+                ],
+                scenario: {
+                    mode: ZegoUIKitPrebuilt.GroupCall,
                 },
-            ],
-            scenario: {
-                mode: ZegoUIKitPrebuilt.GroupCall, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
-            },
-        });
+            });
+        };
 
+        const element = document.querySelector('.myCallContainer');
+        if (element) {
+            myMeeting(element);
+        }
 
-    };
+        // Clean-up function
+        return () => {
+            // Clean up Zego instance
+            if (zpInstance) {
+                // Stop the call or any other necessary cleanup
+                zpInstance.stop();
+                // Disconnect any event listeners
+                // Clear state variables
+                setRoomID('');
+                // Additional cleanup if needed
+            }
+        };
+    }, []); // Run only once when component mounts
 
     return (
         <div
             className="myCallContainer"
-            ref={myMeeting}
             style={{ width: '100vw', height: '100vh' }}
         ></div>
     );
-}
+};
+
+export default VideoCallZego;

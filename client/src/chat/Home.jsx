@@ -20,6 +20,13 @@ const Home = () => {
     }, [user, navigate, dispatch])
 
 
+    // useEffect(() => {
+    //     socket.on('alert', (data) => {
+    //         if (user?._id == data.to) {
+    //             alert(`${data.user_from} is calling`)
+    //         }
+    //     })
+    // })
 
     useEffect(() => {
         socket.on('user_list', (data) => {

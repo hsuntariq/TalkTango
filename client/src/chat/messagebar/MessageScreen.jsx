@@ -12,7 +12,7 @@ import {
   createMessage,
 } from "../../features/chat/chatSlice";
 import { toast } from "react-toastify";
-import Video from "./Video";
+import Incoming from "./Incoming";
 const socket = io.connect("http://localhost:5174/");
 const MessageScreen = ({ list }) => {
   const [imageLoading, setImageLoading] = useState(false);
@@ -21,7 +21,7 @@ const MessageScreen = ({ list }) => {
   const [receivedMessages, setReceivedMessages] = useState([]);
   const { receiver_id } = useParams();
   const { chatLoading, chatData } = useSelector((state) => state.chat);
-  const { user, isLoading } = useSelector((state) => state.auth);
+  const { user, isLoading, allUsers } = useSelector((state) => state.auth);
   const [selectedImages, setSelectedImages] = useState([]);
   const [images, setImages] = useState(null);
   const navigate = useNavigate();
@@ -312,80 +312,118 @@ const MessageScreen = ({ list }) => {
   );
 
 
-    //negotiate
+  //negotiate
 
   const handleNegoNeeded = useCallback(async () => {
-        const offer = await Peer.getOffer()
-        socket.emit('peer:nego:needed',{offer,from: receiver_id, chatID: chatData?._id})
-      },[chatData?._id, receiver_id])
+    const offer = await Peer.getOffer()
+    socket.emit('peer:nego:needed', { offer, from: receiver_id, chatID: chatData?._id })
+  }, [chatData?._id, receiver_id])
 
-  const handleIncomingNego = useCallback(async({from,offer}) => {
+  const handleIncomingNego = useCallback(async ({ from, offer }) => {
     const ans = Peer.getAnswer(offer);
     socket.emit('peer:nego:done', { to: from, ans, chatID: chatData?._id });
   }, [chatData?._id])
-  
-  const handleNegoFinal = useCallback(async({ from, ans }) => {
-      await Peer.setLocalDescription(ans)
-  },[])
-    
-  
-  
+
+  const handleNegoFinal = useCallback(async ({ from, ans }) => {
+    await Peer.setLocalDescription(ans)
+  }, [])
+
+
+
   useEffect(() => {
-    Peer.peer.addEventListener('negotiationneeded',handleNegoNeeded )
-    },[handleNegoNeeded])
+    Peer.peer.addEventListener('negotiationneeded', handleNegoNeeded)
+  }, [handleNegoNeeded])
 
   // whenever we get a track
   useEffect(() => {
     Peer.peer.addEventListener('track', async (e) => {
       const remStream = e.streams;
       setRemoteStream(remStream)
-      })
-  },[])
+    })
+  }, [])
 
   useEffect(() => {
     socket.on("incoming:call", handleIncommingCall)
     socket.on('call:accepted', handleCallAccepted)
-    socket.on('peer:nego:needed',handleIncomingNego)
-    socket.on('peer:nego:final',handleNegoFinal)
+    socket.on('peer:nego:needed', handleIncomingNego)
+    socket.on('peer:nego:final', handleNegoFinal)
   }, [handleCallAccepted, handleIncomingNego, handleIncommingCall, handleNegoFinal])
+
+
+  const [showIncoming, setShowIncoming] = useState(false)
+  const [myData, setMyData] = useState(null)
+  useEffect(() => {
+    socket.on('alert', (data) => {
+      if (user?._id == data.to) {
+        setShowIncoming(true)
+        setMyData(data)
+      }
+    })
+  })
+  useEffect(() => {
+    socket.on('declined', (data) => {
+      console.log(user?._id == data.to)
+      if (user?._id == data.to) {
+        alert(`${data?.user_from.toUpperCase()} has declined the call`)
+      }
+    })
+  })
+
+
+  const findUser = () => {
+    return allUsers.find((item) => {
+      return item._id == receiver_id;
+    })
+  }
+
+  const declineCall = () => {
+    setShowIncoming(false);
+    setMyData(false)
+
+    socket.emit('call_declined', { from: user?._id, to: receiver_id, user_from: user?.username })
+
+  }
 
 
 
 
 
   return (
-    <div className="w-full top-0 flex  flex-col relative justify-between  ">
-      {vidRecording && <Video remoteStream={remoteStream} vidRef={vidRef} stopVidRecording={stopVidRecording} />}
-      <MessageHeader list={list} startCall={startCall} />
-      <Messages
-        audioBlob={audioBlob}
-        imageInputs={imageInputs}
-        handleInputChange={handleInputChange}
-        setImageInputs={setImageInputs}
-        sendImageChat={sendImageChat}
-        imageLoading={imageLoading}
-        handleUpload={handleUpload}
-        selectedImages={selectedImages}
-        setSelectedImages={setSelectedImages}
-        receivedMessages={receivedMessages}
-        allMessages={allMessages}
-      />
-      <Footer
-        sentMessages={sentMessages}
-        setSentMessages={setSentMessages}
-        stopRecording={stopRecording}
-        startRecording={startRecording}
-        recording={recording}
-        setSelectedImages={setSelectedImages}
-        selectedImages={selectedImages}
-        handleImageChange={handleImageChange}
-        setRoom={setRoom}
-        sendMessage={sendMessage}
-        setMessage={setMessage}
-        message={message}
-        audioBlob={audioBlob}
-      />
-    </div>
+    <>
+      {showIncoming && <Incoming declineCall={declineCall} data={myData} />}
+
+      <div className="w-full top-0 flex  flex-col relative justify-between  ">
+        <MessageHeader list={list} startCall={startCall} />
+        <Messages
+          audioBlob={audioBlob}
+          imageInputs={imageInputs}
+          handleInputChange={handleInputChange}
+          setImageInputs={setImageInputs}
+          sendImageChat={sendImageChat}
+          imageLoading={imageLoading}
+          handleUpload={handleUpload}
+          selectedImages={selectedImages}
+          setSelectedImages={setSelectedImages}
+          receivedMessages={receivedMessages}
+          allMessages={allMessages}
+        />
+        <Footer
+          sentMessages={sentMessages}
+          setSentMessages={setSentMessages}
+          stopRecording={stopRecording}
+          startRecording={startRecording}
+          recording={recording}
+          setSelectedImages={setSelectedImages}
+          selectedImages={selectedImages}
+          handleImageChange={handleImageChange}
+          setRoom={setRoom}
+          sendMessage={sendMessage}
+          setMessage={setMessage}
+          message={message}
+          audioBlob={audioBlob}
+        />
+      </div>
+    </>
   );
 };
 

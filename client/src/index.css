@@ -120,6 +120,65 @@ body {
   border-radius: 50%;
 }
 
+
+.video-image {
+  position: relative
+}
+
+.video-image::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: rgb(0, 128, 0, 0.9);
+  z-index: -2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse2 0.7s infinite linear alternate;
+  border-radius: 50%;
+}
+
+.video-image::after {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgb(0, 128, 0, 0.7);
+  z-index: -2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse2 0.9s infinite linear alternate;
+  border-radius: 50%;
+}
+
+
+
+@keyframes pulse2 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    /* Initial scale: 90% */
+    opacity: 0.7;
+    /* Initial opacity */
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    /* Scale up to 110% */
+    opacity: 1;
+    /* Maximum opacity */
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    /* Return to the initial scale */
+    opacity: 0.7;
+    /* Return to the initial opacity */
+  }
+}
+
+
 @keyframes pulse {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -130,22 +189,20 @@ body {
   }
 }
 
-.head{
-  background-image: url('https://media0.giphy.com/media/1zj5V9hQlkWHJ8m5kv/giphy.webp?cid=790b7611s651zhlm0jlwym291l17eviqr8xyca5xpgocswk0&ep=v1_gifs_search&rid=giphy.webp&ct=g');
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+
 
 
 
 @keyframes moveGradient {
   0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
