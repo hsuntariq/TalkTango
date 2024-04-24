@@ -389,7 +389,7 @@ const MessageScreen = ({ list, link }) => {
 
   return (
     <>
-      {showIncoming && <Incoming link={link} declineCall={declineCall} data={myData} />}
+      {showIncoming && <Incoming showIncoming={showIncoming} setShowIncoming={setShowIncoming} link={link} declineCall={declineCall} data={myData} />}
 
       <div className="w-full top-0 flex  flex-col relative justify-between  ">
         <MessageHeader list={list} startCall={startCall} />

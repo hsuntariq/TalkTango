@@ -1,9 +1,17 @@
-import React, { useContext } from 'react'
-
-const Incoming = ({ data, declineCall, link }) => {
+import React, { useContext, useEffect, useState } from 'react'
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:5174')
+const Incoming = ({ data, declineCall, link, setShowIncoming }) => {
     // const { videoLink } = useContext(AppContext)
+    const [url, setUrl] = useState(null)
+    useEffect(() => {
+        socket.on('answered', (data) => {
+            setUrl(data.shareableLink)
+        })
+    }, [])
     const accept = () => {
-        console.log(link)
+        setShowIncoming(false)
+        window.open(url, '_blank');
     }
     return (
         <>

@@ -42,12 +42,6 @@ const MessageHeader = ({ startCall, list }) => {
 
     const handleVideo = () => {
         socket.emit('incoming_call', { from: user?._id, to: receiver_id, user_from: user?.username, image: user?.image })
-
-
-
-
-
-
     }
 
 
@@ -79,7 +73,7 @@ const MessageHeader = ({ startCall, list }) => {
                 </div>
                 <div className="flex gap-4">
                     <IoMdCall className="cursor-pointer text-2xl" />
-                    <Link to="/video" target="_blank">
+                    <Link to={`/video/${user?._id}/${receiver_id}`} target="_blank">
                         <IoMdVideocam onClick={handleVideo} className="cursor-pointer text-2xl" />
                     </Link>
                     <HiSearch className="cursor-pointer text-2xl" />
