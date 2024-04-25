@@ -10,9 +10,11 @@ import logo from '../../../assets/logo.png'
 import { FaRegBell } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux'
 import { getRequestData } from '../../../features/notifications/notificationSlice';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { accceptFriend } from '../../../features/friends/friendSlice';
 import { toast } from 'react-hot-toast'
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+
 const Header = () => {
     const [show, setShow] = useState(false)
     const dispatch = useDispatch()
@@ -57,7 +59,9 @@ const Header = () => {
                 <div className="icons text-1xl xl:text-2xl flex gap-10 w-1/2 justify-around ">
                     <MdHome />
                     <CiPlay1 />
-                    <BsShop />
+                    <Link to='/home'>
+                        <IoChatbubbleEllipsesOutline />
+                    </Link>
                     <div className="notifications relative">
                         <div className="requests relative">
                             {requests?.length && requests?.length > 0 ?

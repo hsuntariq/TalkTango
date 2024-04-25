@@ -2,15 +2,15 @@ const AsyncHandler = require('express-async-handler')
 const Friend = require('../models/Friends')
 const User = require('../models/userModel')
 const Notification = require('../models/notificationModel')
-const addFriend = AsyncHandler(async(req, res) => {
+const addFriend = AsyncHandler(async (req, res) => {
     const { user_id, friend_id } = req.body;
-    
+
     // Find user
     let findUser = await Friend.findOne({ user: user_id });
     let to = await User.findOne({ _id: friend_id });
     // find user notification
-    let findNotification = await Notification.findOne({user:friend_id})
-    
+    let findNotification = await Notification.findOne({ user: friend_id })
+
 
 
 
@@ -37,14 +37,14 @@ const addFriend = AsyncHandler(async(req, res) => {
             notifications: [{
                 type: 'friend_request',
                 from: user_id,
-                to:friend_id
+                to: friend_id
             }]
         })
     } else {
         findNotification.notifications.push({
             type: 'friend_request',
             from: user_id,
-            to:friend_id
+            to: friend_id
         });
         await findNotification.save();
     }
@@ -58,15 +58,15 @@ const addFriend = AsyncHandler(async(req, res) => {
 const acceptRequest = AsyncHandler(async (req, res) => {
     const { user, from } = req.body;
     const findUser = await User.findOne({ _id: user });
-    const findFriendList = await Friend.findOne({user: from });
-    const notification = await Notification.findOne({user:user});
-    const findLoggedUserFriends = await Friend.findOne({user})
+    const findFriendList = await Friend.findOne({ user: from });
+    const notification = await Notification.findOne({ user: user });
+    const findLoggedUserFriends = await Friend.findOne({ user })
 
     if (!findLoggedUserFriends) {
         await Friend.create({
             user,
             requested: [],
-            friends:[from]
+            friends: [from]
         })
     } else {
         findLoggedUserFriends.friends.push(user)
@@ -79,10 +79,10 @@ const acceptRequest = AsyncHandler(async (req, res) => {
         // remove the requested id from the requested array
         findFriendList.requested.pull(user);
         // push the friend id into the friends array from the user's side
-        if (!findFriendList.friends.includes(user)) {   
+        if (!findFriendList.friends.includes(user)) {
             findFriendList.friends.push(user)
         }
-        
+
         notification.notifications = notification.notifications.filter((item) => !(item.from == from && item.to == user));
 
         await notification.save()
@@ -92,13 +92,13 @@ const acceptRequest = AsyncHandler(async (req, res) => {
     }
 
     res.send(findLoggedUserFriends)
-}) 
+})
 
 
-const cancelRequest = AsyncHandler(async(req,res) => {
+const cancelRequest = AsyncHandler(async (req, res) => {
     const { user_id, friend_id } = req.body;
     const findUser = await Friend.findOne({ user: user_id });
-    if (findUser.requested.includes(friend_id)) {   
+    if (findUser.requested.includes(friend_id)) {
         findUser.requested.pull(friend_id);
     }
 
@@ -108,8 +108,22 @@ const cancelRequest = AsyncHandler(async(req,res) => {
 })
 
 
+const getFriendList = AsyncHandler(async (req, res) => {
+    const user_id = req.params.id;
+    const findUser = await Friend.findOne({ user: user_id });
+    if (!findUser) {
+        res.status(404);
+        throw new Error('Nothing to show, start adding people to get friends')
+    } else {
+        // res.send(findUser)
+        res.send(findUser.friends);
+    }
+})
+
+
 module.exports = {
     addFriend,
     cancelRequest,
-    acceptRequest
+    acceptRequest,
+    getFriendList
 }

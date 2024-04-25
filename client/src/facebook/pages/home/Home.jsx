@@ -22,7 +22,7 @@ const Home = () => {
                         <Story />
                         <Timeline />
                     </div>
-                    <div className="mt-[4rem] overflow-y-scroll w-1/5 h-[90%] bg-white p-3 md:fixed right-0 top-0 ">
+                    <div className="mt-[4rem] overflow-y-scroll w-1/5 h-[90%] bg-white p-3  right-0 top-0 ">
                         <MainSuggestions />
                     </div>
                 </div>

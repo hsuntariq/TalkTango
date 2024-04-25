@@ -8,7 +8,7 @@ const Incoming = ({ data, declineCall, link, setShowIncoming }) => {
         socket.on('answered', (data) => {
             setUrl(data.shareableLink)
         })
-    }, [])
+    })
     const accept = () => {
         setShowIncoming(false)
         window.open(url, '_blank');

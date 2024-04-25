@@ -8,6 +8,7 @@ import { RiGalleryLine, RiUserLine } from 'react-icons/ri';
 import { MdSave } from 'react-icons/md';
 import { PiTagChevronFill } from "react-icons/pi";
 import { IoMdSettings } from "react-icons/io";
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
     const { user, isLoading } = useSelector(state => state.auth)
@@ -35,10 +36,10 @@ const Sidebar = () => {
                         <FaCalendarAlt color="hotpink" />
                         <h4>Events</h4>
                     </div>
-                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                    <Link to='/friends' className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
                         <RiUserLine color="orange" />
                         <h4>Friends</h4>
-                    </div>
+                    </Link>
                     <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
                         <RiGalleryLine color='green' />
                         <h4>Memories</h4>
