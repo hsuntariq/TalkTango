@@ -12,7 +12,7 @@ const initialState = {
     singlePost: [],
     shared: false,
     commentLoading: false,
-
+    myPosts: []
 }
 
 
@@ -98,6 +98,15 @@ export const deleteComment = createAsyncThunk('posts/delete-comment', async (dat
     try {
         // console.log(data)
         return await postService.deleteComment(data)
+    } catch (error) {
+        thunkAPI.rejectWithValue(error.response.data.error)
+
+    }
+})
+export const getMyPosts = createAsyncThunk('posts/get-my-posts', async (data, thunkAPI) => {
+    try {
+        // console.log(data)
+        return await postService.getMyPosts(data)
     } catch (error) {
         thunkAPI.rejectWithValue(error.response.data.error)
 
@@ -260,8 +269,20 @@ export const postSlice = createSlice({
             .addCase(deleteComment.fulfilled, (state, action) => {
                 state.commentLoading = false;
                 state.postSuccess = true
-                console.log(action.payload)
                 state.comments = action.payload?.comments
+            })
+            .addCase(getMyPosts.pending, (state) => {
+                state.commentLoading = true
+            })
+            .addCase(getMyPosts.rejected, (state, action) => {
+                state.commentLoading = false;
+                state.postError = true;
+                state.postMessage = action.payload;
+            })
+            .addCase(getMyPosts.fulfilled, (state, action) => {
+                state.commentLoading = false;
+                state.postSuccess = true
+                state.myPosts = action.payload
             })
 
     }

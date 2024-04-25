@@ -268,6 +268,22 @@ const generateToken = (id) => {
 
 
 
+const uploadPhoto = AsyncHandler(async (req, res) => {
+    const { user_id, image } = req.body;
+    const findUser = await User.findOne({ _id: user_id });
+    if (!findUser) {
+        res.status(404);
+        throw new Error('User not found')
+    } else {
+        findUser.image = image
+        await findUser.save()
+        res.send(findUser)
+    }
+})
+
+
+
+
 module.exports = {
     registerUser,
     getAllUsers,
@@ -276,5 +292,6 @@ module.exports = {
     setTheme,
     setChatTheme,
     sendResetLink,
-    resetPassword
+    resetPassword,
+    uploadPhoto
 }

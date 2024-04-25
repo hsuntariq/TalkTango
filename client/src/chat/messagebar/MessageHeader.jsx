@@ -42,12 +42,6 @@ const MessageHeader = ({ startCall, list }) => {
 
     const handleVideo = () => {
         socket.emit('incoming_call', { from: user?._id, to: receiver_id, user_from: user?.username, image: user?.image })
-
-
-
-
-
-
     }
 
 

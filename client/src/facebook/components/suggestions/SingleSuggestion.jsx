@@ -40,13 +40,12 @@ const SingleSuggestion = ({ _id, image, username, add, friendLoading }) => {
     return (
         <>
             <div key={_id} className="flex cursor-pointer hover:shadow-md transition-all hover:scale-105 gap-2 p-2 items-center">
-                <img width={'40px'} style={{ height: '40px', borderRadius: '50%' }} src={image ? image : 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='} alt="" />
+                <div className="img rounded-full w-[45px] h-[45px]">
+                    <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn-icons-png.flaticon.com/512/9655/9655066.png'} alt="" />
+                </div>
                 <div className="info">
                     <h3 className="font-bold text-sm capitalize">{username}</h3>
-                    <Button onClick={handleAddFriend} style={{
-                        fontSize: '0.7rem',
-                        background: checkRequested() ? 'gray' : '#1565C0',
-                    }} variant="contained" size="small" disabled={loading}>
+                    <Button onClick={handleAddFriend} style={{ background: 'linear-gradient(to right, #FEBA00,#FD6700)', color: 'white', fontWeight: 'bold' }} variant="contained" size="small" disabled={loading}>
                         {loading ? <ClipLoader color="white" size={20} /> :
                             checkRequested() ? 'Requested' : 'ADD'
                         }

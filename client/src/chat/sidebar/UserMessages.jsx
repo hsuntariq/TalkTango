@@ -22,7 +22,9 @@ const UserMessages = ({ _id, username, phone }) => {
     return (
         <Link onClick={addChat} to={`/message-panel/${_id}`} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">
             <div className="flex items-center  my-2 gap-4 text-white">
-                <img src="https://github.com/hsuntariq/whatsapp_clone/raw/main/assets/whatsapp.PNG" alt="" className="w-[50px] h-[50px] rounded-full" />
+                <div className="img rounded-full w-[45px] h-[45px]">
+                    <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn-icons-png.flaticon.com/512/9655/9655066.png'} alt="" />
+                </div>
                 <div className="">
                     <h6>{username}</h6>
                     <p className="text-gray-400">

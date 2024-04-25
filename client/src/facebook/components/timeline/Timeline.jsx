@@ -144,12 +144,11 @@ const Timeline = () => {
                         </div>
                     </Card>
                 ) : (
-                    <Card variant='outlined' className='px-5 py-4 my-3 shadow'>
-                        <div className='flex items-center gap-4'>
-                            <img width={'40px'} style={{
-                                height: '40px',
-                                borderRadius: '50%'
-                            }} src={user.image ? user.image : 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='} alt="" />
+                    <Card variant='outlined' className='px-5  py-4 my-3 shadow'>
+                        <div className='flex items-center gap-4 '>
+                            <div className="img rounded-full w-[45px] h-[45px]">
+                                <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn-icons-png.flaticon.com/512/9655/9655066.png'} alt="" />
+                            </div>
 
                             <FormControl className='w-full d-flex align-items-center'>
                                 <Input value={caption} onChange={(e) => setCaption(e.target.value)} type='text' className='w-full rounded-full outline-none' placeholder={`What's on your mind ${user?.username}?`} />
@@ -158,14 +157,14 @@ const Timeline = () => {
                         <hr className='my-2' />
                         <div className="flex justify-between text-sm  items-center">
                             <div className="flex relative cursor-pointer gap-4 items-center">
-                                <IoImagesSharp color="green" />
+                                <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/8/88/Orange_ENTER_International_Logo_for_2022.png" />
                                 <input type="file" className='absolute cursor-pointer  opacity-0' multiple onChange={handleImageChange} />
                                 <h4>Photo</h4>
 
                             </div>
 
                             <div className="flex cursor-pointer gap-4 items-center">
-                                <BsFillMegaphoneFill />
+                                <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Eo_circle_orange_film-camera.svg/2048px-Eo_circle_orange_film-camera.svg.png" />
                                 <h4>Video</h4>
                             </div>
                             <div className="flex cursor-pointer gap-4 items-center">

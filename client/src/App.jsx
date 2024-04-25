@@ -13,8 +13,10 @@ import Audio from "./Audio"
 import Home2 from './facebook/pages/home/Home'
 import SinglePost from "./facebook/components/singlePost/SinglePost"
 import { Toaster } from "react-hot-toast"
-import VideoCallZego from "./videoCall/VideoCall"
 import { useState } from "react"
+import VideoCallZego from "./videoCall/VideoCall"
+import Friends from "./facebook/pages/friends/Friends"
+import UserProfile from "./facebook/pages/profile/UserProfile"
 const App = () => {
   const [videoLink, setVideoLink] = useState('');
 
@@ -37,14 +39,15 @@ const App = () => {
             <Route path='/forgotten-password' element={<EnterEmail />} />
             <Route path='/reset-password/:id' element={<ResetPass />} />
             <Route path='/audio' element={<Audio />} />
-            <Route path='/video/:caller-id/:receiver-id' element={<VideoCallZego />} />
+            <Route path='/video/:caller_id/:receiver_id' element={<VideoCallZego />} />
 
 
             {/* facebook */}
 
             <Route path='/fb-home/:user_id' element={<Home2 />} />
             <Route path='/single-post/:id/:user_id' element={<SinglePost />} />
-
+            <Route path="/friends" element={<Friends />} />
+            <Route path="/profile/:id" element={<UserProfile />} />
 
             {/* not-found */}
             <Route path='*' element={<Error />} />

@@ -4,8 +4,16 @@ import moment from 'moment'
 import React from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import Loader from './Loader'
 
 const AllPosts = ({ post, remainingPostsCount, userData, postsInGroup, numPostsToDisplay }) => {
+
+    const { posts, postLoading, postImages, postSuccess, shared } = useSelector(state => state.post)
+
+    if (postLoading && isLoading) {
+        return <Loader />
+    }
+
     return (
         <>
 

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
-import io from 'socket.io-client';
+import io from 'socket.io-client'
+import { useParams } from 'react-router-dom';
 const socket = io.connect('http://localhost:5174')
 function randomID(len) {
     let result = '';
@@ -22,7 +23,8 @@ export function getUrlParams(
     return new URLSearchParams(urlStr);
 }
 
-export default function Video() {
+export default function VideoCallZego() {
+    const { caller_id, receiver_id } = useParams()
     const roomID = getUrlParams().get('roomID') || randomID(5);
     let myMeeting = async (element) => {
 
@@ -34,17 +36,12 @@ export default function Video() {
         // Create instance object from Kit Token.
         const zp = ZegoUIKitPrebuilt.create(kitToken);
         // start the call
-
-        const shareableLink =
-            window.location.protocol +
-            '//' +
-            window.location.host +
-            window.location.pathname +
+        const shareableLink = window.location.protocol + '//' +
+            window.location.host + window.location.pathname +
             '?roomID=' +
-            roomID;
+            roomID
 
-        socket.emit('answer', shareableLink)
-
+        socket.emit('answer', { caller_id, receiver_id, shareableLink })
         zp.joinRoom({
             container: element,
             sharedLinks: [

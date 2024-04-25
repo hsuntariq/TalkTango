@@ -14,11 +14,17 @@ const acceptRequest = async (friendData) => {
     const response = await axios.post(`${base_url}/accept-request`, friendData);
     return response.data
 }
+const getFriends = async (user_id) => {
+
+    const response = await axios.get(`${base_url}/get-friends/${user_id}`);
+    return response.data
+}
 
 
 
 export const friendService = {
     addFriend,
     cancelRequest,
-    acceptRequest
+    acceptRequest,
+    getFriends
 }

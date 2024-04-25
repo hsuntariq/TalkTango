@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
 
   socket.on('answer', (data) => {
     console.log(data)
+    socket.broadcast.emit('answered', data)
   })
 
 
