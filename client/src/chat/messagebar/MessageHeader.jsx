@@ -79,7 +79,7 @@ const MessageHeader = ({ startCall, list }) => {
                 </div>
                 <div className="flex gap-4">
                     <IoMdCall className="cursor-pointer text-2xl" />
-                    <Link to="/video" target="_blank">
+                    <Link to={`/video/${user?._id}/${receiver_id}`} target="_blank">
                         <IoMdVideocam onClick={handleVideo} className="cursor-pointer text-2xl" />
                     </Link>
                     <HiSearch className="cursor-pointer text-2xl" />

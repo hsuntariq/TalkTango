@@ -37,7 +37,7 @@ const App = () => {
             <Route path='/forgotten-password' element={<EnterEmail />} />
             <Route path='/reset-password/:id' element={<ResetPass />} />
             <Route path='/audio' element={<Audio />} />
-            <Route path='/video' element={<VideoCallZego onVideoLink={handleVideoLink} setLink={setLink} link={link} />} />
+            <Route path='/video/:caller-id/:receiver-id' element={<VideoCallZego />} />
 
 
             {/* facebook */}
