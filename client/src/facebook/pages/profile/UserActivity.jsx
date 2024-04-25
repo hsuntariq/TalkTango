@@ -1,24 +1,65 @@
 import { Card, CardHeader, TextField } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BsFillHeartFill } from 'react-icons/bs'
 import { FaRegCommentDots } from 'react-icons/fa'
 import { RiShareForwardLine } from 'react-icons/ri'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
+import { getMyPosts } from '../../../features/posts/postSlice'
 
 const UserActivity = () => {
-    const { user } = useSelector(state => state.auth)
+    const dispatch = useDispatch()
+    const { user, allUsers } = useSelector(state => state.auth)
+    const { friends } = useSelector(state => state.friend)
+    const { posts } = useSelector(state => state.post)
+
     const { id } = useParams()
+    const findFriends = allUsers?.filter((item, index) => {
+        return item?.id == friends[index]
+    })
+
+    useEffect(() => {
+        dispatch(getMyPosts(id))
+    }, [])
+
+
+
+    const findUser = allUsers.find(item => item?._id == id)
+
+
+
     return (
         <>
             <div className="flex flex-col md:flex-row my-4 p-3 justify-between gap-10">
                 <div className="flex flex-col gap-4 self-start">
                     <Card className='p-4'>
                         <h4 className="font-bold uppercase">
-                            Friends
+                            Friends . <span className='text-gray-400'>
+                                {friends?.length} friends
+                            </span>
                         </h4>
                         <div className="grid grid-cols-2 md:grid-cols-3">
-                            <img className='w-[150px] h-[150px] m-3 object-cover ' src={user?.image ? user?.image : 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=1577'} alt="" />
+                            {friends?.length > 0 ? (
+                                <>
+                                    {findFriends?.map((item, index) => {
+                                        return (
+                                            <>
+                                                <Card className='p-2 mx-2 my-1'>
+
+                                                    <img key={index} className='w-[150px] h-[150px] m-3 object-cover ' src={user?.image ? user?.image : 'https://static-00.iconduck.com/assets.00/user-icon-1024x1024-dtzturco.png'} alt="" />
+                                                </Card>
+
+
+                                            </>
+                                        )
+                                    })}
+                                </>
+                            ) : (
+                                <h4 className="font-bold">
+                                    No Friends
+                                </h4>
+                            )}
+
 
 
                         </div>

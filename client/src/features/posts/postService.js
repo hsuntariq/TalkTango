@@ -53,6 +53,10 @@ const deleteComment = async (data) => {
     console.log(response)
     return response.data
 }
+const getMyPosts = async (user_id) => {
+    const response = await axios.get(`${base_url}/${user_id}`);
+    return response.data
+}
 
 
 export const postService = {
@@ -65,5 +69,6 @@ export const postService = {
     getComments,
     makeComment,
     updateComment,
-    deleteComment
+    deleteComment,
+    getMyPosts
 }

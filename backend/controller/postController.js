@@ -168,6 +168,12 @@ const deleteComment = AsyncHandler(async (req, res) => {
 
 
 
+const myPosts = AsyncHandler(async (req, res) => {
+    const user_id = req.params.id;
+    const posts = await Post.find({ user: user_id });
+    res.send(posts)
+})
+
 
 
 module.exports = {
@@ -179,5 +185,6 @@ module.exports = {
     makeComment,
     getComments,
     updateComment,
-    deleteComment
+    deleteComment,
+    myPosts
 }
