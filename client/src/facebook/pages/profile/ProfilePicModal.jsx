@@ -6,7 +6,7 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Card } from '@mui/material';
-
+// import { ClipLoader } from 'react-loading-spinner'
 const style = {
     position: 'absolute',
     top: '50%',
@@ -79,10 +79,7 @@ export default function ProfilePicModal({ open, setOpen, handleOpen, handleClose
                         <input type="file" onChange={handleImageChange} />
                         {imagePreview && <img className='my-3 h-[200px] w-[100%] object-contain block mx-auto' src={imagePreview} />}
                         <Button onClick={uploadImage} style={{ background: 'linear-gradient(to right, #FEBA00,#FD6700)', color: 'white', fontWeight: 'bold', width: '100%', margin: '1rem 0' }} variant="contained" size="small" >
-                            {imageUploaded ? <ClipLoader color="white" size={20} /> :
-                                'Upload'
-                            }
-
+                            Upload
                         </Button>
                     </Card>
                 </Fade>

@@ -84,7 +84,9 @@ const Header = () => {
 
                 <div className="icons text-1xl xl:text-2xl flex gap-10 w-1/2 justify-around ">
                     <MdHome />
-                    <CiPlay1 />
+                    <Link to={`/tik-home/${user?._id}`}>
+                        <CiPlay1 />
+                    </Link>
                     <Link to='/home'>
                         <IoChatbubbleEllipsesOutline />
                     </Link>

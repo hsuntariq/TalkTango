@@ -17,6 +17,7 @@ import { useState } from "react"
 import VideoCallZego from "./videoCall/VideoCall"
 import Friends from "./facebook/pages/friends/Friends"
 import UserProfile from "./facebook/pages/profile/UserProfile"
+import TikHome from "./tiktok/TikHome"
 const App = () => {
   const [videoLink, setVideoLink] = useState('');
 
@@ -48,6 +49,14 @@ const App = () => {
             <Route path='/single-post/:id/:user_id' element={<SinglePost />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/profile/:id" element={<UserProfile />} />
+
+
+            {/* tiktok */}
+            <Route path='tik-home/:id' element={<TikHome />} />
+
+
+
+
 
             {/* not-found */}
             <Route path='*' element={<Error />} />

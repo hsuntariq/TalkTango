@@ -18,7 +18,6 @@ const FriendList = () => {
     }, [])
 
 
-    console.log(friends)
     const findFriends = () => {
         const users = allUsers?.filter((user, index) => {
             return user?._id == friends[index]
@@ -29,7 +28,6 @@ const FriendList = () => {
     }
 
 
-    let test = true
     // if (friendLoading || isLoading) {
     //     return 
     // }
@@ -59,7 +57,7 @@ const FriendList = () => {
             <div className="grid grid-cols-2 mt-[4rem] ">
                 {findFriends()?.map((item, index) => {
                     return (
-                        <Link to={`/profile/${item?._id}`}>
+                        <Link key={index} to={`/profile/${item?._id}`}>
                             <Card key={index} className="flex p-3 m-3 gap-4 items-center">
                                 <img className='w-[100px] h-[100px] bg-gray-100 object-contain rounded-full' src={item?.image ? item?.image : 'https://cdn-icons-png.flaticon.com/512/9655/9655066.png'} alt="" />
                                 <div>
