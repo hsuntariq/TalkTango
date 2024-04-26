@@ -59,6 +59,14 @@ io.on("connection", (socket) => {
     console.log(data)
     socket.broadcast.emit('answered', data)
   })
+  socket.on('request_incoming', (data) => {
+    // console.log(data)
+    socket.broadcast.emit('new_request', data)
+  })
+  socket.on('accept', (data) => {
+    // console.log(data)
+    socket.broadcast.emit('friend_accepted', data)
+  })
 
 
 

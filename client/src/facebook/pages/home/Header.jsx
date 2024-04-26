@@ -11,24 +11,50 @@ import { FaRegBell } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux'
 import { getRequestData } from '../../../features/notifications/notificationSlice';
 import { Link, useParams } from 'react-router-dom';
-import { accceptFriend } from '../../../features/friends/friendSlice';
+import { accceptFriend, addFriendData } from '../../../features/friends/friendSlice';
 import { toast } from 'react-hot-toast'
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
-
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:5174')
 const Header = () => {
     const [show, setShow] = useState(false)
     const dispatch = useDispatch()
     const { user, allUsers } = useSelector(state => state.auth);
     const { requests } = useSelector(state => state.notification);
     const { user_id } = useParams()
-
     useEffect(() => {
         dispatch(getRequestData(user_id))
-    }, [dispatch, user_id])
+        socket.on('new_request', (data) => {
+            if (data.to === user?._id) {
+                toast(`New request from ${data.from_name}`, {
+                    icon: '🙌'
+                })
+            }
+        });
+    }, [dispatch, user_id, socket])
 
 
 
-    const acceptRequest = (from, to) => {
+    useEffect(() => {
+        const handleFriendAccepted = (data) => {
+            if (data.to === user?._id) {
+                toast(`friend request accepted by ${data.from_name}`, {
+                    icon: '🙌'
+                })
+            }
+        };
+
+        socket.on('friend_accepted', handleFriendAccepted);
+
+        return () => {
+            socket.off('friend_accepted', handleFriendAccepted);
+        };
+    }, []);
+
+
+    const acceptRequest = (from, to, from_name) => {
+        const name = allUsers.find(item => item?._id == from)
+        socket.emit('accept', { from: to, to: from, from_name: name?.username })
         dispatch(accceptFriend({
             from, user: to
         })).then((res) => {
