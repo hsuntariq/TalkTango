@@ -5,7 +5,8 @@ import { Button } from '@mui/material'
 import { CircleLoader, ClipLoader } from 'react-spinners';
 import { useDispatch, useSelector } from 'react-redux';
 import { cancelFriend } from '../../../features/friends/friendSlice';
-
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:5174')
 const SingleSuggestion = ({ _id, image, username, add, friendLoading }) => {
     const { allUsers, user } = useSelector(state => state.auth)
     const [loading, setLoading] = useState(false);
@@ -19,6 +20,9 @@ const SingleSuggestion = ({ _id, image, username, add, friendLoading }) => {
         setLoading(true);
         if (e.target.innerText == 'ADD') {
             add(_id)
+            socket.emit('request_incoming', {
+                from: user?._id, to: _id, from_name: user?.username, from_image: user?.image
+            })
         } else {
             const data = {
                 friend_id: _id, user_id: user?._id
@@ -41,7 +45,7 @@ const SingleSuggestion = ({ _id, image, username, add, friendLoading }) => {
         <>
             <div key={_id} className="flex cursor-pointer hover:shadow-md transition-all hover:scale-105 gap-2 p-2 items-center">
                 <div className="img rounded-full w-[45px] h-[45px]">
-                    <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn-icons-png.flaticon.com/512/9655/9655066.png'} alt="" />
+                    <img className='w-full h-full object-cover rounded-full' src={image ? image : 'https://cdn-icons-png.flaticon.com/512/9655/9655066.png'} alt="" />
                 </div>
                 <div className="info">
                     <h3 className="font-bold text-sm capitalize">{username}</h3>
