@@ -8,6 +8,11 @@ const videoSchema = mongoose.Schema({
     video: {
         type: String,
         required: true
+    },
+    caption: {
+        type: String,
+        required: false,
+        default:'TalkTango'
     }
 })
 

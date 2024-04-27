@@ -3,8 +3,11 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { Card } from '@mui/material';
-
+import { Card, Input } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux'
+import { uploadVideoData } from '../../features/video/videoSlice';
+import { toast } from 'react-hot-toast'
+import { CircleLoader } from 'react-spinners'
 const style = {
     position: 'absolute',
     top: '50%',
@@ -21,8 +24,13 @@ const style = {
 
 
 export default function UploadModal({ open, setOpen, handleOpen, handleClose }) {
+
+    const { user } = useSelector(state => state.auth)
+    const { videoLoading } = useSelector(state => state.video)
+    const dispatch = useDispatch()
+    const [caption, setCaption] = useState('')
     const [error, setError] = useState(false)
-    const [imageUploaded, setImageUploaded] = useState(false);
+    const [videoUploading, setVideoUploading] = useState(false);
     const [video, setVideo] = useState(null);
     const [videoPreview, setVideoPreview] = useState(null);
 
@@ -50,15 +58,14 @@ export default function UploadModal({ open, setOpen, handleOpen, handleClose }) 
             data.append('file', video);
             data.append('upload_preset', 'vgvxg0kj');
             try {
-                setImageUploaded(true);
+                setVideoUploading(true);
                 const res = await fetch('https://api.cloudinary.com/v1_1/djo5zsnlq/video/upload', {
                     method: 'POST',
                     body: data
                 })
 
                 const videoUrl = await res.json();
-                setImageUploaded(false)
-                console.log(videoUrl.url)
+                setVideoUploading(false)
                 return videoUrl.url
 
             } catch (error) {
@@ -72,12 +79,22 @@ export default function UploadModal({ open, setOpen, handleOpen, handleClose }) 
     const handleVideoUpload = async () => {
         if (video) {
             const userVideo = await uploadVideo(video);
-            return userVideo;
+            const data = {
+                user_id: user?._id, caption, video: userVideo
+            }
+            dispatch(uploadVideoData(data)).then(() => {
+                setOpen(false)
+                setVideoPreview(null)
+                toast.success('Video Uploaded Successfully', {
+                    icon: '📹'
+                })
+                setVideo(null)
+                setCaption('');
+            })
         } else {
             return null;
         }
     }
-
 
 
 
@@ -91,21 +108,24 @@ export default function UploadModal({ open, setOpen, handleOpen, handleClose }) 
                 aria-labelledby="keep-mounted-modal-title"
                 aria-describedby="keep-mounted-modal-description"
             >
+
                 <Card sx={style}>
                     <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
                         Uplaod A video
                     </Typography>
                     <input accept='video/*' className='my-2' type='file' onChange={handleVideoChange} />
+                    <Input className='w-full my-2' placeholder="Add a caption..." value={caption} onChange={(e) => setCaption(e.target.value)} />
                     {error && <p className='text-red-500 font-bold'>
                         please choose a video
                     </p>}
                     {videoPreview && <video src={videoPreview} controls></video>}
 
-                    <button onClick={handleVideoUpload} className="w-full p-3 bg-orange-500">
-                        Uplaod
+                    <button disabled={videoLoading || videoUploading} onClick={handleVideoUpload} className="w-full p-2 rounded-full my-2 text-white font-bold bg-orange-500">
+                        {videoLoading || videoUploading ? <CircleLoader size={20} /> : 'Upload'}
                     </button>
 
                 </Card>
+
             </Modal>
         </div>
     );
