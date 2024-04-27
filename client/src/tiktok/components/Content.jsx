@@ -2,7 +2,11 @@ import React from 'react'
 import { FaChartSimple, FaHeart, FaRibbon } from 'react-icons/fa6'
 import vid from '../../assets/vid.mp4'
 import { FaShare } from 'react-icons/fa'
+import SingleVideo from './SingleVideo'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 const Content = () => {
+    const { user } = useSelector(state => state.auth)
     return (
         <>
             <div className="flex justify-center gap-4 w-full">
@@ -18,7 +22,9 @@ const Content = () => {
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, nihil.
                     </p>
                     <div className="flex gap-4">
-                        <video className='h-[300px] rounded-xl w-[200px] object-cover ' muted autoPlay loop src={vid}></video>
+                        <Link to={`/single-video/${user?._id}/3`}>
+                            <video className='h-[300px] rounded-xl w-[200px] object-cover ' controls src="http://res.cloudinary.com/djo5zsnlq/video/upload/v1714202537/uuzichpqyghs9cxtfzb9.mkv"></video>
+                        </Link>
                         <div className="flex flex-col gap-1 items-center justify-end">
                             <div className="items-center flex flex-col">
 

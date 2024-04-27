@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../../assets/logo.png'
 import { FaPlus } from 'react-icons/fa6'
+import UploadModal from './UploadModal';
 
 const Header = () => {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     return (
         <>
             <div className="shadow">
@@ -15,10 +19,11 @@ const Header = () => {
                         </div>
                         <div className="flex ms-auto w-full justify-end  gap-3 items-center">
                             <input type="text" placeholder='Search' className="rounded-full p-2 w-1/2 bg-gray-200" />
-                            <div className="border p-2 flex items-center">
+                            <div onClick={handleOpen} className="border p-2 flex items-center cursor-pointer">
                                 <FaPlus />
                                 Upload
                             </div>
+                            <UploadModal open={open} setOpen={setOpen} handleOpen={handleOpen} handleClose={handleClose} />
                             <div className="bg-gradient-to-r p-2 from-rose-600 to-orange-300">
                                 Log in
                             </div>

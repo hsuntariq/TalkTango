@@ -18,6 +18,7 @@ import VideoCallZego from "./videoCall/VideoCall"
 import Friends from "./facebook/pages/friends/Friends"
 import UserProfile from "./facebook/pages/profile/UserProfile"
 import TikHome from "./tiktok/TikHome"
+import SingleVideo from './tiktok/components/SingleVideo'
 const App = () => {
   const [videoLink, setVideoLink] = useState('');
 
@@ -53,7 +54,7 @@ const App = () => {
 
             {/* tiktok */}
             <Route path='tik-home/:id' element={<TikHome />} />
-
+            <Route path='single-video/:user_id/:video_id' element={<SingleVideo />} />
 
 
 

@@ -106,6 +106,7 @@ app.use("/api/chats", require("./routes/chatRoutes"));
 app.use("/api/posts", require("./routes/postRoutes"));
 app.use("/api/friends", require("./routes/friendRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
+app.use("/api/tiktok", require("./routes/tiktokRoutes"));
 
 // check for the errors
 app.use(errorHandler);
