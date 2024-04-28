@@ -33,6 +33,17 @@ export const getVideoData = createAsyncThunk('video/get-video', async (_, thunkA
 })
 
 
+export const getVideoLikes = createAsyncThunk('posts/like-video', async (data, thunkAPI) => {
+    try {
+        return await videoService.likeVideo(data)
+    } catch (error) {
+        thunkAPI.rejectWithValue(error.response.data.error)
+    }
+})
+
+
+
+
 export const videoSlice = createSlice({
     name: 'video',
     initialState,
@@ -73,6 +84,24 @@ export const videoSlice = createSlice({
                 state.videoSuccess = true;
                 state.videos = action.payload;
                 
+            })
+        .addCase(getVideoLikes.pending, (state) => {
+                state.videoLoading = true
+            })
+            .addCase(getVideoLikes.rejected, (state, action) => {
+                state.videoLoading = false;
+                state.videoError = true;
+                state.videoMessage = action.payload;
+            })
+            .addCase(getVideoLikes.fulfilled, (state, action) => {
+                state.videoLoading = false;
+                state.videoSuccess = true;
+                state.videos = state.videos.map((video) => {
+                    if (video._id === action.payload._id) {
+                        video.likes = action.payload.likes
+                    }
+                    return video
+                })
             })
     }
 })

@@ -12,7 +12,15 @@ const getVideos = async (data) => {
 }
 
 
+
+const likeVideo = async (likeData) => {
+    const response = await axios.post(`${base_url}/like-video`, likeData)
+    return response.data
+}
+
+
 export const videoService = {
     uploadVideo,
-    getVideos
+    getVideos,
+    likeVideo
 }

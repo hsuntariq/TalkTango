@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
-import { FaChartSimple, FaHeart, FaRibbon } from 'react-icons/fa6'
+import { FaChartSimple, FaHeart, FaRegHeart, FaRibbon } from 'react-icons/fa6'
 import vid from '../../assets/vid.mp4'
 import { FaShare } from 'react-icons/fa'
 import SingleVideo from './SingleVideo'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getVideoData, reset } from '../../features/video/videoSlice'
+import { getVideoData, getVideoLikes, reset } from '../../features/video/videoSlice'
 import { toast } from 'react-hot-toast';
 import { getAllUsers } from '../../features/auth/authSlice'
+import { ClipLoader } from 'react-spinners'
+import { BsFillHeartFill } from 'react-icons/bs'
 const Content = () => {
     const { user, allUsers } = useSelector(state => state.auth)
     const { videos, videoError, videoLoading, videoMessage } = useSelector(state => state.video)
@@ -25,6 +27,14 @@ const Content = () => {
     }, [dispatch, videoError, videoMessage])
 
 
+
+
+    const updateLikes = (u_id, p_id) => {
+        const likeData = {
+            user_id: u_id, video_id: p_id
+        }
+        dispatch(getVideoLikes(likeData))
+    }
 
 
     return (
@@ -52,15 +62,23 @@ const Content = () => {
                                     </p>
                                     <div className="flex gap-4">
                                         <Link to={`/single-video/${vid?.user}/${vid?._id}`}>
-                                            <video className='h-[300px] rounded-xl w-[200px] object-cover ' controls src={vid?.video}></video>
+                                            <video className='h-[300px] xl:w-[600px] rounded-xl w-[200px] object-cover ' controls src={vid?.video}></video>
                                         </Link>
                                         <div className="flex flex-col gap-1 items-center justify-end">
                                             <div className="items-center flex flex-col">
 
-                                                <div className="bg-gray-200 p-3 rounded-full cursor-pointer">
-                                                    <FaHeart />
+                                                <div onClick={() => updateLikes(user?._id, vid?._id)} className="bg-gray-200 p-2 rounded-full cursor-pointer">
+                                                    {vid?.likes?.includes(user?._id) ? (
+                                                        <div onClick={() => updateLikes(user?._id, vid?._id)} className="text-center border p-2">
+                                                            <BsFillHeartFill size={15} color='red' className=' font-bold' />
+                                                        </div>
+                                                    ) : (
+                                                        <div onClick={() => updateLikes(user?._id, vid?._id)} className=" text-center p-2">
+                                                            <FaRegHeart size={15} className=' font-bold' />
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                <p className="text-gray-500">200</p>
+                                                <p className="text-gray-500">{vid?.likes?.length}</p>
                                             </div>
                                             <div className="items-center flex flex-col">
 

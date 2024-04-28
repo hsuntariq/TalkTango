@@ -13,6 +13,14 @@ const videoSchema = mongoose.Schema({
         type: String,
         required: false,
         default:'TalkTango'
+    },
+    likes: {
+        type: Array,
+        default:[]
+    },
+    comments: {
+        type: Array,
+        default:[],
     }
 })
 

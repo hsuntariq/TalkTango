@@ -22,16 +22,16 @@ const SingleVideo = () => {
 
                     <video className=' rounded-xl w-[50%] object-cover ' controls loop src={findVideo?.video}></video>
                     <div className=" bg-white w-[50%] rounded-xl">
-                        <div className="bg-gray-100 w-[50%] mx-auto rounded-xl">
+                        <div className="bg-gray-100 w-3/4 mx-auto rounded-xl">
                             <div className="flex  p-5">
                                 <div className="flex">
                                     <img className='w-[50px] h-[50px] rounded-full' src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/af0a0fe78bded864ea7f1200eb84f556~c5_100x100.jpeg?lk3s=a5d48078&x-expires=1714323600&x-signature=7jMN5VHFcVIS%2FZ35wUvILDul3uA%3D" alt="" />
-                                    <div className="flex flex-col">
+                                    <div className="flex gap-3 flex-col">
                                         <h5 className="font-bold">
-                                            Username
+                                           {findVideo?.username}
                                         </h5>
                                         <p className="text-gray-600">
-                                            Full name
+                                            {findVideo?.email}
                                         </p>
                                     </div>
                                 </div>
