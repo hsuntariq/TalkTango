@@ -56,7 +56,8 @@ const MessageScreen = ({ list, link }) => {
         socket.emit("sent_message", {
           chatID: chatData?._id,
           voice: blob,
-
+          sender_id: user?._id,
+          receiver_id
         });
         setSentMessages([
           ...sentMessages,
@@ -65,6 +66,8 @@ const MessageScreen = ({ list, link }) => {
             id: chatData?._id,
             sortID: Date.now(),
             voice: blob,
+            sender_id: user?._id,
+            receiver_id
           },
         ]);
       };
@@ -114,6 +117,8 @@ const MessageScreen = ({ list, link }) => {
         sent: true,
         id: chatData?._id,
         sortID: Date.now(),
+        sender_id: user?._id,
+        receiver_id
       },
     ]);
 
@@ -136,6 +141,8 @@ const MessageScreen = ({ list, link }) => {
           id: chatData?._id,
           sortID: Date.now(),
           voice: data?.voice,
+          sender_id: user?._id,
+          receiver_id
         },
       ]);
     });
@@ -242,113 +249,7 @@ const MessageScreen = ({ list, link }) => {
 
   // handle video call
 
-  const vidRef = useRef()
-  const partnerVid = useRef()
-  const [vidRecording, setVidRecording] = useState(false);
-  // local stream
-  const [videoStream, setVideoStream] = useState(null);
-  // remote stream
-  const [remoteStream, setRemoteStream] = useState(null);
 
-  const [callAccepted, setCallAccepted] = useState(false)
-  const startCall = async () => {
-    try {
-      setVidRecording(true)
-      const videoStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-      setVideoStream(videoStream)
-
-      const offer = await Peer.getOffer()
-      socket.emit('user:call', { to: receiver_id, offer, from: user?._id, chatID: chatData?._id })
-
-      if (vidRef.current) {
-        vidRef.current.srcObject = videoStream;
-      }
-
-
-
-    }
-    catch (error) {
-      setVidRecording(false)
-      console.log(error)
-      toast.error('Access denied')
-    }
-  }
-
-  const stopVidRecording = () => {
-    setVidRecording(false);
-    if (vidRef.current && vidRef.current.srcObject) {
-      const tracks = vidRef.current.srcObject.getTracks();
-      tracks.forEach(track => track.stop());
-      vidRef.current.srcObject = null
-    }
-  }
-
-
-  // handle incoming call
-
-  const handleIncommingCall = useCallback(
-    async ({ from, offer }) => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-      setStream(stream);
-      console.log(`Incoming Call`, from, offer);
-      const ans = await Peer.getAnswer(offer);
-      socket.emit("call:accepted", { to: from, ans, from: receiver_id, chatID: chatData?._id })
-    },
-    [socket]
-  );
-
-  const handleCallAccepted = useCallback(
-    ({ from, ans }) => {
-      Peer.setLocalDescription(ans);
-      console.log("Call Accepted!");
-      // send the stream to the other user
-      for (const track of videoStream.getTracks()) {
-        Peer.peer.addTrack(track, videoStream);
-      }
-    },
-    [videoStream]
-  );
-
-
-  //negotiate
-
-  const handleNegoNeeded = useCallback(async () => {
-    const offer = await Peer.getOffer()
-    socket.emit('peer:nego:needed', { offer, from: receiver_id, chatID: chatData?._id })
-  }, [chatData?._id, receiver_id])
-
-  const handleIncomingNego = useCallback(async ({ from, offer }) => {
-    const ans = Peer.getAnswer(offer);
-    socket.emit('peer:nego:done', { to: from, ans, chatID: chatData?._id });
-  }, [chatData?._id])
-
-  const handleNegoFinal = useCallback(async ({ from, ans }) => {
-    await Peer.setLocalDescription(ans)
-  }, [])
-
-
-
-  useEffect(() => {
-    Peer.peer.addEventListener('negotiationneeded', handleNegoNeeded)
-  }, [handleNegoNeeded])
-
-  // whenever we get a track
-  useEffect(() => {
-    Peer.peer.addEventListener('track', async (e) => {
-      const remStream = e.streams;
-      setRemoteStream(remStream)
-    })
-  }, [])
-
-  useEffect(() => {
-    socket.on("incoming:call", handleIncommingCall)
-    socket.on('call:accepted', handleCallAccepted)
-    socket.on('peer:nego:needed', handleIncomingNego)
-    socket.on('peer:nego:final', handleNegoFinal)
-  }, [handleCallAccepted, handleIncomingNego, handleIncommingCall, handleNegoFinal])
 
 
   const [showIncoming, setShowIncoming] = useState(false)
@@ -392,7 +293,7 @@ const MessageScreen = ({ list, link }) => {
       {showIncoming && <Incoming showIncoming={showIncoming} setShowIncoming={setShowIncoming} link={link} declineCall={declineCall} data={myData} />}
 
       <div className="w-full top-0 flex  flex-col relative justify-between  ">
-        <MessageHeader list={list} startCall={startCall} />
+        <MessageHeader list={list} />
         <Messages
           audioBlob={audioBlob}
           imageInputs={imageInputs}

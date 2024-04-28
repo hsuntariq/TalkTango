@@ -80,9 +80,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sent_message", (data) => {
-
+    console.log(data)
     // Emit "received_message" event to all users in the room
-    io.to(data.chatID).emit("received_message", data);
+   socket.broadcast.emit("received_message", data);
   });
 
 

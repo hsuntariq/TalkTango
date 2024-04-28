@@ -8,7 +8,10 @@ import { ClipLoader } from "react-spinners";
 import { FaCheck } from "react-icons/fa6";
 import { PiClockBold } from "react-icons/pi";
 import { getChat } from "../../features/chat/chatSlice";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
+import ring from '../../assets/ringtone.mp3'
 const Messages = ({
   allMessages,
   handleInputChange,
@@ -24,6 +27,8 @@ const Messages = ({
   audioChunks,
   audioBlob
 }) => {
+
+
   const messagesEndRef = useRef(null);
   const [showImage, setShowImage] = useState(null);
   const { user, isLoading } = useSelector((state) => state.auth);
@@ -49,11 +54,15 @@ const Messages = ({
 
   const findChat = () => {
     const foundChat = allMessages.filter((chat) => {
-      return chat.id === chatData?._id;
+      return chat.sender_id == user?._id && chat.receiver_id == receiver_id;
     });
+
     const sortedChat = foundChat.sort((a, b) => a.sortID - b.sortID);
+
+
     return sortedChat;
   };
+
 
   useEffect(() => {
     const chatData = {
@@ -87,7 +96,7 @@ const Messages = ({
         className={`h-[90%] bg-center `}
       >
         <div className="messages overflow-y-scroll py-10  h-[85vh]">
-          {chatData?.chat?.map((message) => {
+          {/* {chatData?.chat?.map((message) => {
             return (
               <>
                 <p className='relative'>
@@ -111,7 +120,7 @@ const Messages = ({
                         <div className='relative'>
                           <audio controls>
                             <source src={URL.createObjectURL(new Blob([message.voice]))} />
-
+                            Your browser does not support the audio element.
                           </audio>
                           <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
                             {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
@@ -156,7 +165,7 @@ const Messages = ({
                 </p>
               </>
             );
-          })}
+          })} */}
           {findChat()?.map((message) => {
             return (
               <>
@@ -179,10 +188,11 @@ const Messages = ({
                       )}
                       {message?.voice && (
                         <div className='relative'>
-                          <audio controls>
-                            <source src={URL.createObjectURL(new Blob([message.voice]))} />
+                          <AudioPlayer
+                            controls
+                            src={URL.createObjectURL(new Blob([message?.voice]))}
+                          />
 
-                          </audio>
                           <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
                             {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
                           </div>
@@ -212,10 +222,11 @@ const Messages = ({
                       </div>
                       {message?.voice && (
                         <div className='relative'>
-                          {message?.voice && <audio controls>
-                            <source src={URL.createObjectURL(new Blob([message.voice]))} />
-
-                          </audio>}
+                          {message?.voice && <AudioPlayer
+                            autoPlay={false}
+                            controls={true}
+                            src={URL.createObjectURL(new Blob([message?.voice]))}
+                          />}
                           <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
                           </div>
                         </div>

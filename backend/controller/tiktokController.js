@@ -1,6 +1,6 @@
 const AsyncHandler = require('express-async-handler');
 const Video = require('../models/videoModel')
-
+const {v4:uuidv4} = require('uuid')
 
 const uploadVideo = AsyncHandler(async(req,res)=>{
     const { video,caption, user_id } = req.body;
@@ -35,16 +35,16 @@ const makeComment = AsyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Please add a comment')
     }
-    const findPost = await Video.findOne({ _id: video_id });
+    const findVideo = await Video.findOne({ _id: video_id });
 
-    if (!findPost) {
+    if (!findVideo) {
         res.status(404)
-        throw new Error('No post found')
+        throw new Error('No video found')
     } else {
-        findPost.comments.push({
+        findVideo.comments.push({
             user_id, comment, date, id
         })
-        await findPost.save()
+        await findVideo.save()
         res.send({ user_id, comment, video_id, date, id })
     }
 
@@ -58,8 +58,34 @@ const getVideos = AsyncHandler(async (req, res) => {
 })
 
 
+const getComments = async (req, res) => {
+    const video_id = req.params.id;
+    if (!video_id) {
+        res.status(400).json({ error: 'Please provide a video_id' });
+        return;
+    }
+
+    try {
+        const findVideo = await Video.findOne({ _id: video_id }).sort({ 'createdAt': -1 });
+        if (!findVideo) {
+            res.status(404).json({ error: 'No Video found' });
+            return;
+        }
+
+        res.json(findVideo.comments);
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
 module.exports = {
     uploadVideo,
     getVideos,
-    likes
+    likes,
+    makeComment,
+    getComments
+
+
 }

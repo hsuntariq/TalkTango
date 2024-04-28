@@ -3,13 +3,16 @@ import { videoService } from './videoService';
 
 const initialState = {
     videos: [],
+    comments: [],
+    commentLoading: false,
     videoLoading: false,
     videoSuccess: false,
     videoError: false,
     videoMessage: '',
     videoImages: [],
     singleVideo: [],
-    myVideos: []
+    myVideos: [],
+
 }
 
 
@@ -38,6 +41,24 @@ export const getVideoLikes = createAsyncThunk('posts/like-video', async (data, t
         return await videoService.likeVideo(data)
     } catch (error) {
         thunkAPI.rejectWithValue(error.response.data.error)
+    }
+})
+
+export const makeComment = createAsyncThunk('posts/post-comments', async (data, thunkAPI) => {
+    try {
+        return await videoService.makeComment(data)
+    } catch (error) {
+        thunkAPI.rejectWithValue(error.response.data.error)
+
+    }
+})
+
+export const getCommentsData = createAsyncThunk('posts/get-comments', async (data, thunkAPI) => {
+    try {
+        return await videoService.getComments(data)
+    } catch (error) {
+        thunkAPI.rejectWithValue(error.response.data.error)
+
     }
 })
 
@@ -102,6 +123,32 @@ export const videoSlice = createSlice({
                     }
                     return video
                 })
+            })
+        .addCase(makeComment.pending, (state) => {
+                state.commentLoading = true
+            })
+            .addCase(makeComment.rejected, (state, action) => {
+                state.commentLoading = false;
+                state.videoError = true;
+                state.videoMessage = action.payload;
+            })
+            .addCase(makeComment.fulfilled, (state, action) => {
+                state.commentLoading = false;
+                state.videoSuccess = true
+                state.comments?.push(action.payload)
+            })
+        .addCase(getCommentsData.pending, (state) => {
+                state.commentLoading = true
+            })
+            .addCase(getCommentsData.rejected, (state, action) => {
+                state.commentLoading = false;
+                state.videoError = true;
+                state.videoMessage = action.payload;
+            })
+            .addCase(getCommentsData.fulfilled, (state, action) => {
+                state.commentLoading = false;
+                state.videoSuccess = true
+                state.comments = action.payload
             })
     }
 })

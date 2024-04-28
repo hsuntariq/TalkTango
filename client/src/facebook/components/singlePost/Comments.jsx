@@ -36,10 +36,10 @@ const Comments = ({ findUser, date, comment, commentUser, comment_id }) => {
 
     }
     return (
-        <div className="flex ps-3 gap-3">
+        <div className="flex ps-3 gap-3 w-[80%]">
             <img className='w-[30px] h-[30px] rounded-full' src={findUser?.image || "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="} alt="" />
             <div className="flex flex-col w-full">
-                <div className="flex justify-between w-full items-center">
+                <div className="flex  gap-2 w-full items-center">
                     <h5 className="text-sm font-bold p-0 m-0">
                         {findUser?.username}
                     </h5>
@@ -47,7 +47,7 @@ const Comments = ({ findUser, date, comment, commentUser, comment_id }) => {
                         {moment(date).fromNow()}
                     </p>
                     <div className="relative">
-                        <BsThreeDotsVertical onClick={() => setOpen(!open)} cursor="pointer" size={13} />
+                        <BsThreeDotsVertical className='align-self-end justify-end' onClick={() => setOpen(!open)} cursor="pointer" size={13} />
                         {open &&
                             <Card className="flex bg-white z-20 py-1 -left-[100px] list-none flex-col gap-1 absolute px-2">
                                 <li className='flex hover:bg-gray-100 p-1 px-3 cursor-pointer gap-2 items-center'><MdOutlineReport color="red" /> Report</li>
@@ -71,7 +71,7 @@ const Comments = ({ findUser, date, comment, commentUser, comment_id }) => {
                         }
                     </div>
                 </div>
-                <p className="text-gray-500 text-sm p-0 m-0">
+                <p className="text-gray-500 break-words  text-sm p-0 m-0">
                     {comment?.length > 60 ?
                         (
                             <>

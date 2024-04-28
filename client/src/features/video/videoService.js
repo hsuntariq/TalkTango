@@ -11,7 +11,16 @@ const getVideos = async (data) => {
     return response.data
 }
 
+const makeComment = async (data) => {
+    const response = await axios.post(`${base_url}/make-comment`, data);
+    return response.data
+}
 
+const getComments = async (data) => {
+    const response = await axios.get(`${base_url}/get-comments/${data.video_id}`);
+    console.log(response.data)
+    return response.data
+}
 
 const likeVideo = async (likeData) => {
     const response = await axios.post(`${base_url}/like-video`, likeData)
@@ -22,5 +31,7 @@ const likeVideo = async (likeData) => {
 export const videoService = {
     uploadVideo,
     getVideos,
-    likeVideo
+    likeVideo,
+    makeComment,
+    getComments
 }

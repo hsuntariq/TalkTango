@@ -78,13 +78,15 @@ const Content = () => {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <p className="text-gray-500">{vid?.likes?.length}</p>
+                                                <p className="text-gray-500">{vid?.likes?.length ?? 0}</p>
                                             </div>
                                             <div className="items-center flex flex-col">
 
                                                 <div className="bg-gray-200 p-3 rounded-full cursor-pointer">
                                                     <FaChartSimple />                                </div>
-                                                <p className="text-gray-500">200</p>
+                                                <p className="text-gray-500">
+                                                    {vid?.comments?.length ?? 0}
+                                                </p>
                                             </div>
 
                                             <div className="items-center flex flex-col">

@@ -22,15 +22,23 @@ const addMessages = AsyncHandler(async (req, res) => {
     const findChat = await Chat.findOne({
         users: { $all: [sender_id, receiver_id] }
     })
-    findChat.chat.push({
+    try {
+        if (findChat) {
+            findChat.chat.push({
         _id: uuidv4(),
         message,
         sender_id,
         receiver_id,
         time:Date.now()
-    })
-    await findChat.save();
-    res.send(findChat)
+        })
+        }
+        await findChat.save();
+        res.send(findChat)
+    } catch (error) {
+        throw new Error(error)
+    }
+    
+    
 })
 
 

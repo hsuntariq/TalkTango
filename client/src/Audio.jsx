@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+import ring from './assets/ringtone.mp3'
 
 const Audio = () => {
     const [stream, setStream] = useState(null);
@@ -50,10 +53,22 @@ const Audio = () => {
             )}
 
             {audioBlob && (
-                <audio controls>
-                    <source src={URL.createObjectURL(audioBlob)} />
-                </audio>
+                // <audio controls>
+                //     <source src={URL.createObjectURL(audioBlob)} />
+                // </audio>
+                <AudioPlayer
+                    controls
+                    src={URL.createObjectURL(audioBlob)}
+
+                // other props here
+                />
             )}
+            {/* <AudioPlayer
+                controls
+                src={URL.createObjectURL(audioBlob)}
+
+            // other props here
+            /> */}
         </>
     );
 };
