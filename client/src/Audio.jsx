@@ -59,8 +59,6 @@ const Audio = () => {
                 <AudioPlayer
                     controls
                     src={URL.createObjectURL(audioBlob)}
-
-                // other props here
                 />
             )}
             {/* <AudioPlayer

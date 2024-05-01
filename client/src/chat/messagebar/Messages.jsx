@@ -68,8 +68,8 @@ const Messages = ({
     const chatData = {
       sender_id: user?._id, receiver_id
     }
-    dispatch(getChat(chatData))
-  }, [receiver_id])
+    // dispatch(getChat(chatData))
+  }, [dispatch, receiver_id, user?._id])
 
   useEffect(() => {
     findChat();

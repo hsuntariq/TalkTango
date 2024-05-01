@@ -7,6 +7,8 @@ import { IoMdVideocam, IoMdCall } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
 import io from 'socket.io-client'
 import { AppContext } from "../../context/Context";
+import { Card } from '@mui/material'
+import ChatPopUp from "./chatPopUp";
 const socket = io.connect('http://localhost:5174')
 const MessageHeader = ({ startCall, list }) => {
     const { videoLink } = useContext(AppContext)
@@ -45,7 +47,18 @@ const MessageHeader = ({ startCall, list }) => {
     }
 
 
+    const [anchorEl, setAnchorEl] = useState(null);
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
 
     return (
         <>
@@ -77,7 +90,12 @@ const MessageHeader = ({ startCall, list }) => {
                         <IoMdVideocam onClick={handleVideo} className="cursor-pointer text-2xl" />
                     </Link>
                     <HiSearch className="cursor-pointer text-2xl" />
-                    <HiOutlineDotsVertical className="cursor-pointer text-2xl" />
+                    <div className="relative">
+                        <HiOutlineDotsVertical aria-describedby={id} onClick={handleClick} className="cursor-pointer text-2xl" />
+                        <div className="absolute w-[100px] -translate-x-full">
+                            <ChatPopUp anchorEl={anchorEl} setAnchorEl={setAnchorEl} handleClick={handleClick} handleClose={handleClose} open={open} id={id} />
+                        </div>
+                    </div>
 
                 </div>
             </div >

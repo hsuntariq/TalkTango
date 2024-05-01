@@ -10,6 +10,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import Settings from "./Settings";
 import Ske from "../../components/loader/Skeleton";
 import LoadingUser from "./LoadingUser";
+import { findMyChats } from "../../features/chat/chatSlice";
+import UserMessages2 from "./UserMessage2";
 const Sidebar = () => {
   let loop = Array.from({ length: 10 });
   const [search, setSearch] = useState("");
@@ -17,7 +19,7 @@ const Sidebar = () => {
 
     useSelector((state) => state.auth);
   const { received_id, sender_id } = useParams()
-  const { chatLoading } = useSelector(state => state.chat)
+  const { chatLoading, myChats, chatData } = useSelector(state => state.chat)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const show = useRef();
@@ -26,8 +28,10 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
+    dispatch(findMyChats(user?._id))
     dispatch(getAllUsers())
-  }, [])
+  }, [dispatch, user?._id, chatData])
+
 
 
   const findUser = () => {
@@ -80,10 +84,20 @@ const Sidebar = () => {
           <IoFilterOutline color="white" size={20} />
         </form>
         <div className="max-h-[86vh] overflow-y-scroll">
+          {search?.length > 0 ? (
+            <>
+              {findUser()?.map((users) => {
+                return <UserMessages key={users._id} {...users} />;
+              })}
+            </>
+          ) : (
+            <>
+              {myChats?.map((users) => {
+                return <UserMessages2 key={users._id} {...users} />;
+              })}
+            </>
+          )}
 
-          {findUser()?.map((users) => {
-            return <UserMessages key={users._id} {...users} />;
-          })}
 
         </div>
       </div>

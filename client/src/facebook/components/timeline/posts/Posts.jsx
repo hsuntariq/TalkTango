@@ -68,7 +68,7 @@ const Posts = ({ caption, images }) => {
     return (
         <>
             {posts?.map((post) => {
-                const userData = allUsers.find((user) => user?._id === post?.user);
+                const userData = allUsers?.find((user) => user?._id === post?.user);
 
                 return (
                     <div key={post._id}>

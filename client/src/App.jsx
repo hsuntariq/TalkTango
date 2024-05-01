@@ -19,6 +19,8 @@ import Friends from "./facebook/pages/friends/Friends"
 import UserProfile from "./facebook/pages/profile/UserProfile"
 import TikHome from "./tiktok/TikHome"
 import SingleVideo from './tiktok/components/SingleVideo'
+import Test from "./Test"
+// import Test from "./Test"
 const App = () => {
   const [videoLink, setVideoLink] = useState('');
 
@@ -57,8 +59,8 @@ const App = () => {
             <Route path='single-video/:user_id/:video_id' element={<SingleVideo />} />
 
 
-
-
+            {/* {test} */}
+            <Route path='/test' element={<Test />} />
             {/* not-found */}
             <Route path='*' element={<Error />} />
           </Route>

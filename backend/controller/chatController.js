@@ -9,9 +9,10 @@ const addChat = AsyncHandler(async (req, res) => {
     })
     if (findChat) {
         res.send(findChat);
+        console.log('already exists')
     } else {
         const newChat = await Chat.create({
-            users: [sender_id, receiver_id], chat: []
+            users: [sender_id, receiver_id], chat: [],sender_id,receiver_id
         })
         res.send(newChat);
     }
@@ -62,6 +63,7 @@ const addImageMessage = AsyncHandler(async (req, res) => {
 
 
 const { Buffer } = require('buffer');
+const ChatModel = require('../models/ChatModel');
 
 const addVoiceMessage = AsyncHandler(async (req, res) => {
     const { voice, sender_id, receiver_id } = req.body;
@@ -100,16 +102,77 @@ const findChat = AsyncHandler(async (req, res) => {
     }).sort({ time: -1 });
     if (findChat) {
 
-        res.send(findChat.chat)
+        res.send(findChat)
     } else {
         throw new Error('No Data found')
     }
 })
+
+
+
+const chatLock = AsyncHandler(async (req, res) => {
+    const { user_id, chat_id, pass,lock } = req.body;
+    const findChat = await ChatModel.findOne({ _id: chat_id });
+    if (!findChat) {
+        res.status(404);
+        throw new Error('Chat not found');
+    } else {
+        // If `chatLock` exists, find and update the existing lock information
+            const existingLockIndex = findChat.chatLock.findIndex(lockItem => lockItem.user_id === user_id);
+            if (existingLockIndex !== -1) {
+                // If the user_id already exists in the `chatLock` array, update the lock information
+                findChat.chatLock[existingLockIndex] = {
+                    lock, pass, user_id
+                };
+            } else {
+                // If the user_id doesn't exist in the `chatLock` array, add the new lock information
+                findChat.chatLock.push({
+                    lock, pass, user_id
+                });
+        }
+        await findChat.save()
+        
+    }
+
+    res.send(findChat)
+})
+
+
+const findMyChats = AsyncHandler(async (req, res) => {
+    const user_id = req.params.id;
+    const findChats = await ChatModel.find({sender_id:user_id});
+    res.send(findChats);
+});
+
+
+
+const checkPass = AsyncHandler(async (req, res) => {
+    const {sender_id,receiver_id,password} = req.body;
+   const findChat = await Chat.findOne({
+        users: { $all: [sender_id, receiver_id] }
+    })
+    if (!findChat) {
+        res.status(404)
+        throw new Error('chat not found')
+    } else {
+        if(findChat.chatLock[0].pass == password){
+            res.send(findChat)
+        } else {
+            res.status(401);
+            throw new Error('Invalid Password')
+        }
+    }
+})
+
+
 
 module.exports = {
     addChat,
     addMessages,
     findChat,
     addImageMessage,
-    addVoiceMessage
+    addVoiceMessage,
+    chatLock,
+    findMyChats,
+    checkPass
 }
