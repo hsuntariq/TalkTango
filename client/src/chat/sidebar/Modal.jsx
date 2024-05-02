@@ -32,23 +32,21 @@ const BasicModal = ({ onClose, receiver_id }) => {
             toast.error(message)
         }
 
-        if (chatSuccess) {
-            onClose()
-            navigate(`/message-panel/${receiver_id}`)
-            toast.success('Verification successful')
-        }
 
 
-        dispatch(reset())
-
-    }, [chatError, message])
+    }, [chatError, chatSuccess, dispatch, message, navigate, onClose, receiver_id])
 
     const handlePassword = () => {
         const data = {
             sender_id: user?._id, receiver_id, password: pass
         }
 
-        dispatch(checkPass(data))
+        dispatch(checkPass(data)).then(() => {
+            onClose()
+            navigate(`/message-panel/${receiver_id}`)
+            toast.success('Verification successful')
+            dispatch(reset())
+        })
 
     }
 

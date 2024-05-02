@@ -18,24 +18,28 @@ const UserMessages2 = ({ sender_id, receiver_id, phone, chatLock }) => {
     const find = allUsers?.find((item) => {
         return item?._id == receiver_id
     })
-    const addChat = (e) => {
-
-        const chatData = {
-            sender_id, receiver_id
-        }
+    const addChat = () => {
+        // Check if the chat is locked
         if (chatLock?.length > 0 && chatLock[0]?.lock === 'true') {
+            // If locked, show the modal
             setShowModal(true);
-        } else {
-            setShowModal(false)
-            dispatch(createChat(chatData));
-            // Navigate to the message panel
-            // You can replace this with your own navigation logic
-            navigate(`/message-panel/${receiver_id}`);
         }
-    }
+        // If not locked, dispatch createChat action and navigate to the message panel
+        const chatData = {
+            sender_id: user?._id,
+            receiver_id
+        };
+        // Dispatch createChat action
+        dispatch(createChat(chatData));
+        // Navigate to the message panel
+        navigate(`/message-panel/${receiver_id}`);
+        // navigate(`/fb-home/${receiver_id}`);
+        // alert('hello')
+
+    };
     return (
         <>
-            <Link onClick={addChat} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">
+            <div onClick={addChat} className="flex items-center px-3 justify-between cursor-pointer hover:bg-[#202C33] transition-all">
                 <div className="flex items-center  my-2 gap-4 text-white">
                     <div className="img rounded-full w-[45px] h-[45px]">
                         <img className='w-full h-full object-cover rounded-full' src={user?.image ? user?.image : 'https://cdn-icons-png.flaticon.com/512/9655/9655066.png'} alt="" />
@@ -61,7 +65,7 @@ const UserMessages2 = ({ sender_id, receiver_id, phone, chatLock }) => {
                         }</h6>
                     </div>
                 </div>
-            </Link>
+            </div>
             {showModal && (
                 <BasicModal
                     receiver_id={receiver_id}
