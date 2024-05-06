@@ -10,8 +10,9 @@ import EmojiPicker from "emoji-picker-react";
 import { IoIosImages } from "react-icons/io";
 import { FaPhotoVideo } from "react-icons/fa";
 import { IoDocument } from "react-icons/io5";
-import { MdAudiotrack } from "react-icons/md";
-
+import { MdAudiotrack, MdOutlineAttachMoney } from "react-icons/md";
+import { Card } from '@mui/material'
+import PaymentPopUp from "./PaymentPopUp";
 const Footer = ({
   sendMessage,
   userInfo,
@@ -24,7 +25,8 @@ const Footer = ({
   startRecording,
   stopRecording,
   recording,
-  audioBlob
+  audioBlob,
+  buy
 }) => {
   const { chatLoading, chatData } = useSelector((state) => state.chat);
 
@@ -137,12 +139,9 @@ const Footer = ({
                 </div>
                 <div className="text"> Video</div>
               </li>
-              <li className="flex cursor-pointer hover:bg-gray-700 transition px-3 py-1 my-2 gap-3 items-center text-1xl">
-                <div className="icon">
-                  <IoDocument />
-                </div>
-                <div className="text"> Document</div>
-              </li>
+
+              <PaymentPopUp buy={buy} />
+
               <li className="flex cursor-pointer hover:bg-gray-700 transition px-3 py-1 my-2 gap-3 items-center text-1xl">
                 <div className="icon">
                   <MdAudiotrack />

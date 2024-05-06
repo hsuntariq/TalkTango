@@ -98,13 +98,13 @@ const Messages = ({
         <div className="messages overflow-y-scroll py-10  h-[85vh]">
 
 
-          {chatData?.chat?.map((message) => {
+          {/* {chatData?.chat?.map((message) => {
             return (
               <>
                 <p className='text-2xl'>{message.message}</p>
               </>
             )
-          })}
+          })} */}
 
           {/* {chatData?.chat?.map((message) => {
             return (
@@ -190,9 +190,9 @@ const Messages = ({
                             className="aspect-square object-cover"
                             src={message.image}
                           />
-                          <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                          {/* <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
                             {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
-                          </div>
+                          </div> */}
                         </div>
 
                       )}
@@ -203,14 +203,30 @@ const Messages = ({
                             src={URL.createObjectURL(new Blob([message?.voice]))}
                           />
 
-                          <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                          {/* <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
                             {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
-                          </div>
+                          </div> */}
                         </div>
                       )}
-                      <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+
+                      {message?.payment && (
+                        <div className='relative'>
+                          <div className="flex justify-center gap-3">
+                            <img width={30} src="https://media1.giphy.com/media/0YJZ6Ui38mP1QrfSex/giphy.gif?cid=6c09b952vuuf3ts7prlo14oliu3zn2k5sow8pzffi96439x3&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s" alt="" />
+                            <p className="font-bold p-0 m-0 text-yellow-600">
+                              {message?.payment}
+                            </p>
+                          </div>
+                          {/* <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                            {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
+                          </div> */}
+                        </div>
+
+                      )}
+
+                      {/* <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
                         {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
-                      </div>
+                      </div> */}
                       {message.message}
                     </div>
                   ) : (
@@ -241,7 +257,21 @@ const Messages = ({
                           </div>
                         </div>
                       )}
-                      {message.message}
+                      {message?.payment && (
+                        <div className='relative'>
+                          <div className="flex justify-center gap-3">
+                            <img width={30} src="https://media1.giphy.com/media/0YJZ6Ui38mP1QrfSex/giphy.gif?cid=6c09b952vuuf3ts7prlo14oliu3zn2k5sow8pzffi96439x3&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s" alt="" />
+                            <p className="font-bold p-0 m-0 text-yellow-600">
+                              {message?.payment}
+                            </p>
+                          </div>
+                          {/* <div className="text-end flex justify-end absolute right-4 bottom-1 flex-end">
+                            {chatLoading ? (<PiClockBold size={12} color="gray" />) : (<FaCheck size={12} color="lightgray" />)}
+                          </div> */}
+                        </div>
+
+                      )}
+                      {message?.message && message?.message}
                     </div>
                   )}
                 </p>

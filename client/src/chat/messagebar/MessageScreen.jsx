@@ -121,6 +121,18 @@ const MessageScreen = ({ list, link }) => {
         receiver_id
       },
     ]);
+    socket.emit("sent_message", { message, chatID: chatData?._id });
+    setSentMessages([
+      ...sentMessages,
+      {
+        message,
+        sent: true,
+        id: chatData?._id,
+        sortID: Date.now(),
+        sender_id: user?._id,
+        receiver_id
+      },
+    ]);
 
     // return the input to an empty state
     if (!chatLoading) {
@@ -129,6 +141,34 @@ const MessageScreen = ({ list, link }) => {
     dispatch(createMessage(messageData));
     // }
   };
+
+
+  const buy = async (data) => {
+    socket.emit("sent_message", { payment: data.price, chatID: chatData?._id });
+    setSentMessages([
+      ...sentMessages,
+      {
+        payment: data.price,
+        sent: true,
+        id: chatData?._id,
+        sortID: Date.now(),
+        sender_id: user?._id,
+        receiver_id
+      },
+    ]);
+    const response = await fetch('http://localhost:5174/api/checkout', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ item: data })
+    })
+
+    const d = await response.json()
+    window.open(d.url, '_blank')
+    // console.log(d)
+
+  }
 
   useEffect(() => {
     socket.on("received_message", (data) => {
@@ -142,7 +182,8 @@ const MessageScreen = ({ list, link }) => {
           sortID: Date.now(),
           voice: data?.voice,
           sender_id: user?._id,
-          receiver_id
+          receiver_id,
+          payment: data.payment
         },
       ]);
     });
@@ -322,6 +363,7 @@ const MessageScreen = ({ list, link }) => {
           setMessage={setMessage}
           message={message}
           audioBlob={audioBlob}
+          buy={buy}
         />
       </div>
     </>
