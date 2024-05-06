@@ -117,6 +117,19 @@ export const checkPass = createAsyncThunk('chat/check-pass', async (data, thunkA
         return thunkAPI.rejectWithValue(message)
     }
 })
+export const scheduleMessageData = createAsyncThunk('chat/schedule-message', async (data, thunkAPI) => {
+    try {
+        return await chatService.scheduleMessage(data)
+    } catch (error) {
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.error) ||
+            error.message ||
+            error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 export const chatSlice = createSlice({
     name: 'chat',
@@ -234,6 +247,20 @@ export const chatSlice = createSlice({
                 state.chatLoading = false;
                 state.chatSuccess = true;
                 state.chatData = action.payload;
+            })
+            .addCase(scheduleMessageData.pending, (state) => {
+                state.chatLoading = true;
+            })
+            .addCase(scheduleMessageData.rejected, (state, action) => {
+                state.chatLoading = false;
+                state.chatError = true;
+                state.message = action.payload
+            })
+            .addCase(scheduleMessageData.fulfilled, (state, action) => {
+                console.log(action.payload)
+                state.chatLoading = false;
+                state.chatSuccess = true;
+                // state.chatData?.push(action.payload);
             })
     }
 })

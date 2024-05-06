@@ -1,6 +1,7 @@
 const AsyncHandler = require('express-async-handler');
 const { v4: uuidv4 } = require('uuid')
 const Chat = require('../models/ChatModel');
+const ScheduleMessage = require('../models/scheduleModel');
 
 const addChat = AsyncHandler(async (req, res) => {
     const { sender_id, receiver_id } = req.body;
@@ -164,6 +165,102 @@ const checkPass = AsyncHandler(async (req, res) => {
     }
 })
 
+const scheduleMessage = AsyncHandler(async (req, res) => {
+    try {
+        const { message, date, sender_id, receiver_id } = req.body;
+        
+        const newScheduledMessage = await ScheduleMessage.create({
+            users: [sender_id, receiver_id],
+            message: message,
+            date: date,
+            sender_id,
+            receiver_id
+        });
+
+        res.send(newScheduledMessage);
+    } catch (error) {
+        console.error("Error scheduling message:", error);
+        throw new Error(error.message)
+    }
+});
+
+const schedule = require('node-schedule');
+
+
+
+
+const sendMessages = AsyncHandler(async (msg) => {
+    const { message, sender_id, receiver_id } = msg;
+    // console.log(message,sender_id,receiver_id)
+    const findChat = await Chat.findOne({
+        users: { $all: [sender_id, receiver_id] }
+    })
+   
+    try {
+        if (findChat) {
+            console.log('found')
+            findChat.chat.push({
+            _id: uuidv4(),
+            message,
+            sender_id,
+            receiver_id,
+            time:Date.now()
+            })
+            await findChat.save();
+        } else {
+            console.log('not found')
+            await Chat.create({
+                users: [sender_id, receiver_id], 
+                chat: [{ _id: uuidv4(), message }], 
+                sender_id, 
+                receiver_id
+            });
+       
+        }
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+
+
+
+
+const sendScheduleMessage = AsyncHandler(async (req, res) => {
+     try {
+        // Find messages scheduled for the current time or earlier
+        const currentTime = new Date();
+        const messages = await ScheduleMessage.find({ date: { $lte: currentTime } });
+        
+         
+
+         
+         // Iterate through messages and send them
+         if (messages) {
+             
+             for (const message of messages) {
+                 // Send message logic goes here
+                 // console.log('Sending message:', message);
+                 await sendMessages(message);
+                 
+                 // Optionally, you can delete the message from the database after sending it
+                 await ScheduleMessage.findByIdAndDelete(message._id);
+                }
+                console.log('sent')
+            }
+    } catch (error) {
+        console.error('Error scheduling messages:', error);
+    }
+})
+
+
+
+
+
+// Schedule the function to run every minute (adjust as needed)
+schedule.scheduleJob('*/5 * * * * *', sendScheduleMessage);
+
+
 
 
 module.exports = {
@@ -174,5 +271,6 @@ module.exports = {
     addVoiceMessage,
     chatLock,
     findMyChats,
-    checkPass
+    checkPass,
+    scheduleMessage
 }

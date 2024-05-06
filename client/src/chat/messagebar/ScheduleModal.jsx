@@ -5,9 +5,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { FormControl, Input, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { chatLock } from '../../features/chat/chatSlice';
+import { chatLock, scheduleMessageData } from '../../features/chat/chatSlice';
 import { toast } from 'react-hot-toast'
-
+import { useParams } from 'react-router-dom'
 
 
 const style = {
@@ -25,12 +25,21 @@ const style = {
 export default function ScheduleModal({ open3, setOpen3, handleOpen3, handleClose3 }) {
     const { user } = useSelector(state => state.auth);
     const { chatData, chatLoading } = useSelector(state => state.chat);
+    const { receiver_id } = useParams()
     const dispatch = useDispatch()
+    const [date, setDate] = useState(null)
+    const [message, setMessage] = useState('')
     const handleClick = (e) => {
         e.preventDefault();
+        // console.log(date, message)
+        dispatch(scheduleMessageData({
+            sender_id: user?._id, receiver_id, message, date
+        }))
 
-        setOpen3(false)
+        // setOpen3(false)
     }
+
+
 
 
 
@@ -55,15 +64,18 @@ export default function ScheduleModal({ open3, setOpen3, handleOpen3, handleClos
                                 id="outlined-helperText"
                                 label="Write a message..."
                                 sx={{ marginBottom: '0.6rem ' }}
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
                             />
 
                             <TextField
-
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
                                 type="datetime-local"
                             />
 
-                            <Button fullWidth variant="contained" className='my-2' sx={{ backgroundColor: 'orange', margin: '1rem 0' }}>
-                                Schedule
+                            <Button onClick={handleClick} fullWidth variant="contained" className='my-2' sx={{ backgroundColor: 'orange', margin: '1rem 0' }}>
+                                {chatLoading ? 'Scheduling...' : 'Schedule'}
                             </Button>
 
 

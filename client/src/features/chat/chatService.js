@@ -43,6 +43,10 @@ const checkPass = async (data) => {
     const response = await axios.post(`${base_url}/check-pass`,data);
     return response.data
 }
+const scheduleMessage = async (data) => {
+    const response = await axios.post(`${base_url}/schedule-message`,data);
+    return response.data
+}
 
 export const chatService = {
     addChat,
@@ -52,5 +56,6 @@ export const chatService = {
     findChat,
     chatLock,
     findMyChats,
-    checkPass
+    checkPass,
+    scheduleMessage
 }

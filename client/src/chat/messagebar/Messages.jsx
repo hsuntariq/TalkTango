@@ -96,6 +96,16 @@ const Messages = ({
         className={`h-[90%] bg-center `}
       >
         <div className="messages overflow-y-scroll py-10  h-[85vh]">
+
+
+          {chatData?.chat?.map((message) => {
+            return (
+              <>
+                <p className='text-2xl'>{message.message}</p>
+              </>
+            )
+          })}
+
           {/* {chatData?.chat?.map((message) => {
             return (
               <>
