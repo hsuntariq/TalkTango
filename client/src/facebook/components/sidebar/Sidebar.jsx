@@ -28,22 +28,23 @@ const Sidebar = () => {
                     </button>
                 </div>
                 <div className="flex text-sm flex-col gap-5 xl:gap-10 p-4">
-                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                    <Link to={`/tik-home/${user?._id}`} className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
                         <PiVideoBold color='blue' />
                         <h4>Watch</h4>
-                    </div>
-                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                    </Link>
+                    <Link to={`/home`} className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
                         <FaCalendarAlt color="hotpink" />
-                        <h4>Events</h4>
-                    </div>
+                        <h4>Chat</h4>
+                    </Link>
+
+
+
+
                     <Link to='/friends' className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
                         <RiUserLine color="orange" />
                         <h4>Friends</h4>
                     </Link>
-                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
-                        <RiGalleryLine color='green' />
-                        <h4>Memories</h4>
-                    </div>
+
                     <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
                         <PiTagChevronFill color="red" style={{ rotate: '90deg' }} />
                         <h4>Saved</h4>
