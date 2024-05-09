@@ -42,7 +42,8 @@
     "react-voice-visualizer": "^1.8.1",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.7.4",
-    "vite-plugin-node-polyfills": "^0.21.0"
+    "vite-plugin-node-polyfills": "^0.21.0",
+    "zego-express-engine-webrtc": "^3.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",
