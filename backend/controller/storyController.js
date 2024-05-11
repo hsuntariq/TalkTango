@@ -13,6 +13,14 @@ const uploadStory = AsyncHandler(async (req, res) => {
   res.send(newStory);
 });
 
+const getStories = AsyncHandler(async(req,res)=>{
+  const stories = await Story.find().sort({createdAt:-1});
+  res.send(stories);
+})
+
+
+
 module.exports = {
   uploadStory,
+getStories
 };

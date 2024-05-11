@@ -23,6 +23,16 @@ export const uploadStoryData = createAsyncThunk(
     }
   }
 );
+export const getStoryData = createAsyncThunk(
+  "story/get-story",
+  async (_, thunkAPI) => {
+    try {
+      return await storyService.getStory();
+    } catch (error) {
+      thunkAPI.rejectWithValue(error.response.data.error);
+    }
+  }
+);
 
 export const storySlice = createSlice({
   name: "story",
@@ -50,7 +60,20 @@ export const storySlice = createSlice({
         state.storyLoading = false;
         state.storySuccess = true;
         state.stories.push(action.payload);
-      });
+      })
+      .addCase(getStoryData.pending, (state) => {
+        state.storyLoading = true;
+      })
+      .addCase(getStoryData.rejected, (state, action) => {
+        state.storyLoading = false;
+        state.storyError = true;
+        state.message = action.payload;
+      })
+      .addCase(getStoryData.fulfilled, (state, action) => {
+        state.storyLoading = false;
+        state.storySuccess = true;
+        state.stories = action.payload;
+      })
   },
 });
 

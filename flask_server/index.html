@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Filter</title>
+</head>
+<body>
+    <h1>Camera Filter</h1>
+    <div>
+        <img id="video_feed" src="{{ url_for('video_feed') }}" style="width: 640px; height: 480px;">
+    </div>
+    <button id="filter_button">Apply Filter</button>
+
+    <script>
+        // JavaScript code to handle button click event
+        document.getElementById("filter_button").addEventListener("click", function() {
+            // Code to trigger filter application (you can use AJAX for this)
+            console.log("Filter applied!");
+        });
+    </script>
+</body>
+</html>

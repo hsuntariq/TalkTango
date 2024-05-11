@@ -11,7 +11,7 @@ CORS(app)
 # Initialize variables
 cap = cv2.VideoCapture(0)  # Use the index of the camera device
 cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-overlay = cv2.imread('sunglass.png', cv2.IMREAD_UNCHANGED)
+overlay = cv2.imread('sunglstartass.png', cv2.IMREAD_UNCHANGED)
 
 @app.route('/camfilter')
 @cross_origin()
