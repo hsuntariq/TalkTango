@@ -7,10 +7,11 @@ import toast from 'react-hot-toast'
 import { getStoryData, reset } from '../../../../features/stories/storySlice'
 import Skeleton from 'react-loading-skeleton'
 import { getAllUsers } from '../../../../features/auth/authSlice'
+import { Link } from 'react-router-dom'
 const Story = () => {
     const dispatch = useDispatch()
     const { storyLoading, stories, storyError, storyMessage, storySuccess } = useSelector(state => state.story);
-
+    const { user } = useSelector(state => state.auth);
     useEffect(() => {
         dispatch(getAllUsers())
     }, [dispatch])
@@ -29,9 +30,9 @@ const Story = () => {
                     <h2 className="text-1xl text-gray-800 font-bold my-2">
                         Stories
                     </h2>
-                    <button className="text-blue-500">
+                    <Link to={`/all-stories/${user?._id}`} className="text-blue-500">
                         See All
-                    </button>
+                    </Link>
                 </div>
                 <div className="flex story-bar" style={{
                     flexWrap: 'nowrap',
@@ -57,13 +58,14 @@ const Story = () => {
                     ) : (
                         <>
                             {stories?.map((story, index) => {
-                                return <StoryCard  myUser={story?.user} {...story} key={index} />
+                                return <StoryCard myUser={story?.user} {...story} key={index} />
                             })}
                         </>
                     )}
 
                 </div>
             </div>
+
         </>
     )
 }

@@ -29,7 +29,7 @@ const MainSuggestions = () => {
 
     return (
         <>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col h-[90vh] overflow-y-scroll gap-2">
                 {allUsers?.map((person, index) => {
                     return (
                         <>

@@ -21,6 +21,7 @@ import TikHome from "./tiktok/TikHome";
 import SingleVideo from "./tiktok/components/SingleVideo";
 import Test from "./Test";
 import Filters from "./Filters";
+import AllStories from "./facebook/components/timeline/stories/AllStories";
 // import Test from "./Test"
 const App = () => {
   const [videoLink, setVideoLink] = useState("");
@@ -58,6 +59,7 @@ const App = () => {
             <Route path="/single-post/:id/:user_id" element={<SinglePost />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/profile/:id" element={<UserProfile />} />
+            <Route path="/all-stories/:id" element={<AllStories />} />
 
             {/* tiktok */}
             <Route path="tik-home/:id" element={<TikHome />} />
