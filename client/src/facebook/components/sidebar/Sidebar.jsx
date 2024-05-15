@@ -49,10 +49,10 @@ const Sidebar = () => {
                         <PiTagChevronFill color="red" style={{ rotate: '90deg' }} />
                         <h4>Saved</h4>
                     </div>
-                    <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+                    <Link to={`profile/${user?._id}`} className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
                         <IoMdSettings color="yellow" style={{ rotate: '90deg' }} />
-                        <h4>Settings</h4>
-                    </div>
+                        <h4>Profile</h4>
+                    </Link>
                 </div>
                 <hr />
             </Card>

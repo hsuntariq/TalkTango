@@ -17,7 +17,7 @@ const style = {
 };
 
 export default function StoryModalNew({ handleOpen, handleClose, open, setOpen, data }) {
-    console.log(data)
+    
 
     return (
         <div>

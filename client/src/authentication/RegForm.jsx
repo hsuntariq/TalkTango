@@ -4,12 +4,13 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { registerUser, reset } from "../features/auth/authSlice";
 import Loader from "../components/loader/Loader";
 import { BeatLoader } from "react-spinners";
-
-const RegForm = () => {
+import { Card } from '@mui/material'
+import { IoMdClose } from 'react-icons/io'
+const RegForm = ({ open, setOpen }) => {
     const [imageUploaded, setImageUploaded] = useState(false);
 
     // to dispatch function
@@ -206,36 +207,41 @@ const RegForm = () => {
 
     return (
         <>
-            <form className="w-full d-flex flex-col items-center justify-center">
-                <div className="image relative">
-                    <FaCirclePlus size={20} className="absolute bottom-0 font-bold right-0 border p rounded-full z-22 text-orange-500" />
-                    <img className="w-[200px] mb-2 h-[200px] small-img block mx-auto" src={imagePreview ? imagePreview : 'https://cdn.pixabay.com/photo/2015/03/04/22/35/avatar-659652_640.png'} alt="" />
-                    <input type="file" onChange={handleImageChange} className="absolute bottom-0 opacity-0 w-full cursor-pointer " name="" id="" />
+            <div className="min-h-screen fixed top-0 z-40 flex justify-center items-center w-full bg-black/70">
 
-                </div>
-                <input name="username" value={username} onChange={handleChange} type="text" placeholder="Username..." className="mb-1 p-1 rounded focus:border-orange-500 shadow-md  w-full  border border-orange-100 outline-none" />
-                <input name="email" value={email} onChange={handleChange} type="text" placeholder="Email..." className="mb-1 p-1 rounded focus:border-orange-500 shadow-md  w-full  border border-orange-100 outline-none" />
+                <Card className="w-1/3 p-5  d-flex flex-col items-center justify-center">
+                    <IoMdClose onClick={() => setOpen(false)} cursor="pointer" size={30} />
+                    <div className="image relative">
+                        <FaCirclePlus size={20} className="absolute bottom-0 font-bold right-0 border p rounded-full z-22 text-orange-500" />
+                        <img className="w-[200px] mb-2 h-[200px] small-img block mx-auto" src={imagePreview ? imagePreview : 'https://cdn.pixabay.com/photo/2015/03/04/22/35/avatar-659652_640.png'} alt="" />
+                        <input type="file" onChange={handleImageChange} className="absolute bottom-0 opacity-0 w-full cursor-pointer " name="" id="" />
 
-                <input name="password" value={password} onChange={handlePasswordChange} type="password" placeholder="password..." className="mb-1 p-1 rounded  focus:border-orange-500 shadow-md  w-full  border border-orange-100 outline-none" />
-                {numError && <p className="text-red-600 font-bold">
-                    Password must include a number
-                </p>}
-                {letterError && <p className="text-red-600 font-bold">
-                    Password must include a capital letter
-                </p>}
-                {specialError && <p className="text-red-600 font-bold">
-                    Password must include a special Character
-                </p>}
-                {LengthError && <p className="text-red-600 font-bold">
-                    Password must be 8 characters long
-                </p>}
-                <PhoneInput country={'pk'} value={phone} className='mb-1 rounded  focus:border-orange-500 shadow-md w-full border border-orange-100 outline-none' onChange={(value) => setPhone(value)}
-                    placeholder={'+92 315 1248441'}
-                />
-                <button disabled={imageUploaded} onClick={handleClick} className={`w-full rounded bg-orange-500 text-white p-1  transition-all ${imageUploaded ? 'cursor-not-allowed diabled bg-orange-700' : 'bg-orange-500'}`}>
-                    {imageUploaded ? <BeatLoader size={10} color="white" /> : 'Register'}
-                </button>
-            </form>
+                    </div>
+                    <input name="username" value={username} onChange={handleChange} type="text" placeholder="Username..." className="mb-1 p-1 rounded focus:border-orange-500 shadow-md  w-full  border border-orange-100 outline-none" />
+                    <input name="email" value={email} onChange={handleChange} type="text" placeholder="Email..." className="mb-1 p-1 rounded focus:border-orange-500 shadow-md  w-full  border border-orange-100 outline-none" />
+
+                    <input name="password" value={password} onChange={handlePasswordChange} type="password" placeholder="password..." className="mb-1 p-1 rounded  focus:border-orange-500 shadow-md  w-full  border border-orange-100 outline-none" />
+                    {numError && <p className="text-red-600 font-bold">
+                        Password must include a number
+                    </p>}
+                    {letterError && <p className="text-red-600 font-bold">
+                        Password must include a capital letter
+                    </p>}
+                    {specialError && <p className="text-red-600 font-bold">
+                        Password must include a special Character
+                    </p>}
+                    {LengthError && <p className="text-red-600 font-bold">
+                        Password must be 8 characters long
+                    </p>}
+                    <PhoneInput country={'pk'} value={phone} className='mb-1 rounded  focus:border-orange-500 shadow-md w-full border border-orange-100 outline-none' onChange={(value) => setPhone(value)}
+                        placeholder={'+92 315 1248441'}
+                    />
+                    <button disabled={imageUploaded} onClick={handleClick} className={`w-full rounded bg-orange-500 text-white p-1  transition-all ${imageUploaded ? 'cursor-not-allowed diabled bg-orange-700' : 'bg-orange-500'}`}>
+                        {imageUploaded ? <BeatLoader size={10} color="white" /> : 'Register'}
+                    </button>
+                </Card>
+            </div>
+
         </>
     )
 }
