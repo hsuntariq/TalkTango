@@ -16,10 +16,9 @@ const Sidebar = () => {
   let loop = Array.from({ length: 10 });
   const [search, setSearch] = useState("");
   const { allUsers, user, isLoading, isSuccess, isError, message } =
-
     useSelector((state) => state.auth);
-  const { received_id, sender_id } = useParams()
-  const { chatLoading, myChats, chatData } = useSelector(state => state.chat)
+  const { received_id, sender_id } = useParams();
+  const { chatLoading, myChats, chatData } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const show = useRef();
@@ -28,35 +27,25 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    dispatch(findMyChats(user?._id))
-    dispatch(getAllUsers())
-  }, [dispatch, user?._id, chatData])
-
-
+    dispatch(findMyChats(user?._id));
+    dispatch(getAllUsers());
+  }, [dispatch, user?._id, chatData]);
 
   const findUser = () => {
     const foundUsers = allUsers?.filter((foundUser) => {
-      return foundUser?.username.toLowerCase().startsWith(search)
-    })
-
+      return foundUser?.username.toLowerCase().startsWith(search);
+    });
 
     return foundUsers;
-
-  }
+  };
 
   useEffect(() => {
-    findUser()
-  }, [search])
-
-
-
+    findUser();
+  }, [search]);
 
   const handleChange = (e) => {
     setSearch(e.target.value);
   };
-
-
-
 
   return (
     <>
@@ -97,8 +86,6 @@ const Sidebar = () => {
               })}
             </>
           )}
-
-
         </div>
       </div>
     </>

@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
 ::-webkit-scrollbar {
   height: 2px;
   width: 2px;
@@ -60,7 +57,7 @@ body {
 }
 
 .welcome {
-  background-image: url("https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3JtNjg1ZGVzaWduLXRuLXJlbWl4LTAwMmIuanBn.jpg") !important;
+  /* background-image: url("https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3JtNjg1ZGVzaWduLXRuLXJlbWl4LTAwMmIuanBn.jpg") !important; */
   background-position: left center;
 }
 
@@ -120,9 +117,8 @@ body {
   border-radius: 50%;
 }
 
-
 .video-image {
-  position: relative
+  position: relative;
 }
 
 .video-image::before {
@@ -153,8 +149,6 @@ body {
   border-radius: 50%;
 }
 
-
-
 @keyframes pulse2 {
   0% {
     transform: translate(-50%, -50%) scale(0.6);
@@ -178,7 +172,6 @@ body {
   }
 }
 
-
 @keyframes pulse {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -188,10 +181,6 @@ body {
     transform: translate(-50%, -50%) scale(1.5);
   }
 }
-
-
-
-
 
 @keyframes moveGradient {
   0% {
