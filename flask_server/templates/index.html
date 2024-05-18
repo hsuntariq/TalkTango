@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Snap Tango</title>
+</head>
+<body style="overflow: hidden;background: linear-gradient(45deg, #FFA500, #FFD700);
+;height:100vh" class="d-flex justify-content-center align-items-center">
+    <div class="container position-relative" style="height: 90vh;">
+        <h1 class="text-center text-white fw-bolder ">Snap Tango!</h1>
+        <img style="object-fit: cover;border-radius: 40px;" id="videoStream" width="100%" height="100%" src="/camfilter" alt="Video Stream">
+        <br>
+        <div class="container position-absolute d-flex justify-content-between align-items-center" style="bottom: 0%;">
+            
+            <button  class="btn" onclick="changeFilter('beard.png')">
+                <img width="70px" height="70px"  class="rounded-circle border" src="https://pngimg.com/d/beard_PNG55115.png" alt="">
+            </button>
+            <button  class="btn" onclick="changeFilter('cool.png')">
+                <img width="70px" height="70px"  class="rounded-circle border" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/bdb34ba8-8ba8-4407-877b-82a90d3577dc/df3grmm-019741fc-b86f-40f3-920c-5a592cea843b.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2JkYjM0YmE4LThiYTgtNDQwNy04NzdiLTgyYTkwZDM1NzdkY1wvZGYzZ3JtbS0wMTk3NDFmYy1iODZmLTQwZjMtOTIwYy01YTU5MmNlYTg0M2IucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.G1uKHCoh9euE0HQbQNio2V8Ano-wJzQJ4_EZxSxTXlc" alt="">
+            </button>
+            <button  class="btn" onclick="changeFilter('pirate.png')">
+                <img width="70px" height="70px"  class="rounded-circle border" src="https://img.pikbest.com/origin/09/21/82/26TpIkbEsTG2c.png!w700wp" alt="">
+            </button>
+            <button onclick="takeScreenshot()" class="border" style="width: 70px;height: 70px; border-radius: 50%;"></button>
+            <button  class="btn" onclick="changeFilter('star.png')">
+                <img width="70px" height="70px"  class="rounded-circle border" src="https://www.shareicon.net/data/512x512/2016/08/31/821560_star_512x512.png" alt="">
+            </button>
+            <button  class="btn" onclick="changeFilter('sunglass.png')">
+                <img width="70px" height="70px"  class="rounded-circle border" src="https://freedesignfile.com/image/preview/9435/girls-sunglasses-cartoon-clipart.png" alt="">
+            </button>
+            <button  class="btn" onclick="changeFilter('native.png')">
+                <img width="70px" height="70px"  class="rounded-circle border" src="https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-cartoon-native-american-indian-style-warrior-looking-at-the-camera-vector-png-image_6822219.png" alt="">
+            </button>
+            <br>
+            
+        </div>
+    </div>
+    <script>
+        function changeFilter(filter) {
+            fetch(`/change_filter?filter=${filter}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log(`Filter changed to ${filter}`);
+                    } else {
+                        console.error('Error changing filter:', data.error);
+                    }
+                });
+        }
+
+        function takeScreenshot() {
+            fetch('/screenshot')
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'screenshot.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(err => console.error('Error taking screenshot:', err));
+        }
+    </script>
+</body>
+</html>

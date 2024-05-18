@@ -69,7 +69,7 @@ const SidebarHeader = ({ toggleSettings }) => {
               alt=""
             />
           </Link>
-          <Link to={`http://localhost:5000/camfilter`}>
+          <Link to={`http://localhost:5000/`}>
             <img
               width="20px"
               src="https://cdn-icons-png.flaticon.com/512/11187/11187154.png"
