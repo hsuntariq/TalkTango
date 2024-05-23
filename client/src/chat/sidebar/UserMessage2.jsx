@@ -58,7 +58,7 @@ const UserMessages2 = ({ sender_id, receiver_id, phone, chatLock }) => {
           </div>
           <div className="">
             <h6 className="capitalize">{find?.username}</h6>
-            <p className="text-gray-400">Lorem ipsum dolor sit.</p>
+            {/* <p className="text-gray-400">Lorem ipsum dolor sit.</p> */}
           </div>
         </div>
         <div className="time-info text-end flex justify-end flex-col items-end ">

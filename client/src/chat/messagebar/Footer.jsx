@@ -3,7 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { HiEmojiHappy, HiMicrophone, HiPlus } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { createMessage, createVoiceMessage } from "../../features/chat/chatSlice";
+import {
+  createMessage,
+  createVoiceMessage,
+} from "../../features/chat/chatSlice";
 import { IoIosSend, IoMdClose } from "react-icons/io";
 import { Circles } from "react-loader-spinner";
 import EmojiPicker from "emoji-picker-react";
@@ -11,7 +14,7 @@ import { IoIosImages } from "react-icons/io";
 import { FaPhotoVideo } from "react-icons/fa";
 import { IoDocument } from "react-icons/io5";
 import { MdAudiotrack, MdOutlineAttachMoney } from "react-icons/md";
-import { Card } from '@mui/material'
+import { Card } from "@mui/material";
 import PaymentPopUp from "./PaymentPopUp";
 const Footer = ({
   sendMessage,
@@ -26,7 +29,7 @@ const Footer = ({
   stopRecording,
   recording,
   audioBlob,
-  buy
+  buy,
 }) => {
   const { chatLoading, chatData } = useSelector((state) => state.chat);
 
@@ -36,29 +39,26 @@ const Footer = ({
   const [active, setActive] = useState(false);
   const focus = useRef();
   const record = useRef();
-  const { receiver_id } = useParams()
-  const dispatch = useDispatch()
+  const { receiver_id } = useParams();
+  const dispatch = useDispatch();
   const startRec = async () => {
-
     if (recording) {
-      stopRecording()
+      stopRecording();
       if (audioBlob) {
-        console.log(audioBlob)
-        dispatch(createVoiceMessage(
-          {
+        console.log(audioBlob);
+        dispatch(
+          createVoiceMessage({
             sender_id: user?._id,
             receiver_id,
-            voice: audioBlob
-          }
-        ))
+            voice: audioBlob,
+          })
+        );
       }
     } else {
-      startRecording()
+      startRecording();
     }
     record.current.classList.toggle("anim");
   };
-
-
 
   useEffect(() => {
     if (message.length > 0) {
@@ -84,8 +84,9 @@ const Footer = ({
       >
         <div className="flex gap-3 relative">
           <div
-            className={`absolute bottom-[30px]  transition ${showEmoji ? "opacity-1 scale-1 " : "opacity-0 scale-0 "
-              }`}
+            className={`absolute bottom-[30px]  transition ${
+              showEmoji ? "opacity-1 scale-1 " : "opacity-0 scale-0 "
+            }`}
           >
             <EmojiPicker
               onEmojiClick={(e) => {
@@ -114,8 +115,11 @@ const Footer = ({
             style={{
               background: `rgba(${user?.bgTheme})`,
             }}
-            className={`absolute bottom-[40px] opacity-0 left-[40px] border rounded-md  transition ${showMenu ? "scale-1 z-20 opacity-100" : "scale-0 -z-[100] rotate-[360deg]"
-              } `}
+            className={`absolute bottom-[40px] opacity-0 left-[40px] border rounded-md  transition ${
+              showMenu
+                ? "scale-1 z-20 opacity-100"
+                : "scale-0 -z-[100] rotate-[360deg]"
+            } `}
           >
             <ul className="list-none">
               <li className="flex cursor-pointer hover:bg-gray-700 transition px-3 py-1 my-2 gap-3 items-center text-1xl">
@@ -132,22 +136,22 @@ const Footer = ({
                   Image
                 </div>
               </li>
-              <li className="flex cursor-pointer hover:bg-gray-700 transition px-3 py-1 my-2 gap-3 items-center text-1xl">
+              {/* <li className="flex cursor-pointer hover:bg-gray-700 transition px-3 py-1 my-2 gap-3 items-center text-1xl">
                 <div className="icon">
                   {" "}
                   <FaPhotoVideo />
                 </div>
                 <div className="text"> Video</div>
-              </li>
+              </li> */}
 
               <PaymentPopUp buy={buy} />
 
-              <li className="flex cursor-pointer hover:bg-gray-700 transition px-3 py-1 my-2 gap-3 items-center text-1xl">
+              {/* <li className="flex cursor-pointer hover:bg-gray-700 transition px-3 py-1 my-2 gap-3 items-center text-1xl">
                 <div className="icon">
                   <MdAudiotrack />
                 </div>
                 <div className="text">Document</div>
-              </li>
+              </li> */}
             </ul>
           </div>
           <HiPlus
@@ -155,8 +159,9 @@ const Footer = ({
               setShowEmoji(false);
               setShowMenu(!showMenu);
             }}
-            className={`cursor-pointer transition  text-2xl ${showMenu && "rotate-45"
-              } `}
+            className={`cursor-pointer transition  text-2xl ${
+              showMenu && "rotate-45"
+            } `}
           />
         </div>
         <input

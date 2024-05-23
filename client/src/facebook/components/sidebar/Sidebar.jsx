@@ -53,7 +53,7 @@ const Sidebar = () => {
                 <h4>Saved</h4>
               </div>
               <Link
-                to={`profile/${user?._id}`}
+                to={`/profile/${user?._id}`}
                 className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center"
               >
                 <IoMdSettings color="yellow" style={{ rotate: "90deg" }} />
