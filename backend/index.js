@@ -6,6 +6,8 @@ const { Server } = require("socket.io");
 const http = require("http");
 // require cors to  handle cross server request
 const cors = require("cors");
+const Video = require('./models/videoModel')
+
 
 // initialize the intance of the express to get all the features
 const app = express();
@@ -15,6 +17,11 @@ const server = http.createServer(app);
 
 app.get('/',(req,res)=>{
   res.send('hello')
+})
+
+app.get('/test',(req, res) => {
+    const videos = await Video.find();
+    res.send(videos);
 })
 
 
