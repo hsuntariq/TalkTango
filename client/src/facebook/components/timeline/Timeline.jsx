@@ -173,13 +173,13 @@ const Timeline = () => {
                 <h4>Photo</h4>
               </div>
 
-              <div className="flex cursor-pointer gap-4 items-center">
+              {/* <div className="flex cursor-pointer gap-4 items-center">
                 <img
                   width="20px"
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Eo_circle_orange_film-camera.svg/2048px-Eo_circle_orange_film-camera.svg.png"
                 />
                 <h4>Video</h4>
-              </div>
+              </div> */}
             </div>
             {imagePreviews?.length > 0 && (
               <div className="flex">

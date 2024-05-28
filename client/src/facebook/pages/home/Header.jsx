@@ -78,7 +78,7 @@ const Header = () => {
           <div className="img">
             <img style={{ width: "60px" }} src={logo} alt="" />
           </div>
-          <div className="search-bar flex items-center border rounded-full px-4">
+          {/* <div className="search-bar flex items-center border rounded-full px-4">
             <span>
               <IoSearchOutline className="text-1xl xl:text-2xl" />
             </span>
@@ -87,7 +87,7 @@ const Header = () => {
               className="border-0"
               placeholder="Search the Tango"
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="icons text-1xl xl:text-2xl flex gap-10 w-1/2 justify-around ">

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
 const socket = io.connect('http://localhost:5174')
@@ -18,7 +19,7 @@ const Incoming = ({ data, declineCall, link, setShowIncoming }) => {
             <div className="min-h-screen flex flex-col justify-center items-center w-full bg-white/50 text-center z-[400] gap-7 fixed top-0">
                 <div className="video-image w-max">
 
-                    <img width="30%" className='block mx-auto' src={data?.image ? (data?.image) : (
+                    <img className='block mx-auto object-contain w-[200px] h-[200px] rounded-full' src={data?.image ? (data?.image) : (
                         "https://static.vecteezy.com/system/resources/previews/019/879/186/original/user-icon-on-transparent-background-free-png.png"
                     )} alt="" />
                 </div>

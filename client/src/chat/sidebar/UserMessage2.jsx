@@ -9,7 +9,7 @@ import { getAllUsers } from "../../features/auth/authSlice";
 import { MdLock } from "react-icons/md";
 import BasicModal from "./Modal";
 
-const UserMessages2 = ({ sender_id, receiver_id, phone, chatLock }) => {
+const UserMessages2 = ({ sender_id, receiver_id, phone, image, chatLock }) => {
   const { user, allUsers } = useSelector((state) => state.auth);
   const { chatError, message, chatSuccess } = useSelector(
     (state) => state.chat
@@ -49,8 +49,8 @@ const UserMessages2 = ({ sender_id, receiver_id, phone, chatLock }) => {
             <img
               className="w-full h-full object-cover rounded-full"
               src={
-                user?.image
-                  ? user?.image
+                image
+                  ? image
                   : "https://cdn-icons-png.flaticon.com/512/9655/9655066.png"
               }
               alt=""

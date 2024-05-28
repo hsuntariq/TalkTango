@@ -21,7 +21,7 @@ const Sidebar = () => {
         <Typography variant="h6">
           <div className="flex items-center justify-between  gap-3 p-4 pt-5  hover:bg-gray-200">
             <h3 className="font-bold text-dark text-1xl">Home</h3>
-            <button className="text-blue-500">Create</button>
+            {/* <button className="text-blue-500">Create</button> */}
           </div>
           <Typography>
             <div className="flex text-sm flex-col gap-5 xl:gap-10 p-4">
@@ -48,10 +48,10 @@ const Sidebar = () => {
                 <h4>Friends</h4>
               </Link>
 
-              <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
+              {/* <div className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center">
                 <PiTagChevronFill color="red" style={{ rotate: "90deg" }} />
                 <h4>Saved</h4>
-              </div>
+              </div> */}
               <Link
                 to={`/profile/${user?._id}`}
                 className="flex items-center hover:bg-gray-200 p-2 cursor-pointer gap-3 item-center"

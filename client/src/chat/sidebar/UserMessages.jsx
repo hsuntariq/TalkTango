@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { getAllUsers } from "../../features/auth/authSlice";
 
-const UserMessages = ({ _id, username, phone }) => {
+const UserMessages = ({ _id, username, phone, image }) => {
   const { user } = useSelector((state) => state.auth);
   const { chatError, message, chatSuccess } = useSelector(
     (state) => state.chat
@@ -32,8 +32,8 @@ const UserMessages = ({ _id, username, phone }) => {
           <img
             className="w-full h-full object-cover rounded-full"
             src={
-              user?.image
-                ? user?.image
+              image
+                ? image
                 : "https://cdn-icons-png.flaticon.com/512/9655/9655066.png"
             }
             alt=""

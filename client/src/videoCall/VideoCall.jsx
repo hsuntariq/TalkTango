@@ -29,8 +29,8 @@ export default function VideoCallZego() {
     let myMeeting = async (element) => {
 
         // generate Kit Token
-        const appID = 663029736;
-        const serverSecret = "6d6ce5a3ac1570056d044ba09b879feb";
+        const appID = 88524909;
+        const serverSecret = "d40fdf1a59ad9dce4c4472f911f84af1";
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, randomID(5), randomID(5));
 
         // Create instance object from Kit Token.

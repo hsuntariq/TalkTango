@@ -68,7 +68,7 @@ const MessageHeader = ({ startCall, list }) => {
       >
         <div className="flex items-center gap-2 text-white">
           <div className="user-image rounded-full w-[45px] h-[45px]">
-            <img src={user?.image ? user?.image : logo} alt="" />
+            <img className='rounded-full' src={displayUserInfo()?.image ? displayUserInfo()?.image : logo} alt="" />
           </div>
           <div className="text-1xl text-white">
             <h1 style={{ color: "white" }} className="text-1xl text-white">
