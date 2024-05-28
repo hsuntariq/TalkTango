@@ -13,6 +13,11 @@ const app = express();
 app.use(cors());
 const server = http.createServer(app);
 
+app.get('/',(req,res)=>{
+  res.send('hello')
+})
+
+
 // create the socket server
 
 const io = new Server(server, {
