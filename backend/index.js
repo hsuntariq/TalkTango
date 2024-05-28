@@ -99,7 +99,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-await mongoose.connect("mongodb+srv://hsuntariq:hello123@cluster0.z89ry6j.mongodb.net/?retryWrites=true&w=majority")
 
 
 app.use("/api/users", require("./routes/userRoutes"));
