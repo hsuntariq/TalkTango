@@ -12,7 +12,13 @@ const cors = require("cors");
 // initialize the intance of the express to get all the features
 const app = express();
 // use cors
-app.use(cors());
+app.use(cors(
+    {
+        origin: ["http://localhost:5173"],
+        methods: ["POST", "GET"],
+        credentials: true
+    }
+));
 const server = http.createServer(app);
 
 
