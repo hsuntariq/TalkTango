@@ -20,7 +20,6 @@ app.get('/',(req,res)=>{
 })
 
 
-mongoose.connect("mongodb+srv://hsuntariq:hello123@cluster0.z89ry6j.mongodb.net/?retryWrites=true&w=majority")
 
 // create the socket server
 
@@ -98,6 +97,11 @@ require("colors");
 connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+
+mongoose.connect("mongodb+srv://hsuntariq:hello123@cluster0.z89ry6j.mongodb.net/?retryWrites=true&w=majority")
+
+
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/chats", require("./routes/chatRoutes"));
 app.use("/api/posts", require("./routes/postRoutes"));
