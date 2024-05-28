@@ -20,7 +20,7 @@ app.get('/',(req,res)=>{
 })
 
 
-
+mongoose.connect("mongodb+srv://hsuntariq:hello123@cluster0.z89ry6j.mongodb.net/?retryWrites=true&w=majority")
 
 // create the socket server
 
